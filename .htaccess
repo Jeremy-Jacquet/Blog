@@ -1,0 +1,4 @@
+# REWRITE PAGES
+RewriteEngine On
+
+RewriteRule ^(.*)$ public/$1
