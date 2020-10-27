@@ -1,6 +1,7 @@
 CREATE TABLE `article` (
 `id` int(11) PRIMARY KEY AUTO_INCREMENT NOT NULL,
 `title` varchar(50) NOT NULL,
+`sentence` tinytext NOT NULL,
 `content` text NOT NULL,
 `filename` varchar(20) NOT NULL,
 `user_id` int(11) NOT NULL,
