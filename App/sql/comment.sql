@@ -4,5 +4,5 @@ CREATE TABLE `comment` (
 `article_id` int(11) NOT NULL,
 `user_id` int(11) NOT NULL,
 `created_at` datetime NOT NULL,
-`status` tinyint(3)
+`status` tinyint(1)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
