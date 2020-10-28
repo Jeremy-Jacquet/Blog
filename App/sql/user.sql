@@ -5,10 +5,10 @@ CREATE TABLE `user` (
 `email` varchar(78) NOT NULL,
 `filename` varchar(20) NOT NULL,
 `created_at` datetime NOT NULL,
-`connected_at` datetime NOT NULL,
-`newsletter` tinyint(1),
+`last_connexion` datetime NOT NULL,
+`newsletter` tinyint(1) NOT NULL,
 `flag` tinyint,
-`is_bannish` tinyint(1) NOT NULL,
+`banned` tinyint(1) NOT NULL,
 `role_id` int(11) NOT NULL,
 `token` varchar(72)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

@@ -10,5 +10,5 @@ CREATE TABLE `article` (
 `updated_at` datetime,
 `updated_user_id` int(11),
 `category_id` int(11) NOT NULL,
-`status` tinyint(3)
+`status` tinyint(1)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
