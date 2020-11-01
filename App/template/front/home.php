@@ -2,7 +2,7 @@
 
 <section id="presentation">
     <div>
-        <h1 class="text-center">Le blog de votre développeur</h2>
+        <h1 class="text-center">Le blog de votre développeur</h1>
         <p class="text-center">Jérémy Jacquet</p>
         <p class="text-center">Développeur PHP /MySQL</p>
     </div>
