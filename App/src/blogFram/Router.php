@@ -30,6 +30,9 @@ class Router
                 elseif($route === 'categories') {
                     $this->frontController->categories();
                 }
+                elseif($route === 'articles') {
+                    $this->frontController->articles();
+                }
                 else {
                     $this->errorController->errorNotFound();
                 }
