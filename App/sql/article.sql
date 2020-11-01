@@ -6,7 +6,7 @@ CREATE TABLE `article` (
 `filename` varchar(20) NOT NULL,
 `user_id` int(11) NOT NULL,
 `created_at` datetime NOT NULL,
-`published_at` datetime,
+`published_at` datetime NOT NULL,
 `updated_at` datetime,
 `updated_user_id` int(11),
 `category_id` int(11) NOT NULL,

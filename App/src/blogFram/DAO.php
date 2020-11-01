@@ -10,7 +10,7 @@ abstract class DAO
 
     private $connection;
 
-    private function checkConnection()
+    protected function checkConnection()
     {
         if($this->connection === null) {
             return $this->getConnection();
@@ -32,10 +32,10 @@ abstract class DAO
 
     }
 
+    /*
     protected function createQuery($sql, $parameters = null)
     {
-        if($parameters)
-        {
+        if($parameters) {
             $result = $this->checkConnection()->prepare($sql);
             $result->execute($parameters);
             return $result;
@@ -43,4 +43,5 @@ abstract class DAO
         $result = $this->checkConnection()->query($sql);
         return $result;
     }
+    */
 }
