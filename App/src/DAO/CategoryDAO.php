@@ -18,10 +18,16 @@ class CategoryDAO extends DAO
         return $category;
     }
 
-    public function getCategories($highlight = null)
+    public function getCategories($status)
     {
-        if($highlight) {
+        if($status == 'highlight') {
             $sql = 'SELECT * FROM category WHERE status = 1';
+        } elseif($status == 'active') {
+            $sql = 'SELECT * FROM category WHERE status IS NULL';
+        } elseif($status == 'inactive') {
+            $sql = 'SELECT * FROM category WHERE status = 0';
+        } elseif($status == 'all') {
+            $sql = 'SELECT * FROM category';
         }
         $result = $this->checkConnection()->query($sql);
         $result->execute();
