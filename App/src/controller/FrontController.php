@@ -25,4 +25,12 @@ class FrontController extends Controller
            'categoriesActive' =>$categoriesActive
         ]);
     }
+
+    public function articles()
+    {
+        $articles = $this->articleDAO->getArticles('active');
+        return $this->view->render($this->controller, 'articles', [
+           'articles' => $articles
+        ]);
+    }
 }
