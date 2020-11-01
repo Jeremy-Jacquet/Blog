@@ -27,6 +27,9 @@ class Router
                 if($route === 'accueil') {
                     $this->frontController->home();
                 } 
+                elseif($route === 'categories') {
+                    $this->frontController->categories();
+                }
                 else {
                     $this->errorController->errorNotFound();
                 }
