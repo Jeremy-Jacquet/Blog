@@ -33,7 +33,8 @@ class ArticleDAO extends DAO
             FROM article a 
             INNER JOIN user u ON u.id = a.user_id 
             INNER JOIN category c ON c.id = a.category_id 
-            ORDER BY id
+            WHERE a.status = 1 
+            ORDER BY id 
             DESC LIMIT :nb';
         $result = $this->checkConnection()->prepare($sql);
         $result->bindValue(':nb', $numberArticles, \PDO::PARAM_INT);
@@ -45,6 +46,32 @@ class ArticleDAO extends DAO
         }
         $result->closeCursor();
         return $articles;
+    }
+
+    public function getArticles($status)
+    {
+        $sql = 'SELECT a.id, a.title, a.sentence, a.content, a.filename, a.user_id, a.created_at, a.published_at, a.updated_at, a.updated_user_id, a.category_id, a.status, u.pseudo, c.title
+            FROM article a 
+            INNER JOIN user u ON u.id = a.user_id 
+            INNER JOIN category c ON c.id = a.category_id';
+        if($status == 'active') {
+            $sql = $sql.' WHERE a.status = 1 ORDER BY id DESC';
+        } elseif($status == 'inactive') {
+            $sql = $sql.' WHERE a.status = 0 ORDER BY id DESC';
+        } elseif($status == 'pending') {
+            $sql = $sql.' WHERE a.status IS NULL ORDER BY id DESC';
+        } elseif($status == 'all') {
+            $sql = $sql.' ORDER BY id DESC';
+        }
+        $result = $this->checkConnection()->query($sql);
+        $result->execute();
+        $categories = [];
+        foreach ($result as $row){
+            $categoryId = $row['id'];
+            $categories[$categoryId] = $this->buildObject($row);
+        }
+        $result->closeCursor();
+        return $categories;
     }
 
 }
