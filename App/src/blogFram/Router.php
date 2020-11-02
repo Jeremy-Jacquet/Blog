@@ -22,6 +22,7 @@ class Router
     public function run()
     {
         $route = $this->request->getGet()->get('route');
+        $category = (int)$this->request->getGet()->get('category');
         try {
             if(isset($route)) {
                 if($route === 'accueil') {
@@ -30,6 +31,16 @@ class Router
                 elseif($route === 'categories') {
                     $this->frontController->categories();
                 }
+<<<<<<< Updated upstream
+=======
+                elseif($route === 'articles') {
+                    if($category) {
+                        $this->frontController->articlesByCategory($category);
+                    } else {
+                        $this->frontController->articles();
+                    }
+                }
+>>>>>>> Stashed changes
                 else {
                     $this->errorController->errorNotFound();
                 }
