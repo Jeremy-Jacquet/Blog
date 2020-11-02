@@ -37,8 +37,18 @@ class FrontController extends Controller
     public function articlesByCategory($categoryId)
     {
         $articles = $this->articleDAO->getArticlesByCategory($categoryId);
+        $category = $this->categoryDAO->getCategory($categoryId);
         return $this->view->render($this->controller, 'articlesByCategory', [
-           'articles' => $articles
+           'articles' => $articles,
+           'category' => $category
+        ]);
+    }
+
+    public function single($id)
+    {
+        $article = $this->articleDAO->getArticle($id);
+        return $this->view->render($this->controller, 'single', [
+           'article' => $article
         ]);
     }
 }
