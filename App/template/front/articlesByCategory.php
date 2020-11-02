@@ -1,6 +1,6 @@
 <?php $this->title = 'Webaby - Articles'; ?>
 
-<h2 class="text-center">Articles par catégorie</h2>
+<h1 class="text-center">Tous les articles</h1>
 <nav>
     <a href="<?= URL ?>articles&category=1">Developpement Web</a>
     <a href="<?= URL ?>articles&category=2">Sciences naturelles</a>
@@ -9,7 +9,7 @@
 </nav>
 
 <section id="articles">
-    <h2 class="text-center">Tous les articles</h2>
+    <h1 class="text-center">Tous les articles</h1>
     <div class="row">
         <?php foreach ($articles as $article) { ?>
             

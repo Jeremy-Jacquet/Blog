@@ -22,6 +22,7 @@ class Router
     public function run()
     {
         $route = $this->request->getGet()->get('route');
+        $category = (int)$this->request->getGet()->get('category');
         try {
             if(isset($route)) {
                 if($route === 'accueil') {
@@ -31,7 +32,11 @@ class Router
                     $this->frontController->categories();
                 }
                 elseif($route === 'articles') {
-                    $this->frontController->articles();
+                    if($category) {
+                        $this->frontController->articlesByCategory($category);
+                    } else {
+                        $this->frontController->articles();
+                    }
                 }
                 else {
                     $this->errorController->errorNotFound();

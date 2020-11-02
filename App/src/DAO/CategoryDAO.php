@@ -20,16 +20,14 @@ class CategoryDAO extends DAO
 
     public function getCategories($status)
     {
-        if($status == 'highlight') {
-            $sql = 'SELECT * FROM category WHERE status = 1';
-        } elseif($status == 'active') {
+        if($status == null) {
             $sql = 'SELECT * FROM category WHERE status IS NULL';
-        } elseif($status == 'inactive') {
-            $sql = 'SELECT * FROM category WHERE status = 0';
-        } elseif($status == 'all') {
-            $sql = 'SELECT * FROM category';
+            $result = $this->checkConnection()->query($sql);
+        } else{
+            $sql = 'SELECT * FROM category WHERE status = :status';
+            $result = $this->checkConnection()->prepare($sql);
+            $result->bindValue(':status', $status, \PDO::PARAM_INT);
         }
-        $result = $this->checkConnection()->query($sql);
         $result->execute();
         $categories = [];
         foreach ($result as $row){
