@@ -3,7 +3,7 @@
 <section id="mainCategories">
     <h1 class="text-center">Les catégories principales</h1>
     <div class="row">
-        <?php foreach ($categoriesHighlight as $category) { ?>
+        <?php foreach ($categoriesMain as $category) { ?>
             
             <div class="border border-dark col-6 mx-auto my-3 p-3">
                 <p><?= $category->getTitle(); ?></p>
