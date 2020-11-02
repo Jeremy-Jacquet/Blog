@@ -23,13 +23,13 @@ class ArticleDAO extends DAO
         $article->setCategoryId($row['category_id']);
         $article->setStatus($row['status']);
         $article->setUserPseudo($row['pseudo']);
-        $article->setCategoryTitle($row['title']);
+        $article->setCategoryTitle($row['category']);
         return $article;
     }
 
     public function getLastArticles($numberArticles)
     {
-        $sql = 'SELECT a.id, a.title, a.sentence, a.content, a.filename, a.user_id, a.created_at, a.published_at, a.updated_at, a.updated_user_id, a.category_id, a.status, u.pseudo, c.title
+        $sql = 'SELECT a.id, a.title, a.sentence, a.content, a.filename, a.user_id, a.created_at, a.published_at, a.updated_at, a.updated_user_id, a.category_id, a.status, u.pseudo, c.title AS category
             FROM article a 
             INNER JOIN user u ON u.id = a.user_id 
             INNER JOIN category c ON c.id = a.category_id 
@@ -39,7 +39,7 @@ class ArticleDAO extends DAO
         $result = $this->checkConnection()->prepare($sql);
         $result->bindValue(':nb', $numberArticles, \PDO::PARAM_INT);
         $result->execute();
-        $articles = [];
+;       $articles = [];
         foreach ($result as $row){
             $articleId = $row['id'];
             $articles[$articleId] = $this->buildObject($row);
@@ -50,7 +50,7 @@ class ArticleDAO extends DAO
 
     public function getArticles($status)
     {
-        $sql = 'SELECT a.id, a.title, a.sentence, a.content, a.filename, a.user_id, a.created_at, a.published_at, a.updated_at, a.updated_user_id, a.category_id, a.status, u.pseudo, c.title
+        $sql = 'SELECT a.id, a.title, a.sentence, a.content, a.filename, a.user_id, a.created_at, a.published_at, a.updated_at, a.updated_user_id, a.category_id, a.status, u.pseudo, c.title AS category
             FROM article a 
             INNER JOIN user u ON u.id = a.user_id 
             INNER JOIN category c ON c.id = a.category_id';
@@ -74,7 +74,7 @@ class ArticleDAO extends DAO
 
     public function getArticlesByCategory($categoryId)
     {
-        $sql = 'SELECT a.id, a.title, a.sentence, a.content, a.filename, a.user_id, a.created_at, a.published_at, a.updated_at, a.updated_user_id, a.category_id, a.status, u.pseudo, c.title
+        $sql = 'SELECT a.id, a.title, a.sentence, a.content, a.filename, a.user_id, a.created_at, a.published_at, a.updated_at, a.updated_user_id, a.category_id, a.status, u.pseudo, c.title AS category
             FROM article a 
             INNER JOIN user u ON u.id = a.user_id 
             INNER JOIN category c ON c.id = a.category_id 
@@ -90,6 +90,22 @@ class ArticleDAO extends DAO
         }
         $result->closeCursor();
         return $articles;
+    }
+
+    public function getArticle($id)
+    {
+        $sql = 'SELECT a.id, a.title, a.sentence, a.content, a.filename, a.user_id, a.created_at, a.published_at, a.updated_at, a.updated_user_id, a.category_id, a.status, u.pseudo, c.title AS category
+        FROM article a 
+        INNER JOIN user u ON u.id = a.user_id 
+        INNER JOIN category c ON c.id = a.category_id
+        WHERE a.id = :id ORDER BY a.id DESC';
+        $result = $this->checkConnection()->prepare($sql);
+        $result->bindValue(':id', $id, \PDO::PARAM_INT);
+        $result->execute();
+        $row = $result->fetch();
+        $article = $this->buildObject($row);
+        $result->closeCursor();
+        return $article;
     }
 
 }

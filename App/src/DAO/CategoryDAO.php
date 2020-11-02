@@ -38,4 +38,16 @@ class CategoryDAO extends DAO
         return $categories;
     }
 
+    public function getCategory($id)
+    {
+        $sql = 'SELECT * FROM category WHERE (status = 1 OR status IS NULL) AND id = :id';
+        $result = $this->checkConnection()->prepare($sql);
+        $result->bindValue(':id', $id, \PDO::PARAM_INT);
+        $result->execute();
+        $row = $result->fetch();
+        $category = $this->buildObject($row);
+        $result->closeCursor();
+        return $category;
+    }
+
 }

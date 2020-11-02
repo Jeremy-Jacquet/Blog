@@ -23,6 +23,8 @@ class Router
     {
         $route = $this->request->getGet()->get('route');
         $category = (int)$this->request->getGet()->get('category');
+        $id = (int)$this->request->getGet()->get('id');
+        
         try {
             if(isset($route)) {
                 if($route === 'accueil') {
@@ -37,6 +39,9 @@ class Router
                     } else {
                         $this->frontController->articles();
                     }
+                }
+                elseif($route === 'article') {
+                    $this->frontController->single($id);
                 }
                 else {
                     $this->errorController->errorNotFound();

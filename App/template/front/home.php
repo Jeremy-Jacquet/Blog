@@ -14,7 +14,12 @@
         <?php foreach ($articles as $article) { ?>
 
             <div class="border border-dark col-6 mx-auto my-3 p-3">
-                <p><?= $article->getTitle(); ?></p>
+                <a href="<?= URL ?>articles&category=<?= $article->getCategoryId(); ?>">
+                    <p><?= $article->getCategoryTitle(); ?></p>
+                </a>
+                <a href="<?= URL ?>article&id=<?= $article->getId(); ?>">
+                    <p><?= $article->getTitle(); ?></p>
+                </a>
                 <p><?= $article->getSentence(); ?></p>
                 <p><?= $article->getContent(); ?></p>
                 <p><?= $article->getUserPseudo(); ?></p>
