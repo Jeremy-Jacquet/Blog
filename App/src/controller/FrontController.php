@@ -9,7 +9,7 @@ class FrontController extends Controller
     public function home()
     {
         $articles = $this->articleDAO->getLastArticles(NB_LAST_ARTICLES);
-        $categories = $this->categoryDAO->getCategories('highlight');
+        $categories = $this->categoryDAO->getCategories(MAIN_CATEGORY);
         return $this->view->render($this->controller, 'home', [
            'articles' => $articles,
            'categories' => $categories
@@ -18,11 +18,30 @@ class FrontController extends Controller
 
     public function categories()
     {
-        $categoriesHighlight = $this->categoryDAO->getCategories('highlight');
-        $categoriesActive = $this->categoryDAO->getCategories('active');
+        $categoriesMain = $this->categoryDAO->getCategories(MAIN_CATEGORY);
+        $categoriesActive = $this->categoryDAO->getCategories(ACTIVE_CATEGORY);
         return $this->view->render($this->controller, 'categories', [
-           'categoriesHighlight' => $categoriesHighlight,
+           'categoriesMain' => $categoriesMain,
            'categoriesActive' =>$categoriesActive
         ]);
     }
+<<<<<<< Updated upstream
+=======
+
+    public function articles()
+    {
+        $articles = $this->articleDAO->getArticles(ACTIVE_ARTICLE);
+        return $this->view->render($this->controller, 'articles', [
+           'articles' => $articles
+        ]);
+    }
+
+    public function articlesByCategory($categoryId)
+    {
+        $articles = $this->articleDAO->getArticlesByCategory($categoryId);
+        return $this->view->render($this->controller, 'articlesByCategory', [
+           'articles' => $articles
+        ]);
+    }
+>>>>>>> Stashed changes
 }
