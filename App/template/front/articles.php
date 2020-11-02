@@ -1,7 +1,15 @@
 <?php $this->title = 'Webaby - Articles'; ?>
 
+<h2 class="text-center">Articles par catégorie</h2>
+<nav>
+    <a href="<?= URL ?>articles&category=1">Developpement Web</a>
+    <a href="<?= URL ?>articles&category=2">Sciences naturelles</a>
+    <a href="<?= URL ?>articles&category=3">Voyages</a>
+    <a href="<?= URL ?>articles&category=4">Jeux-vidéo</a>
+</nav>
+
 <section id="articles">
-    <h1 class="text-center">Tous les articles</h1>
+    <h2 class="text-center">Tous les articles</h2>
     <div class="row">
         <?php foreach ($articles as $article) { ?>
             
