@@ -4,6 +4,7 @@ namespace App\src\DAO;
 
 use App\src\blogFram\DAO;
 use App\src\entity\Article;
+use \PDO;
 
 class ArticleDAO extends DAO
 {
@@ -36,8 +37,8 @@ class ArticleDAO extends DAO
             WHERE a.status = 1 
             ORDER BY id 
             DESC LIMIT :nb';
-        $result = $this->checkConnection()->prepare($sql);
-        $result->bindValue(':nb', $numberArticles, \PDO::PARAM_INT);
+        $result = $this->checkConnexion()->prepare($sql);
+        $result->bindValue(':nb', $numberArticles, PDO::PARAM_INT);
         $result->execute();
 ;       $articles = [];
         foreach ($result as $row){
@@ -56,11 +57,11 @@ class ArticleDAO extends DAO
             INNER JOIN category c ON c.id = a.category_id';
         if($status != null) {
             $sql = $sql.' WHERE a.status = :status ORDER BY a.id DESC';
-            $result = $this->checkConnection()->prepare($sql);
-            $result->bindValue(':status', $status, \PDO::PARAM_INT);
+            $result = $this->checkConnexion()->prepare($sql);
+            $result->bindValue(':status', $status, PDO::PARAM_INT);
         } else {
             $sql = $sql.' WHERE a.status IS NULL ORDER BY a.id DESC';
-            $result = $this->checkConnection()->query($sql);
+            $result = $this->checkConnexion()->query($sql);
         }
         $result->execute();
         $articles = [];
@@ -80,8 +81,8 @@ class ArticleDAO extends DAO
             INNER JOIN category c ON c.id = a.category_id 
             WHERE a.status = 1 
             AND a.category_id = :category_id ORDER BY a.id DESC';
-        $result = $this->checkConnection()->prepare($sql);
-        $result->bindValue(':category_id', $categoryId, \PDO::PARAM_INT);
+        $result = $this->checkConnexion()->prepare($sql);
+        $result->bindValue(':category_id', $categoryId, PDO::PARAM_INT);
         $result->execute();
         $articles = [];
         foreach ($result as $row){
@@ -99,13 +100,24 @@ class ArticleDAO extends DAO
         INNER JOIN user u ON u.id = a.user_id 
         INNER JOIN category c ON c.id = a.category_id
         WHERE a.id = :id ORDER BY a.id DESC';
-        $result = $this->checkConnection()->prepare($sql);
-        $result->bindValue(':id', $id, \PDO::PARAM_INT);
+        $result = $this->checkConnexion()->prepare($sql);
+        $result->bindValue(':id', $id, PDO::PARAM_INT);
         $result->execute();
         $row = $result->fetch();
         $article = $this->buildObject($row);
         $result->closeCursor();
         return $article;
+    }
+
+    public function existsArticle($id)
+    {
+        $sql = 'SELECT title FROM article WHERE id = :id';
+        $result = $this->checkConnexion()->prepare($sql);
+        $result->bindValue(':id', $id, PDO::PARAM_INT);
+        $result->execute();
+        $exists = $result->fetch();
+        $result->closeCursor();
+        return ($exists) ? true : false;
     }
 
 }

@@ -14,10 +14,10 @@
         <?php foreach ($articles as $article) { ?>
 
             <div class="border border-dark col-6 mx-auto my-3 p-3">
-                <a href="<?= URL ?>articles&category=<?= $article->getCategoryId(); ?>">
+                <a href="<?= URL ?>articles&categorie=<?= $article->getCategoryId(); ?>">
                     <p><?= $article->getCategoryTitle(); ?></p>
                 </a>
-                <a href="<?= URL ?>article&id=<?= $article->getId(); ?>">
+                <a href="<?= URL ?>articles&id=<?= $article->getId(); ?>">
                     <p><?= $article->getTitle(); ?></p>
                 </a>
                 <p><?= $article->getSentence(); ?></p>

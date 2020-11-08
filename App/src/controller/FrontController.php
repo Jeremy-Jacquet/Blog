@@ -36,19 +36,30 @@ class FrontController extends Controller
 
     public function articlesByCategory($categoryId)
     {
-        $articles = $this->articleDAO->getArticlesByCategory($categoryId);
-        $category = $this->categoryDAO->getCategory($categoryId);
-        return $this->view->render($this->controller, 'articlesByCategory', [
-           'articles' => $articles,
-           'category' => $category
-        ]);
+        if($this->categoryDAO->existsCategory($categoryId)) {
+            $articles = $this->articleDAO->getArticlesByCategory($categoryId);
+            $category = $this->categoryDAO->getCategory($categoryId);
+            return $this->view->render($this->controller, 'articlesByCategory', [
+            'articles' => $articles,
+            'category' => $category
+            ]);
+        } else {
+            header("Location: ".URL."articles");
+            exit;
+        }
+        
     }
 
     public function single($id)
     {
-        $article = $this->articleDAO->getArticle($id);
-        return $this->view->render($this->controller, 'single', [
-           'article' => $article
-        ]);
+        if($this->articleDAO->existsArticle($id)) {
+            $article = $this->articleDAO->getArticle($id);
+            return $this->view->render($this->controller, 'single', [
+            'article' => $article
+            ]);
+        } else {
+            header("Location: ".URL."articles");
+            exit;
+        }
     }
 }
