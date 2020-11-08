@@ -11,3 +11,8 @@ define("PENDING_ARTICLE", NULL);
 define("MAIN_CATEGORY", 1);
 define("ACTIVE_CATEGORY", NULL);
 define("INACTIVE_CATEGORY", 0);
+
+define("ROLE_VISITOR", 1);
+define("ROLE_MEMBER",2);
+define("ROLE_AUTHOR", 3);
+define("ROLE_ADMIN", 4);
