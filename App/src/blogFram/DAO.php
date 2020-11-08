@@ -8,40 +8,39 @@ use Exception;
 abstract class DAO
 {
 
-    private $connection;
+    private $connexion;
 
-    protected function checkConnection()
+    protected function checkConnexion()
     {
-        if($this->connection === null) {
-            return $this->getConnection();
+        if($this->connexion === null) {
+            return $this->getConnexion();
         }
-        return $this->connection;
+        return $this->connexion;
     }
 
-    private function getConnection()
+    private function getConnexion()
     {
         try{
-            $this->connection = new PDO(DB_HOST, DB_USER, DB_PASS);
-            $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            return $this->connection;
+            $this->connexion = new PDO(DB_HOST, DB_USER, DB_PASS);
+            $this->connexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            return $this->connexion;
         }
-        catch(Exception $errorConnection)
+        catch(Exception $errorConnexion)
         {
-            die ('Erreur de connection :'.$errorConnection->getMessage());
+            die ('Erreur de connection :'.$errorConnexion->getMessage());
         }
 
     }
 
-    /*
     protected function createQuery($sql, $parameters = null)
     {
         if($parameters) {
-            $result = $this->checkConnection()->prepare($sql);
+            $result = $this->checkConnexion()->prepare($sql);
             $result->execute($parameters);
             return $result;
         }
-        $result = $this->checkConnection()->query($sql);
+        $result = $this->checkConnexion()->query($sql);
         return $result;
     }
-    */
+
 }
