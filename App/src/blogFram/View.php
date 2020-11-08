@@ -18,7 +18,7 @@ class View
         echo $view;
     }
 
-    private function renderFile($file, $data)
+    public function renderFile($file, $data)
     {
         if(file_exists($file)){
             extract($data);
