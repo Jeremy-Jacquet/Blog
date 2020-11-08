@@ -1,10 +1,10 @@
 <?php $this->title = 'Webaby - Articles'; ?>
 <nav>
-    <a href="<?= URL ?>articles&category=1">Developpement Web</a>
-    <a href="<?= URL ?>articles&category=2">Sciences naturelles</a>
-    <a href="<?= URL ?>articles&category=3">Voyages</a>
-    <a href="<?= URL ?>articles&category=4">Jeux-vidéo</a>
-    <a href="<?= URL ?>articles&category=5">Société</a>
+    <a href="<?= URL ?>articles&categorie=1">Developpement Web</a>
+    <a href="<?= URL ?>articles&categorie=2">Sciences naturelles</a>
+    <a href="<?= URL ?>articles&categorie=3">Voyages</a>
+    <a href="<?= URL ?>articles&categorie=4">Jeux-vidéo</a>
+    <a href="<?= URL ?>articles&categorie=5">Société</a>
 </nav>
 
 <section id="articles">
@@ -13,7 +13,7 @@
         <?php foreach ($articles as $article) { ?>
             
             <div class="border border-dark col-6 mx-auto my-3 p-3">
-                <a href="<?= URL ?>article&id=<?= $article->getId(); ?>">
+                <a href="<?= URL ?>articles&id=<?= $article->getId(); ?>">
                     <p><?= $article->getTitle(); ?></p>
                 </a>
                 <p><?= $article->getSentence(); ?></p>

@@ -6,7 +6,7 @@
         <?php foreach ($categoriesMain as $category) { ?>
             
             <div class="border border-dark col-6 mx-auto my-3 p-3">
-                <a href="<?= URL ?>articles&category=<?= $category->getId(); ?>">
+                <a href="<?= URL ?>articles&categorie=<?= $category->getId(); ?>">
                     <p><?= $category->getTitle(); ?></p>
                 </a>
                 <p><?= $category->getSentence(); ?></p>
@@ -23,7 +23,7 @@
         <?php foreach ($categoriesActive as $category) { ?>
 
             <div class="border border-dark col-6 mx-auto my-3 p-3">
-                <a href="<?= URL ?>articles&category=<?= $category->getId(); ?>">
+                <a href="<?= URL ?>articles&categorie=<?= $category->getId(); ?>">
                     <p><?= $category->getTitle(); ?></p>
                 </a>
                 <p><?= $category->getSentence(); ?></p>
