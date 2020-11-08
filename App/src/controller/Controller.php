@@ -4,8 +4,10 @@ namespace App\src\controller;
 
 use App\src\blogFram\Request;
 use App\src\blogFram\View;
+use App\src\constraint\Validation;
 use App\src\DAO\ArticleDAO;
 use App\src\DAO\CategoryDAO;
+use App\src\DAO\UserDAO;
 
 abstract class Controller
 {
@@ -15,6 +17,8 @@ abstract class Controller
     protected $view;
     protected $articleDAO;
     protected $categoryDAO;
+    protected $userDAO;
+    protected $validation;
 
     public function __construct()
     {
@@ -24,5 +28,7 @@ abstract class Controller
         $this->view = new View();
         $this->articleDAO = new ArticleDAO();
         $this->categoryDAO = new CategoryDAO();
+        $this->userDAO = new UserDAO();
+        $this->validation = new Validation();
     }
 }
