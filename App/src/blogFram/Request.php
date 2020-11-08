@@ -1,16 +1,18 @@
 <?php
 
-namespace App\src\blogFram;;
+namespace App\src\blogFram;
 
 class Request
 {
+    private $security;
     private $get;
     private $post;
 
     public function __construct()
     {
-        $this->get = new Parameter($_GET);
-        $this->post = new Parameter($_POST);
+        $this->security = new Security();
+        $this->setGet();
+        $this->setPost();
     }
 
     /**
@@ -27,5 +29,20 @@ class Request
     public function getPost()
     {
         return $this->post;
+    }
+
+    public function setGet()
+    {
+        if(isset($_GET)){
+            $this->get = new Parameter($this->security->secureArray($_GET));
+        }
+    }
+
+    public function setPost()
+    {
+        if(isset($_POST)){
+            $this->post = new Parameter($this->security->secureArray($_POST));
+        }
+        
     }
 }
