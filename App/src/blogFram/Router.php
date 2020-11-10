@@ -29,7 +29,9 @@ class Router
         $category = (int)$this->request->getGet()->get('categorie');
         $id = (int)$this->request->getGet()->get('id');
         $post = isset($_POST)? $this->request->getPost() : null;
-        $token = ($this->request->getGet()->get('token'))?? null;
+        $action = ($this->request->getGet()->get('action'))? $this->request->getGet()->get('action') : false;
+        $token = ($this->request->getGet()->get('token'))? $this->request->getGet()->get('token') : false;
+        $email = ($this->request->getGet()->get('email'))? $this->request->getGet()->get('email') : false;
 
         try {
             if(isset($route)) {
@@ -49,10 +51,10 @@ class Router
                     }
                 } 
                 elseif($route === 'inscription') {
-                    $this->backController->register($post);
-                }
-                elseif($route === 'email-confirmation' AND $id != false AND !empty($token)) {
-                    $this->backController->confirmRegister($id, $token);
+                    if($action === 'confirmation' AND $email AND $token) {
+                        $this->frontController->confirmRegister($email, $token);
+                    }
+                    $this->frontController->register($post);
                 }
                 else {
                     $this->errorController->errorNotFound();
