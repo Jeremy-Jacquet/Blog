@@ -68,18 +68,6 @@ class UserDAO extends DAO
         return $user;
     }
 
-    public function getUserByMail($email)
-    {
-        $sql = 'SELECT * FROM user WHERE email = :email';
-        $result = $this->checkConnexion()->prepare($sql);
-        $result->bindValue(':email', $email, PDO::PARAM_STR);
-        $result->execute();
-        $row = $result->fetch();
-        $user = $this->buildObject($row);
-        $result->closeCursor();
-        return $user;
-    }
-
     public function updateUser($id, $attribute, $value)
     {
         $result = $this->checkConnexion()->prepare("UPDATE user SET $attribute = :valueAttribute WHERE id = :id");
