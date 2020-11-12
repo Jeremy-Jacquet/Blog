@@ -71,7 +71,7 @@ class UserDAO extends DAO
         $result->execute();
         $users = [];
         foreach ($result as $row){
-            $users[] = $this->buildObject($row);
+            $users[$row['id']] = $this->buildObject($row);
         }
         $result->closeCursor();
         return $users;
