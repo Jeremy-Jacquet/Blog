@@ -4,6 +4,8 @@ namespace App\src\controller;
 
 use App\src\blogFram\Parameter;
 use App\src\blogFram\Mailer;
+use App\src\blogFram\Search;
+use \DateTime;
 
 class FrontController extends Controller
 {
@@ -14,8 +16,10 @@ class FrontController extends Controller
 
     public function home()
     {
-        $articles = $this->articleDAO->getLastArticles(NB_LAST_ARTICLES);
-        $categories = $this->categoryDAO->getCategories(MAIN_CATEGORY);
+        $articles = $this->articleDAO->getArticlesBy('lasts', NB_LAST_ARTICLES);
+        $categories = Search::lookForOr($this->categoryDAO->getCategories(), [
+            'status' => MAIN_CATEGORY
+        ]);
         return $this->view->render($this->controller, 'home', [
            'articles' => $articles,
            'categories' => $categories,
@@ -25,27 +29,35 @@ class FrontController extends Controller
 
     public function categories()
     {
-        $categoriesMain = $this->categoryDAO->getCategories(MAIN_CATEGORY);
-        $categoriesActive = $this->categoryDAO->getCategories(ACTIVE_CATEGORY);
+        $categoriesMain = Search::lookForOr($this->categoryDAO->getCategories(), [
+            'status' => MAIN_CATEGORY
+            ]);
+        $categoriesActive = Search::lookForOr($this->categoryDAO->getCategories(), [
+            'status' => ACTIVE_CATEGORY
+            ]);
         return $this->view->render($this->controller, 'categories', [
            'categoriesMain' => $categoriesMain,
-           'categoriesActive' =>$categoriesActive
+           'categoriesActive' => $categoriesActive
         ]);
     }
 
     public function articles()
     {
-        $articles = $this->articleDAO->getArticles(ACTIVE_ARTICLE);
+        $articles = Search::lookForOr($this->articleDAO->getArticles(),[
+            'status' => ACTIVE_ARTICLE
+        ]);
         return $this->view->render($this->controller, 'articles', [
            'articles' => $articles
         ]);
     }
 
-    public function articlesByCategory($categoryId)
+    public function articlesByCategory($id)
     {
-        if($this->categoryDAO->existsCategory($categoryId)) {
-            $articles = $this->articleDAO->getArticlesByCategory($categoryId);
-            $category = $this->categoryDAO->getCategory($categoryId);
+        if($this->categoryDAO->existsCategory($id)) {
+            $articles = Search::lookForOr($this->articleDAO->getArticles(), [
+                'categoryId' => $id
+            ]);
+            $category = $this->categoryDAO->getCategory($id);
             return $this->view->render($this->controller, 'articlesByCategory', [
             'articles' => $articles,
             'category' => $category
@@ -53,16 +65,17 @@ class FrontController extends Controller
         } else {
             header("Location: ".URL."articles");
             exit;
-        }
-        
+        }    
     }
 
     public function single($id)
     {
-        if($this->articleDAO->existsArticle($id)) {
-            $article = $this->articleDAO->getArticle($id);
+        $article = Search::lookForOr($this->articleDAO->getArticles(), [
+            'id' => $id
+        ]);
+        if(!empty($article)) {
             return $this->view->render($this->controller, 'single', [
-            'article' => $article
+            'article' => $article[0]
             ]);
         } else {
             header("Location: ".URL."articles");
@@ -74,20 +87,24 @@ class FrontController extends Controller
     {
         if($post->get('submit')) {   
             $this->errors = $this->validation->validate($post, 'User'); 
-            var_dump($this->errors);
             if (!$this->errors) {
-                $existsUser = $this->userDAO->existsUser($post->get('pseudo'));
-                if(!$existsUser) {
-                    $dataUser = $this->userDAO->addUser($post);
-                    if($dataUser) {
-                        $this->sendMail($post, $dataUser);
+                if(!Search::lookForOr($this->userDAO->getUsers(), [
+                    'pseudo' => $post->get('pseudo'),
+                    'email' => $post->get('email')
+                ])) {
+                    $objDateTime = new DateTime('NOW');
+                    $date = $objDateTime->format('Y-m-d H:i:s');
+                    $token = password_hash($date.$post->get('pseudo'), PASSWORD_BCRYPT);
+                    $idUser = $this->userDAO->addUser($post, $date, $token);
+                    if($idUser) {
+                        $this->sendMail($post, $token);
                         header("location: ".URL."accueil");
                         exit;
                     } else {
                         $this->errors = ['request' => 'Il y a eu un problème avec votre inscription'];
                     }    
                 } else {
-                    $this->errors = ['pseudo' => 'Le pseudo existe déjà, veuillez en choisir un autre'];
+                    $this->errors = ['pseudo' => 'Le pseudo existe déjà ou l\'adresse email existe(nt) déjà.'];
                 }
             }
         }
@@ -97,14 +114,13 @@ class FrontController extends Controller
         ]);
     }
 
-    public function sendMail(Parameter $post, $dataUser)
+    public function sendMail(Parameter $post, $token)
     {
         $title = 'Email de confirmation';
         $body = $this->view->renderFile('../App/template/mail/mail_confirmation.php', [
             'title' => $title,
-            'pseudo' => $post->get('pseudo'),
-            'id' => $dataUser['id'],
-            'token' => $dataUser['token']
+            'post' => $post,
+            'token' => $token
             ]);
         $this->mailer = new Mailer();
         $this->mailer->setMail($title, FROM_EMAIL, FROM_USERNAME, $post->get('email'), $body);
@@ -113,15 +129,12 @@ class FrontController extends Controller
 
     public function confirmRegister($email, $token)
     {
-        $user = $this->userDAO->getUserByMail($email);
-        if($user){
-            if($token === $user->getToken()) {
-                echo'coucou';
-                if($this->userDAO->updateUser($user->getId(), 'role_id', ROLE_MEMBER)) {
-                    header("location: ".URL."accueil");
-                    exit;
-                }
-            }
+        $user = Search::lookForAnd($this->userDAO->getUsers(), [
+            'email' => $email,
+            'token' => $token
+        ]);
+        if(!empty($user)) {
+            $this->userDAO->updateUser($user[0]->getId(), 'role_id', ROLE_MEMBER);
         }
         header("Location: ".URL."accueil");
         exit;
