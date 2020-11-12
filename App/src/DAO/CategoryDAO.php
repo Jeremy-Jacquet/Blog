@@ -19,16 +19,22 @@ class CategoryDAO extends DAO
         return $category;
     }
 
-    public function getCategories($status)
+    public function getCategory($id)
     {
-        if($status == null) {
-            $sql = 'SELECT * FROM category WHERE status IS NULL';
-            $result = $this->checkConnexion()->query($sql);
-        } else{
-            $sql = 'SELECT * FROM category WHERE status = :status';
-            $result = $this->checkConnexion()->prepare($sql);
-            $result->bindValue(':status', $status, PDO::PARAM_INT);
-        }
+        $sql = 'SELECT * FROM category WHERE id = :id';
+        $result = $this->checkConnexion()->prepare($sql);
+        $result->bindValue(':id', $id, PDO::PARAM_INT);
+        $result->execute();
+        $row = $result->fetch();
+        $category = $this->buildObject($row);
+        $result->closeCursor();
+        return $category;
+    }
+
+    public function getCategories()
+    {
+        $sql = 'SELECT * FROM category ORDER BY id DESC';
+        $result = $this->checkConnexion()->query($sql);
         $result->execute();
         $categories = [];
         foreach ($result as $row){
@@ -37,18 +43,6 @@ class CategoryDAO extends DAO
         }
         $result->closeCursor();
         return $categories;
-    }
-
-    public function getCategory($id)
-    {
-        $sql = 'SELECT * FROM category WHERE (status = 1 OR status IS NULL) AND id = :id';
-        $result = $this->checkConnexion()->prepare($sql);
-        $result->bindValue(':id', $id, PDO::PARAM_INT);
-        $result->execute();
-        $row = $result->fetch();
-        $category = $this->buildObject($row);
-        $result->closeCursor();
-        return $category;
     }
 
     public function existsCategory($id)

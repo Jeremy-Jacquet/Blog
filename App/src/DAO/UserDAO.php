@@ -28,12 +28,8 @@ class UserDAO extends DAO
         return $user;
     }
 
-    public function addUser(Parameter $post)
+    public function addUser(Parameter $post, $date, $token)
     {
-        $objDateTime = new DateTime('NOW');
-        $date = $objDateTime->format('Y-m-d H:i:s');
-        $data['token'] = password_hash($date.$post->get('pseudo'), PASSWORD_BCRYPT);
-        
         $sql = "INSERT INTO `user` (`id`, `pseudo`, `password`, `email`, `filename`, `created_at`, `last_connexion`, `newsletter`, `flag`, `banned`, `role_id`, `token`) 
             VALUES (:id, :pseudo, :password, :email, :filename, :created_at, :last_connexion, :newsletter, :flag, :banned, :role_id, :token)";
         $result = $this->checkConnexion()->prepare($sql);
@@ -48,12 +44,12 @@ class UserDAO extends DAO
         $result->bindValue(':flag', NULL, PDO::PARAM_INT);
         $result->bindValue(':banned', 0, PDO::PARAM_INT);
         $result->bindValue(':role_id', 1, PDO::PARAM_INT);
-        $result->bindValue(':token', $data['token'], PDO::PARAM_STR);
+        $result->bindValue(':token', $token, PDO::PARAM_STR);
         $result->execute();
-        $data['id'] = $this->checkConnexion()->lastInsertId();
+        $id = $this->checkConnexion()->lastInsertId();
         $result->closeCursor();
         
-        return ($result)? $data : false;
+        return ($result)? $id : false;
     }
 
     public function getUser($id)
@@ -68,16 +64,17 @@ class UserDAO extends DAO
         return $user;
     }
 
-    public function getUserByMail($email)
+    public function getUsers()
     {
-        $sql = 'SELECT * FROM user WHERE email = :email';
-        $result = $this->checkConnexion()->prepare($sql);
-        $result->bindValue(':email', $email, PDO::PARAM_STR);
+        $sql = 'SELECT * FROM user ORDER BY id DESC';
+        $result = $this->checkConnexion()->query($sql);
         $result->execute();
-        $row = $result->fetch();
-        $user = $this->buildObject($row);
+        $users = [];
+        foreach ($result as $row){
+            $users[] = $this->buildObject($row);
+        }
         $result->closeCursor();
-        return $user;
+        return $users;
     }
 
     public function updateUser($id, $attribute, $value)
