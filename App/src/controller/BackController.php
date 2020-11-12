@@ -3,12 +3,36 @@
 namespace App\src\controller;
 
 use App\src\blogFram\Parameter;
+use App\src\blogFram\Search;
 
 class BackController extends Controller
 {
     private $controller = 'back';
     private $errors = [];
 
-    
+    public function dashboard()
+    {
+        // if(isAdmin) {
+            $pendingArticles = Search::lookForOr($this->articleDAO->getArticles(),[
+                'status' => PENDING_ARTICLE
+            ]);
+            $pendingComments = Search::lookForOr($this->commentDAO->getComments(),[
+                'status' => PENDING_COMMENT
+            ]);
+            $users = $this->userDAO->getUsers();
+            $admin = $this->userDAO->getUser(1); // $admin = $this->userDAO->getUser($_SESSION['id']);
+            return $this->view->render($this->controller, 'dashboard', [
+                'admin' => $admin,
+                'users' => $users,
+                'pendingArticles' => $pendingArticles,
+                'pendingComments' => $pendingComments
+            ]);
+        /* 
+        } else {
+            header("Location: ".URL."accueil");
+            exit;
+        }
+        */
+    }
 
 }

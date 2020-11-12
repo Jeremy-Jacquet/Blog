@@ -12,6 +12,10 @@ define("MAIN_CATEGORY", '1');
 define("ACTIVE_CATEGORY", NULL);
 define("INACTIVE_CATEGORY", '0');
 
+define("ACCEPTED_COMMENT", '1');
+define("REFUSED_COMMENT", '0');
+define("PENDING_COMMENT", NULL);
+
 define("ROLE_VISITOR", '1');
 define("ROLE_MEMBER", '2');
 define("ROLE_AUTHOR", '3');

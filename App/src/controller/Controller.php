@@ -8,6 +8,7 @@ use App\src\constraint\Validation;
 use App\src\DAO\ArticleDAO;
 use App\src\DAO\CategoryDAO;
 use App\src\DAO\UserDAO;
+use App\src\DAO\CommentDAO;
 
 abstract class Controller
 {
@@ -18,6 +19,7 @@ abstract class Controller
     protected $articleDAO;
     protected $categoryDAO;
     protected $userDAO;
+    protected $commentDAO;
     protected $validation;
 
     public function __construct()
@@ -29,6 +31,7 @@ abstract class Controller
         $this->articleDAO = new ArticleDAO();
         $this->categoryDAO = new CategoryDAO();
         $this->userDAO = new UserDAO();
+        $this->commentDAO = new CommentDAO();
         $this->validation = new Validation();
     }
 }
