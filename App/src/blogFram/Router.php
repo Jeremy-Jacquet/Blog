@@ -56,6 +56,9 @@ class Router
                     }
                     $this->frontController->register($post);
                 }
+                elseif($route === 'admin') {
+                    $this->backController->dashboard();
+                }
                 else {
                     $this->errorController->errorNotFound();
                 }
