@@ -11,10 +11,10 @@
     </head>
     <body>
 
-        <p>Bonjour <?= $pseudo ?>!</p>
+        <p>Bonjour <?= $post->get('pseudo'); ?>!</p>
         <p>
             Merci de vous êtes inscrit ;)</br>
-            Afin de confirmer votre inscription veuillez cliquer sur le lien suivant: <a href="http://localhost/ocr/blog/index.php?route=inscription&action=confirmation&email=<?= $email; ?>&token=<?= $token; ?>" alt="">Valider votre compte</a>
+            Afin de confirmer votre inscription veuillez cliquer sur le lien suivant: <a href="http://localhost/ocr/blog/index.php?route=inscription&action=confirmation&email=<?= $post->get('email'); ?>&token=<?= $token; ?>" alt="">Valider votre compte</a>
         </p>        
 
     </body>
