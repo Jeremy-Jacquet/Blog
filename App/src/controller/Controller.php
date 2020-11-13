@@ -36,4 +36,19 @@ abstract class Controller
         $this->validation = new Validation();
         $this->session = $this->request->getSession();
     }
+
+    protected function checkLoggedIn()
+    {
+        if($this->session->get('pseudo')) {
+            return true;
+        }
+    }
+
+    protected function checkAdmin()
+    {
+        $this->checkLoggedIn();
+        if($this->session->get('role_id') === ROLE_ADMIN) {
+            return true;
+        }
+    }
 }

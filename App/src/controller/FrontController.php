@@ -85,7 +85,11 @@ class FrontController extends Controller
 
     public function register(Parameter $post = null)
     {
-        if($post->get('submit')) {   
+        if($this->checkLoggedIn()) {
+            $this->session->set('register', 'Vous possédez déjà un compte.');
+            header("Location: ".URL."accueil");
+            exit;
+        } elseif($post->get('submit')) {   
             $this->errors = $this->validation->validate($post, 'User'); 
             if (!$this->errors) {
                 if(!Search::lookForOr($this->userDAO->getUsers(), [
@@ -95,8 +99,7 @@ class FrontController extends Controller
                     $objDateTime = new DateTime('NOW');
                     $date = $objDateTime->format('Y-m-d H:i:s');
                     $token = password_hash($date.$post->get('pseudo'), PASSWORD_BCRYPT);
-                    $idUser = $this->userDAO->addUser($post, $date, $token);
-                    if($idUser) {
+                    if($this->userDAO->addUser($post, $date, $token)) {
                         $this->sendMail($post, $token);
                         header("location: ".URL."accueil");
                         exit;
@@ -111,7 +114,7 @@ class FrontController extends Controller
         return $this->view->render($this->controller, 'register', [
             'post' => $post,
             'errors' => $this->errors
-        ]);
+        ]);       
     }
 
     public function sendMail(Parameter $post, $token)
@@ -148,7 +151,11 @@ class FrontController extends Controller
 
     public function login(Parameter $post)
     {
-        if($post->get('submit')) {
+        if($this->checkLoggedIn()) {
+            $this->session->set('login', 'Vous êtes déjà connecté.');
+            header("Location: ".URL."accueil");
+            exit;
+        } elseif($post->get('submit')) {
             $user = Search::lookForOr($this->userDAO->getUsers(), [
                 'pseudo' => $post->get('pseudo')
             ]);
@@ -158,10 +165,9 @@ class FrontController extends Controller
                 $this->userDAO->updateUser($user[0]->getId(), 'last_connexion', $date);
                 $this->session->set('login', 'Content de vous revoir '.$user[0]->getPseudo());
                 $this->session->set('id', $user[0]->getId());
-                $this->session->set('role', $user[0]->getRoleId());
+                $this->session->set('role_id', $user[0]->getRoleId());
                 $this->session->set('pseudo', $user[0]->getPseudo());
-                header("Location: ".URL."accueil");
-                exit;
+                ($this->checkAdmin())? header("Location: ".URL."admin") : header("Location: ".URL."accueil");
             } else {
                 $this->session->set('error_login', 'Vos identifiants sont incorrects');
                 return $this->view->render($this->controller, 'login', [
@@ -171,4 +177,5 @@ class FrontController extends Controller
         }
         return $this->view->render($this->controller, 'login');
     }
+
 }
