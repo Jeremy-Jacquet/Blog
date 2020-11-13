@@ -6,7 +6,6 @@ use Exception;
 use App\src\controller\FrontController;
 use App\src\controller\BackController;
 use App\src\controller\ErrorController;
-use \DateTime;
 
 class Router
 {
