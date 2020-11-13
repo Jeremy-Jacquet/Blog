@@ -32,6 +32,7 @@ class Router
         $token = $this->request->getGet()->get('token');
         $email = $this->request->getGet()->get('email');
         
+        var_dump($_SESSION);
 
         try {
             if(isset($route)) {
@@ -59,11 +60,11 @@ class Router
                 elseif($route === 'login') {
                     $this->frontController->login($post);
                 }
+                elseif($route === 'logout') {
+                    $this->backController->logout();
+                }
                 elseif($route === 'admin') {
                     $this->backController->dashboard();
-                }
-                elseif($route === 'test') {
-                    $this->backController->test();
                 }
                 else {
                     $this->errorController->errorNotFound();
