@@ -21,6 +21,7 @@ abstract class Controller
     protected $userDAO;
     protected $commentDAO;
     protected $validation;
+    protected $session;
 
     public function __construct()
     {
@@ -33,5 +34,6 @@ abstract class Controller
         $this->userDAO = new UserDAO();
         $this->commentDAO = new CommentDAO();
         $this->validation = new Validation();
+        $this->session = $this->request->getSession();
     }
 }

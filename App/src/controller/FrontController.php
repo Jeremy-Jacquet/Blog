@@ -91,7 +91,7 @@ class FrontController extends Controller
                 if(!Search::lookForOr($this->userDAO->getUsers(), [
                     'pseudo' => $post->get('pseudo'),
                     'email' => $post->get('email')
-                ])) {
+                    ])) {
                     $objDateTime = new DateTime('NOW');
                     $date = $objDateTime->format('Y-m-d H:i:s');
                     $token = password_hash($date.$post->get('pseudo'), PASSWORD_BCRYPT);
@@ -133,10 +133,42 @@ class FrontController extends Controller
             'email' => $email,
             'token' => $token
         ]);
-        if(!empty($user)) {
+        if($user) {
             $this->userDAO->updateUser($user[0]->getId(), 'role_id', ROLE_MEMBER);
+            $this->userDAO->updateUser($user[0]->getId(), 'token', NULL);
+            $this->session->set('confirm_register', 'Félicitations, vous êtes bien inscrit.');            
+            header("Location: ".URL."accueil");
+            exit; 
+        } else {
+            $this->session->set('error_register', 'Votre inscription n\'a pas aboutie.');
+            header("Location: ".URL."inscription");
+            exit; 
+        }       
+    }
+
+    public function login(Parameter $post)
+    {
+        if($post->get('submit')) {
+            $user = Search::lookForOr($this->userDAO->getUsers(), [
+                'pseudo' => $post->get('pseudo')
+            ]);
+            if($user AND password_verify($post->get('password'), $user[0]->getPassword())) {
+                $objDateTime = new DateTime('NOW');
+                $date = $objDateTime->format('Y-m-d H:i:s');
+                $this->userDAO->updateUser($user[0]->getId(), 'last_connexion', $date);
+                $this->session->set('login', 'Content de vous revoir '.$user[0]->getPseudo());
+                $this->session->set('id', $user[0]->getId());
+                $this->session->set('role', $user[0]->getRoleId());
+                $this->session->set('pseudo', $user[0]->getPseudo());
+                header("Location: ".URL."accueil");
+                exit;
+            } else {
+                $this->session->set('error_login', 'Vos identifiants sont incorrects');
+                return $this->view->render($this->controller, 'login', [
+                    'post'=> $post
+                ]);
+            }
         }
-        header("Location: ".URL."accueil");
-        exit;
+        return $this->view->render($this->controller, 'login');
     }
 }

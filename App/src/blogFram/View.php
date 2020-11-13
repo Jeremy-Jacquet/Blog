@@ -6,6 +6,14 @@ class View
 {
     private $file;
     private $title;
+    private $request;
+    private $session;
+
+    public function __construct()
+    {
+        $this->request = new Request();
+        $this->session = $this->request->getSession();
+    }
 
     public function render($controller, $template, $data = [])
     {

@@ -2,15 +2,20 @@
 
 namespace App\src\blogFram;
 
+use App\src\blogFram\Security;
+use App\src\blogFram\Session;
+
 class Request
 {
     private $security;
     private $get;
     private $post;
+    private $session;
 
     public function __construct()
     {
         $this->security = new Security();
+        $this->session = new Session($_SESSION);
         $this->setGet();
         $this->setPost();
     }
@@ -29,6 +34,14 @@ class Request
     public function getPost()
     {
         return $this->post;
+    }
+
+    /**
+     * @return Session
+     */
+    public function getSession()
+    {
+        return $this->session;
     }
 
     public function setGet()
