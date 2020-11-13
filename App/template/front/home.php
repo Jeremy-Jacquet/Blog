@@ -1,4 +1,8 @@
 <?php $this->title = 'Accueil'; ?>
+</br>
+<?= $this->session->show('login'); ?>
+<?= $this->session->show('confirm_register'); ?>
+
 
 <section id="presentation">
     <div>
