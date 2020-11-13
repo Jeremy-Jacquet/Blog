@@ -26,12 +26,13 @@ class Router
     public function run()
     {
         $route = $this->request->getGet()->get('route');
-        $category = (int)$this->request->getGet()->get('categorie');
-        $id = (int)$this->request->getGet()->get('id');
-        $post = isset($_POST)? $this->request->getPost() : null;
-        $action = ($this->request->getGet()->get('action'))? $this->request->getGet()->get('action') : false;
-        $token = ($this->request->getGet()->get('token'))? $this->request->getGet()->get('token') : false;
-        $email = ($this->request->getGet()->get('email'))? $this->request->getGet()->get('email') : false;
+        $action = $this->request->getGet()->get('action');
+        $category = $this->request->getGet()->get('categorie');
+        $id = $this->request->getGet()->get('id');
+        $post = $this->request->getPost();
+        $token = $this->request->getGet()->get('token');
+        $email = $this->request->getGet()->get('email');
+        
 
         try {
             if(isset($route)) {
@@ -56,8 +57,14 @@ class Router
                     }
                     $this->frontController->register($post);
                 }
+                elseif($route === 'login') {
+                    $this->frontController->login($post);
+                }
                 elseif($route === 'admin') {
                     $this->backController->dashboard();
+                }
+                elseif($route === 'test') {
+                    $this->backController->test();
                 }
                 else {
                     $this->errorController->errorNotFound();
