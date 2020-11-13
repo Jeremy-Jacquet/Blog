@@ -1,5 +1,7 @@
 <?php $this->title = 'Webaby - Inscription'; ?>
 </br>
+<?= $this->session->show('error_register'); ?>
+
 <?= isset($errors['request']) ? '<p>'.$errors['request'].'</p>' : ''; ?>
 
 <form action="<?= URL ?>inscription" method="post">
