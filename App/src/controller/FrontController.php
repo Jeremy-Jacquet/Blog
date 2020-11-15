@@ -12,7 +12,6 @@ class FrontController extends Controller
 
     private $controller = 'front';
     private $mailer;
-    private $errors = [];
 
     public function home()
     {
@@ -22,8 +21,7 @@ class FrontController extends Controller
         ]);
         return $this->view->render($this->controller, 'home', [
            'articles' => $articles,
-           'categories' => $categories,
-           'errors' => $this->errors
+           'categories' => $categories
         ]);
     }
 
@@ -86,12 +84,12 @@ class FrontController extends Controller
     public function register(Parameter $post = null)
     {
         if($this->checkLoggedIn()) {
-            $this->session->set('register', 'Vous possédez déjà un compte.');
+            $this->alert->addError('Vous possédez déjà un compte.');
             header("Location: ".URL."accueil");
             exit;
-        } elseif($post->get('submit')) {   
-            $this->errors = $this->validation->validate($post, 'User'); 
-            if (!$this->errors) {
+        } elseif($post->get('submit')) { 
+            $error = $this->validation->validate($post, 'User'); 
+            if(!$error) {
                 if(!Search::lookForOr($this->userDAO->getUsers(), [
                     'pseudo' => $post->get('pseudo'),
                     'email' => $post->get('email')
@@ -104,16 +102,15 @@ class FrontController extends Controller
                         header("location: ".URL."accueil");
                         exit;
                     } else {
-                        $this->errors = ['request' => 'Il y a eu un problème avec votre inscription'];
-                    }    
-                } else {
-                    $this->errors = ['pseudo' => 'Le pseudo existe déjà ou l\'adresse email existe(nt) déjà.'];
+                        $this->alert->addError('Il y a eu un problème avec votre inscription');
+                    }
                 }
+            } else {
+                $this->alert->addError($error);
             }
         }
         return $this->view->render($this->controller, 'register', [
-            'post' => $post,
-            'errors' => $this->errors
+            'post' => $post
         ]);       
     }
 
@@ -139,11 +136,11 @@ class FrontController extends Controller
         if($user) {
             $this->userDAO->updateUser($user[0]->getId(), 'role_id', ROLE_MEMBER);
             $this->userDAO->updateUser($user[0]->getId(), 'token', NULL);
-            $this->session->set('confirm_register', 'Félicitations, vous êtes bien inscrit.');            
+            $this->alert->addSuccess('Félicitations, vous êtes bien inscrit.');            
             header("Location: ".URL."accueil");
             exit; 
         } else {
-            $this->session->set('error_register', 'Votre inscription n\'a pas aboutie.');
+            $this->alert->addError('Votre inscription n\'a pas aboutie.');
             header("Location: ".URL."inscription");
             exit; 
         }       
@@ -152,9 +149,7 @@ class FrontController extends Controller
     public function login(Parameter $post)
     {
         if($this->checkLoggedIn()) {
-            $this->session->set('login', 'Vous êtes déjà connecté.');
-            header("Location: ".URL."accueil");
-            exit;
+            $this->alert->addError('Vous êtes déjà connecté.');
         } elseif($post->get('submit')) {
             $user = Search::lookForOr($this->userDAO->getUsers(), [
                 'pseudo' => $post->get('pseudo')
@@ -163,19 +158,19 @@ class FrontController extends Controller
                 $objDateTime = new DateTime('NOW');
                 $date = $objDateTime->format('Y-m-d H:i:s');
                 $this->userDAO->updateUser($user[0]->getId(), 'last_connexion', $date);
-                $this->session->set('login', 'Content de vous revoir '.$user[0]->getPseudo());
+                $this->alert->addSuccess('Content de vous revoir.');
                 $this->session->set('id', $user[0]->getId());
                 $this->session->set('role_id', $user[0]->getRoleId());
                 $this->session->set('pseudo', $user[0]->getPseudo());
-                ($this->checkAdmin())? header("Location: ".URL."admin") : header("Location: ".URL."accueil");
             } else {
-                $this->session->set('error_login', 'Vos identifiants sont incorrects');
+                $this->alert->addError('Vos identifiants sont incorrects.');
                 return $this->view->render($this->controller, 'login', [
                     'post'=> $post
                 ]);
             }
+        } else {
+            return $this->view->render($this->controller, 'login');
         }
-        return $this->view->render($this->controller, 'login');
+        ($this->checkAdmin())? header("Location: ".URL."admin") : header("Location: ".URL."accueil");
     }
-
 }
