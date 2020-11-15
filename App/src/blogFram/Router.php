@@ -31,8 +31,6 @@ class Router
         $post = $this->request->getPost();
         $token = $this->request->getGet()->get('token');
         $email = $this->request->getGet()->get('email');
-        
-        var_dump($_SESSION);
 
         try {
             if(isset($route)) {

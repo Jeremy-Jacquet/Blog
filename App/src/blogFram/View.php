@@ -6,13 +6,11 @@ class View
 {
     private $file;
     private $title;
-    private $request;
-    private $session;
+    private $alert;
 
     public function __construct()
     {
-        $this->request = new Request();
-        $this->session = $this->request->getSession();
+        $this->alert = new Alert;
     }
 
     public function render($controller, $template, $data = [])
@@ -22,6 +20,7 @@ class View
         $view = $this->renderFile('../App/template/'.$controller.'/layout.php', [
             'title' => $this->title,
             'content' => $content,
+            'alert' => $this->alert
         ]);
         echo $view;
     }

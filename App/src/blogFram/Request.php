@@ -44,14 +44,14 @@ class Request
         return $this->session;
     }
 
-    public function setGet()
+    private function setGet()
     {
         if(isset($_GET)){
             $this->get = new Parameter($this->security->secureArray($_GET));
         }
     }
 
-    public function setPost()
+    private function setPost()
     {
         if(isset($_POST)){
             $this->post = new Parameter($this->security->secureArray($_POST));

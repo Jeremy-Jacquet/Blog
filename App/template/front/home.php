@@ -1,12 +1,5 @@
 <?php $this->title = 'Accueil'; ?>
 </br>
-<?= $this->session->show('login'); ?>
-<?= $this->session->show('confirm_register'); ?>
-<?= $this->session->show('need_login'); ?>
-<?= $this->session->show('not_admin'); ?>
-<?= $this->session->show('logout'); ?>
-<?= $this->session->show('register'); ?>
-
 
 <section id="presentation">
     <div>
