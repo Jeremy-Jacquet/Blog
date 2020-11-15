@@ -2,27 +2,18 @@
 
 namespace App\src\controller;
 
-use App\src\blogFram\Parameter;
 use App\src\blogFram\Search;
 
 class BackController extends Controller
 {
     private $controller = 'back';
-    private $errors = [];
 
     public function logout()
     {
         $this->session->stop();
         $this->session->start();
-        $this->session->set('logout', 'À bientôt');
+        $this->alert->addSuccess('A bientôt');
         header("Location: ".URL."accueil");
-    }
-
-    public function profile()
-    {
-        if($this->checkLoggedIn()) {
-            return $this->view->render($this->controller, 'profile');
-        }
     }
 
     public function dashboard()
@@ -43,10 +34,9 @@ class BackController extends Controller
                 'pendingComments' => $pendingComments
             ]);
         } else {
-            $this->session->set('not_admin', 'Vous n\'avez pas le droit d\'accéder à cette page');
-            header("Location: ".URL."accueil");
-            exit;
+            $this->alert->addError('Vous n\'avez pas le droit d\'accéder à cette page');
         }
+        header("Location: ".URL."accueil");
+        exit;
     }
-
 }
