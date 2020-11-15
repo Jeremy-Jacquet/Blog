@@ -14,7 +14,10 @@
     <body>
 
     <!-- NAV -->
-    <?php include '../App/template/include/nav.php'; ?>
+    <?php include('../App/template/include/nav.php'); ?>
+
+    <!-- ALERT -->
+    <?php include('../App/template/include/alert.php'); ?>
 
     <!-- CONTENT -->
     <?php echo $content; ?>
