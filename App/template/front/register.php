@@ -1,7 +1,7 @@
 <?php $this->title = 'Webaby - Inscription'; ?>
 </br>
 
-<form action="<?= URL ?>inscription" method="post">
+<form method="post" action="<?= URL ?>inscription">
     <label for="pseudo">Pseudo:</label>
     <input type="text" name="pseudo" id="pseudo" value="<?= isset($post) ? $post->get('pseudo') : ''; ?>" required>
     </br>
@@ -12,7 +12,7 @@
     <input type="password" name="password2" id="password2" required>
     </br>
     <label for="email">Email:</label>
-    <input type="email" name="email" id="email" required>
+    <input type="email" name="email" id="email" value="<?= isset($post) ? $post->get('email') : ''; ?>"required>
     </br>
     <input type="submit" name="submit" value="S'inscrire">
 </form>

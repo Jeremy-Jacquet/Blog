@@ -3,43 +3,60 @@
 namespace App\src\constraint;
 
 use App\src\blogFram\Parameter;
+use App\src\blogFram\Alert;
 
-class UserValidation extends Validation
+class UserValidation
 {
-    private $errors = [];
     private $constraint;
+    private $alert;
+
+    const PSEUDO_MIN = 2;
+    const PSEUDO_MAX = 50;
+    const PASSWORD_MIN = 6;
+    const PASSWORD_MAX = 72;
+    const EMAIL_MIN = 6;
+    const EMAIL_MAX = 78;
 
     public function __construct()
     {
         $this->constraint = new Constraint();
+        $this->alert = new Alert();
     }
 
     public function checkField(Parameter $post)
     {
-        foreach ($post->all() as $key => $value) {
+        $error = 0;
+        foreach($post->all() as $key => $value) {
             if($key === 'pseudo') {
-                $error = $this->checkPseudo($key, $value);
-                $this->addError($key, $error);
+                if($this->checkPseudo($key, $value)) {
+                    $this->alert->addError($this->checkPseudo($key, $value));
+                    $error = +1;
+                }
             } elseif ($key === 'password') {
-                $error = $this->checkPassword($key, $value);
-                $this->addError($key, $error);
-            } elseif($key === 'password2'){
-                $error = $this->checkPassword2($post->get('password'), $post->get('password2'));
-                $this->addError($key, $error);
+                if($this->checkPassword($key, $value)) {
+                    $this->alert->addError($this->checkPassword($key, $value));
+                    $error = +1;
+                }
+            } elseif($key === 'passwordConfirm'){
+                if($this->checkIsSame($value, $post->get('password'))) {
+                    $this->alert->addError($this->checkIsSame($value, $post->get('password')));
+                    $error = +1;
+                } 
             } elseif ($key === 'email') {
-                $error = $this->checkEmail($key, $value);
-                $this->addError($key, $error);
+                if($this->checkEmail($key, $value)) {
+                    $this->alert->addError($this->checkEmail($key, $value));
+                    $error = +1;
+                }
+            }
+            elseif($key === 'emailConfirm'){
+                if($this->checkIsSame($value, $post->get('email'))) {
+                    var_dump($this->checkIsSame($value, $post->get('email')));
+                    $this->alert->addError($this->checkIsSame($value, $post->get('email')));
+                    $error = +1;
+                } 
             }
         }
-        return $this->errors;
-    }
-
-    private function addError($name, $error) {
-        if($error) {
-            $this->errors += [
-                $name => $error
-            ];
-        }
+        return ($error)? false : true;
     }
 
     private function checkPseudo($name, $value)
@@ -47,17 +64,15 @@ class UserValidation extends Validation
         if($this->constraint->notBlank($name, $value)) {
             return $this->constraint->notBlank('pseudo', $value);
         }
-        if($this->constraint->minLength($name, $value, 2)) {
-            return $this->constraint->minLength('pseudo', $value, 2);
+        if($this->constraint->minLength($name, $value, self::PSEUDO_MIN)) {
+            return $this->constraint->minLength('pseudo', $value, self::PSEUDO_MIN);
         }
-        if($this->constraint->maxLength($name, $value, 50)) {
-            return $this->constraint->maxLength('pseudo', $value, 50);
+        if($this->constraint->maxLength($name, $value, self::PSEUDO_MAX)) {
+            return $this->constraint->maxLength('pseudo', $value, self::PSEUDO_MAX);
         }
-        /*
-        if($this->constraint->allowedCharacters($value)) {
-            return $this->constraint->allowedCharacters($value);
+        if($this->constraint->allowCharacter($value)) {
+            return $this->constraint->allowCharacter($value);
         }
-        */
     }
 
     private function checkPassword($name, $value)
@@ -65,18 +80,18 @@ class UserValidation extends Validation
         if($this->constraint->notBlank($name, $value)) {
             return $this->constraint->notBlank('password', $value);
         }
-        if($this->constraint->minLength($name, $value, 6)) {
-            return $this->constraint->minLength('password', $value, 6);
+        if($this->constraint->minLength($name, $value, self::PASSWORD_MIN)) {
+            return $this->constraint->minLength('password', $value, self::PASSWORD_MIN);
         }
-        if($this->constraint->maxLength($name, $value, 50)) {
-            return $this->constraint->maxLength('password', $value, 255);
+        if($this->constraint->maxLength($name, $value, self::PASSWORD_MAX)) {
+            return $this->constraint->maxLength('password', $value, self::PASSWORD_MAX);
         }
     }
 
-    private function checkPassword2($password, $password2)
+    private function checkIsSame($data, $dataConfirm)
     {
-        if($this->constraint->samePassword($password, $password2)) {
-            return $this->constraint->samePassword($password, $password2);
+        if($this->constraint->isSame($data, $dataConfirm)) {
+            return $this->constraint->isSame($data, $dataConfirm);
         }
     }
 
@@ -85,13 +100,15 @@ class UserValidation extends Validation
         if($this->constraint->notBlank($name, $value)) {
             return $this->constraint->notBlank('email', $value);
         }
-        if($this->constraint->minLength($name, $value, 6)) {
-            return $this->constraint->minLength('email', $value, 6);
+        if($this->constraint->minLength($name, $value, self::EMAIL_MIN)) {
+            return $this->constraint->minLength('email', $value, self::EMAIL_MIN);
         }
-        if($this->constraint->maxLength($name, $value, 78)) {
-            return $this->constraint->maxLength('email', $value, 78);
+        if($this->constraint->maxLength($name, $value, self::EMAIL_MAX)) {
+            return $this->constraint->maxLength('email', $value, self::EMAIL_MAX);
+        }
+        if($this->constraint->validEmail($value)) {
+            return $this->constraint->validEmail($value);
         }
     }
-
     
 }

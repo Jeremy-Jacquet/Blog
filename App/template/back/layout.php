@@ -29,7 +29,7 @@
     <?php //include('../App/template/include/copyright.php'); ?>
 
     <!-- JS SCRIPTS -->
-    <?php //include('../App/template/include/scripts.php'); ?>
+    <?php include('../App/template/include/scripts.php'); ?>
 
     </body>
 </html>

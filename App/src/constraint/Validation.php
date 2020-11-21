@@ -2,14 +2,25 @@
 
 namespace App\src\constraint;
 
+use App\src\blogFram\Parameter;
+
 class Validation
 {
-    public function validate($data, $name)
+    public function validateInput($category, Parameter $post)
     {
-        if ($name === 'User') {
+        if($category === 'user') {
             $userValidation = new UserValidation();
-            $errors = $userValidation->checkField($data);
-            return $errors;
+            $validate = $userValidation->checkField($post);
+            return $validate;
+        }
+    }
+
+    public function validateImage($category, $file, $directory)
+    {
+        if($category === 'avatar') {
+            $imageValidation = new ImageValidation();
+            $validate = $imageValidation->checkAvatar($file, $directory);
+            return $validate;
         }
     }
 
