@@ -15,14 +15,18 @@ class Alert
 
     public function addError($message)
     {
-        $this->error[] = $message;
-        $this->session->set('error', $this->error);
+        if($message) {
+            $this->error[] = $message;
+            $this->session->set('error', $this->error);
+        }
     }
 
     public function addSuccess($message)
     {
-        $this->success[] = $message;
-        $this->session->set('success', $this->success);
+        if($message) {
+            $this->success[] = $message;
+            $this->session->set('success', $this->success);
+        }
     }
 
     public function checkAlert()
@@ -78,6 +82,7 @@ class Alert
             }
         }
     }
+
     public function showSuccess()
     {
         $successes = $this->getSuccess();
@@ -88,4 +93,5 @@ class Alert
             }
         }
     }
+
 }
