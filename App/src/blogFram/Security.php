@@ -7,6 +7,7 @@ class Security
     public function secureData($data) 
     {
         $secureData = trim($data);
+        $secureData = stripslashes($secureData);
         $secureData = htmlspecialchars($secureData);
         return $secureData;
     }
