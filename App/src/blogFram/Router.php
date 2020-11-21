@@ -31,7 +31,7 @@ class Router
         $post = $this->request->getPost();
         $token = $this->request->getGet()->get('token');
         $email = $this->request->getGet()->get('email');
-
+        
         try {
             if(isset($route)) {
                 if($route === 'accueil') {
@@ -48,18 +48,21 @@ class Router
                     } else {
                         $this->frontController->articles();
                     }
-                } 
+                }
                 elseif($route === 'inscription') {
                     if($action === 'confirmation' AND $email AND $token) {
                         $this->frontController->confirmRegister($email, $token);
                     }
-                    $this->frontController->register($post);
+                    $this->frontController->displayRegister($post);
                 }
-                elseif($route === 'login') {
+                elseif($route === 'connexion') {
                     $this->frontController->login($post);
                 }
-                elseif($route === 'logout') {
+                elseif($route === 'deconnexion') {
                     $this->backController->logout();
+                }
+                elseif($route === 'profil') {
+                    $this->backController->profile($post);
                 }
                 elseif($route === 'admin') {
                     $this->backController->dashboard();
