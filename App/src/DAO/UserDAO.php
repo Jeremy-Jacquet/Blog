@@ -79,12 +79,82 @@ class UserDAO extends DAO
 
     public function updateUser($id, $attribute, $value)
     {
+        $sql = 'UPDATE user SET ';
+        if ($attribute === 'pseudo') {
+            $sql .= 'pseudo = :pseudo  WHERE id = :id';
+            $result = $this->checkConnexion()->prepare($sql);
+            $result->bindValue(':pseudo', $value, PDO::PARAM_STR);
+        }
+        elseif ($attribute === 'password') {
+            $sql .= 'password = :password  WHERE id = :id';
+            $result = $this->checkConnexion()->prepare($sql);
+            $result->bindValue(':password', $value, PDO::PARAM_STR);
+        }
+        elseif ($attribute === 'email') {
+            $sql .= 'email = :email  WHERE id = :id';
+            $result = $this->checkConnexion()->prepare($sql);
+            $result->bindValue(':email', $value, PDO::PARAM_STR);
+        }
+        elseif ($attribute === 'filename') {
+            $sql .= 'filename = :filename  WHERE id = :id';
+            $result = $this->checkConnexion()->prepare($sql);
+            $result->bindValue(':filename', $value, PDO::PARAM_STR);
+        }
+        elseif ($attribute === 'last_connexion') {
+            $sql .= 'last_connexion = :last_connexion  WHERE id = :id';
+            $result = $this->checkConnexion()->prepare($sql);
+            $result->bindValue(':last_connexion', $value, PDO::PARAM_STR);
+        }
+        elseif ($attribute === 'newsletter') {
+            $sql .= 'newsletter = :newsletter  WHERE id = :id';
+            $result = $this->checkConnexion()->prepare($sql);
+            $result->bindValue(':newsletter', $value, PDO::PARAM_INT);
+        }
+        elseif ($attribute === 'flag') {
+            $sql .= 'flag = :flag  WHERE id = :id';
+            $result = $this->checkConnexion()->prepare($sql);
+            $result->bindValue(':flag', $value, PDO::PARAM_INT);
+        }
+        elseif ($attribute === 'banned') {
+            $sql .= 'banned = :banned  WHERE id = :id';
+            $result = $this->checkConnexion()->prepare($sql);
+            $result->bindValue(':banned', $value, PDO::PARAM_INT);
+        }
+        elseif ($attribute === 'role_id') {
+            $sql .= 'role_id = :role_id  WHERE id = :id';
+            $result = $this->checkConnexion()->prepare($sql);
+            $result->bindValue(':role_id', $value, PDO::PARAM_INT);
+        }
+        elseif ($attribute === 'token') {
+            $sql .= 'token = :token  WHERE id = :id';
+            $result = $this->checkConnexion()->prepare($sql);
+            $result->bindValue(':token', $value, PDO::PARAM_STR);
+        }
+        $result->bindValue(':id', $id, PDO::PARAM_INT);
+        $result->execute();
+        $result->closeCursor(); 
+        return ($result)? true : false;
+    }
+
+    /*
+    public function updateUser($id, $attribute, $value)
+    {
         $result = $this->checkConnexion()->prepare("UPDATE user SET $attribute = :valueAttribute WHERE id = :id");
         $result->bindValue(':valueAttribute', $value);
         $result->bindValue(':id', $id, PDO::PARAM_INT);
         $result->execute();
         $result->closeCursor(); 
         return ($result)? true : false;
+    }
+    */
+
+    public function deleteUser($id)
+    {
+        $sql = 'DELETE FROM user WHERE id = :id';
+        $result = $this->checkConnexion()->prepare($sql);
+        $result->bindValue(':id', $id, PDO::PARAM_INT);
+        $result->execute();
+        $result->closeCursor();
     }
 
     public function existsUser($pseudo)
