@@ -5,11 +5,13 @@ namespace App\src\controller;
 use App\src\blogFram\Request;
 use App\src\blogFram\View;
 use App\src\blogFram\Alert;
+use App\src\blogFram\Image;
 use App\src\constraint\Validation;
 use App\src\DAO\ArticleDAO;
 use App\src\DAO\CategoryDAO;
 use App\src\DAO\UserDAO;
 use App\src\DAO\CommentDAO;
+
 
 abstract class Controller
 {
@@ -24,6 +26,7 @@ abstract class Controller
     protected $commentDAO;
     protected $validation;
     protected $alert;
+    
     
 
     public function __construct()
