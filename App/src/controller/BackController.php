@@ -5,6 +5,7 @@ namespace App\src\controller;
 use App\src\blogFram\Image;
 use App\src\blogFram\Parameter;
 use App\src\blogFram\Search;
+use \DateTime;
 
 class BackController extends Controller
 {
@@ -150,6 +151,49 @@ class BackController extends Controller
                 }
             }
         }
+    }
+
+    public function displayUsers(Parameter $post)
+    {
+        if(!$this->checkAdmin()) {
+            $this->alert->addError("Vous n'avez pas le droit d'accéder à cette page.");
+            header("Location: ".URL."accueil");
+            exit;
+        }
+        if(!$post->get('submit')) {
+            return $this->view->render($this->controller, 'users', [
+                'users' => $this->userDAO->getUsers()
+            ]);
+        }
+        if($post->get('update')) {
+            $this->updateUser($post);
+        }
+        $user = $this->userDAO->getUser($post->get('id'));
+        return $this->view->render($this->controller, 'user', [
+            'user' => $user,
+            'role' => $this->userDAO->getRole($user->getRoleId())
+        ]);
+    }
+
+    public function updateUser(Parameter $post)
+    {
+        $id = $post->get('id');
+        $post->delete(['id', 'submit']);
+        $attributesArray = ['pseudo', 'password', 'email', 'filename', 'created_at', 'last_connexion', 'newsletter', 'flag', 'banned', 'role_id', 'token'];
+        if($post->get('token') === 'new') {
+            $post->set('token', password_hash($this->getDate().$post->get('pseudo'), PASSWORD_BCRYPT));
+        } else {
+            $post->set('token', NULL);
+        }
+        if($this->validation->validateInput('user', $post)) {                       
+            foreach($attributesArray as $index => $attribute) {
+                $value = $post->get($attribute);
+                if(!$this->userDAO->updateUser($id, $attribute, $value)) {
+                    $this->alert->addError("Le champ ".$attribute." n'a pas pu être modifié.");
+                }
+            }
+        }
+        $post->set('id', $id);
     }
 
 }
