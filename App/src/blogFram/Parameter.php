@@ -29,4 +29,10 @@ class Parameter
         return $this->parameter;
     }
 
+    public function delete($names = []) {
+        foreach($names as $index => $name) {
+            unset($this->parameter[$name]);
+        }
+    }
+
 }
