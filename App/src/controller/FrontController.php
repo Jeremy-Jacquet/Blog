@@ -108,10 +108,8 @@ class FrontController extends Controller
             ])) {
             $this->alert->addError("Veuillez changer d'idetifiants.");
         } else {
-            $objDateTime = new DateTime('NOW');
-            $date = $objDateTime->format('Y-m-d H:i:s');
-            $token = password_hash($date.$post->get('pseudo'), PASSWORD_BCRYPT);
-            if($this->userDAO->addUser($post, $date, $token)) {
+            $token = password_hash($this->getDate().$post->get('pseudo'), PASSWORD_BCRYPT);
+            if($this->userDAO->addUser($post, $this->getDate(), $token)) {
                 $this->sendMail($post, $token);
                 $this->alert->addSuccess("Félicitations, un email de confirmation vous a été envoyé.");
                 header("location: ".URL."accueil");
