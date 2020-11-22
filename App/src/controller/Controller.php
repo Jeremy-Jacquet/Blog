@@ -11,7 +11,7 @@ use App\src\DAO\ArticleDAO;
 use App\src\DAO\CategoryDAO;
 use App\src\DAO\UserDAO;
 use App\src\DAO\CommentDAO;
-
+use \DateTime;
 
 abstract class Controller
 {
@@ -42,6 +42,16 @@ abstract class Controller
         $this->commentDAO = new CommentDAO();
         $this->validation = new Validation();
         $this->alert = new Alert();
+        $this->setDate();
+    }
+
+    private function setDate(){
+        $objDateTime = new DateTime('NOW');
+        $this->date = $objDateTime->format('Y-m-d H:i:s');
+    }
+
+    protected function getDate() {
+        return $this->date;
     }
 
     protected function checkLoggedIn()

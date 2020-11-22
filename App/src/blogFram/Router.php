@@ -52,8 +52,9 @@ class Router
                 elseif($route === 'inscription') {
                     if($action === 'confirmation' AND $email AND $token) {
                         $this->frontController->confirmRegister($email, $token);
+                    } else {
+                        $this->frontController->displayRegister($post);
                     }
-                    $this->frontController->displayRegister($post);
                 }
                 elseif($route === 'connexion') {
                     $this->frontController->login($post);
@@ -65,7 +66,11 @@ class Router
                     $this->backController->profile($post);
                 }
                 elseif($route === 'admin') {
-                    $this->backController->dashboard();
+                    if($category === 'membres') {
+                        $this->backController->displayUsers($post);
+                    } else {
+                        $this->backController->dashboard();
+                    }
                 }
                 else {
                     $this->errorController->errorNotFound();
