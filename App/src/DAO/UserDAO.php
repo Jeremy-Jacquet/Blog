@@ -30,10 +30,9 @@ class UserDAO extends DAO
 
     public function addUser(Parameter $post, $date, $token)
     {
-        $sql = "INSERT INTO `user` (`id`, `pseudo`, `password`, `email`, `filename`, `created_at`, `last_connexion`, `newsletter`, `flag`, `banned`, `role_id`, `token`) 
+        $sql = "INSERT INTO `user` (`pseudo`, `password`, `email`, `filename`, `created_at`, `last_connexion`, `newsletter`, `flag`, `banned`, `role_id`, `token`) 
             VALUES (:id, :pseudo, :password, :email, :filename, :created_at, :last_connexion, :newsletter, :flag, :banned, :role_id, :token)";
         $result = $this->checkConnexion()->prepare($sql);
-        $result->bindValue(':id', NULL);
         $result->bindValue(':pseudo', $post->get('pseudo'), PDO::PARAM_STR);
         $result->bindValue(':password', password_hash($post->get('password'), PASSWORD_BCRYPT), PDO::PARAM_STR);
         $result->bindValue(':email', $post->get('email'), PDO::PARAM_STR);
@@ -41,7 +40,7 @@ class UserDAO extends DAO
         $result->bindValue(':created_at', $date, PDO::PARAM_STR);
         $result->bindValue(':last_connexion', $date, PDO::PARAM_STR);
         $result->bindValue(':newsletter', 0, PDO::PARAM_INT);
-        $result->bindValue(':flag', NULL, PDO::PARAM_INT);
+        $result->bindValue(':flag', 0, PDO::PARAM_INT);
         $result->bindValue(':banned', 0, PDO::PARAM_INT);
         $result->bindValue(':role_id', 1, PDO::PARAM_INT);
         $result->bindValue(':token', $token, PDO::PARAM_STR);
@@ -77,7 +76,7 @@ class UserDAO extends DAO
         return $users;
     }
 
-    public function updateUser($id, $attribute, $value)
+    public function updateUser($id, $attribute = null, $value = null)
     {
         $sql = 'UPDATE user SET ';
         if ($attribute === 'pseudo') {
@@ -99,6 +98,11 @@ class UserDAO extends DAO
             $sql .= 'filename = :filename  WHERE id = :id';
             $result = $this->checkConnexion()->prepare($sql);
             $result->bindValue(':filename', $value, PDO::PARAM_STR);
+        }
+        elseif ($attribute === 'created_at') {
+            $sql .= 'created_at = :created_at  WHERE id = :id';
+            $result = $this->checkConnexion()->prepare($sql);
+            $result->bindValue(':created_at', $value, PDO::PARAM_STR);
         }
         elseif ($attribute === 'last_connexion') {
             $sql .= 'last_connexion = :last_connexion  WHERE id = :id';
@@ -136,18 +140,6 @@ class UserDAO extends DAO
         return ($result)? true : false;
     }
 
-    /*
-    public function updateUser($id, $attribute, $value)
-    {
-        $result = $this->checkConnexion()->prepare("UPDATE user SET $attribute = :valueAttribute WHERE id = :id");
-        $result->bindValue(':valueAttribute', $value);
-        $result->bindValue(':id', $id, PDO::PARAM_INT);
-        $result->execute();
-        $result->closeCursor(); 
-        return ($result)? true : false;
-    }
-    */
-
     public function deleteUser($id)
     {
         $sql = 'DELETE FROM user WHERE id = :id';
@@ -166,6 +158,20 @@ class UserDAO extends DAO
         $exists = $result->fetch();
         $result->closeCursor();
         return ($exists) ? true : false;
+    }
+
+    public function getRole($roleId)
+    {
+        $sql = 'SELECT r.name
+        FROM role r
+        INNER JOIN user u
+        WHERE r.id = :role_id';
+        $result = $this->checkConnexion()->prepare($sql);
+        $result->bindValue(':role_id', $roleId, PDO::PARAM_INT);
+        $result->execute();
+        $role = $result->fetch(PDO::FETCH_ASSOC);
+        $result->closeCursor();
+        return $role;
     }
 
 }
