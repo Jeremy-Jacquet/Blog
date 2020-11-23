@@ -123,12 +123,22 @@ class BackController extends Controller
     public function updateAccountDelete(Parameter $post)
     {
         if($post->get('delete')) {
-            if($this->validation->validateInput('user', $post)) {
-                $this->userDAO->deleteUser($this->session->get('id'));
-                if(!$this->userDAO->existsUser($this->session->get('id'))) {
-                    $this->logout();
-                } else {
-                    $this->alert->addError("Votre compte n'a pas pu être supprimé.");
+            if(!$post->get('deleteConfirm')) {
+                $this->alert->addError("Vous n'avez pas confirmé le souhait de supprimer votre compte.");
+            } else {
+                if($this->validation->validateInput('user', $post)) {
+                    $id = $this->session->get('id');
+                    $passwordHash = $this->userDAO->getUser($id)->getPassword();
+                    if(!password_verify($post->get('password'), $passwordHash)) {
+                        $this->alert->addError("Votre mot de passe n'est pas bon");
+                    } else {
+                        $this->userDAO->deleteUser($id);
+                        if($this->userDAO->existsUser($id)) {
+                            $this->alert->addError("Votre compte n'a pas pu être supprimé.");
+                        } else {
+                            $this->logout();
+                        }
+                    }
                 }
             }
         }
@@ -160,7 +170,10 @@ class BackController extends Controller
             header("Location: ".URL."accueil");
             exit;
         }
-        if(!$post->get('submit')) {
+        if(!$post->get('submit') OR $post->get('delete')) {
+            if($post->get('delete')) {
+                $this->deleteUser($post);
+            }
             return $this->view->render($this->controller, 'users', [
                 'users' => $this->userDAO->getUsers()
             ]);
@@ -173,6 +186,23 @@ class BackController extends Controller
             'user' => $user,
             'role' => $this->userDAO->getRole($user->getRoleId())
         ]);
+    }
+
+    public function deleteUser(Parameter $post)
+    {
+        if($post->get('delete')) {
+            if(!$post->get('deleteConfirm')) {
+                $this->alert->addError("Vous n'avez pas confirmé la suppression de l'utilisateur.");
+            } else {
+                $id = $post->get('id');
+                $this->userDAO->deleteUser($id);
+                if($this->userDAO->existsUser($id)) {
+                    $this->alert->addError("L'utilisateur n'a pas pu être supprimé.");
+                } else {  
+                    $this->alert->addSuccess("L'utilisateur a bien été supprimé.");
+                }
+            }
+        }
     }
 
     public function updateUser(Parameter $post)
