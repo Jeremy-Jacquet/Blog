@@ -64,7 +64,7 @@
                 </button>
             </div>
             <div class="modal-body">
-            <form method="post" action="<?= URL ?>profil">
+            <form method="post" action="">
                     <label for="email">Nouvelle adresse mail:</label>
                     <input type="email" name="email" id="email" required>
                     </br>
@@ -98,7 +98,7 @@
                 </button>
             </div>
             <div class="modal-body">
-            <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" enctype="multipart/form-data">
+            <form method="post" action="" enctype="multipart/form-data">
                     <label for="avatar">Nouvelle image:</label>
                     <input type="file" name="avatar" id="avatar" required>
                     <input type="hidden" name="avatar" value="true">
@@ -127,12 +127,13 @@ Supprimez mon compte
                 </button>
             </div>
             <div class="modal-body">
-            <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
-                    <label for="delete">Je confirme vouloir supprimer mon compte</label>
-                    <input type="checkbox" id="delete" name="delete" value="true">
+            <form method="post" action="">
+                    <label for="deleteConfirm">Je confirme vouloir supprimer mon compte</label>
+                    <input type="checkbox" name="deleteConfirm" id="deleteConfirm" value="true">
                     </br>
                     <label for="password">Validez via votre de passe:</label>
                     <input type="password" name="password" id="password" required>
+                    <input type="hidden" name="delete" value="true" required>
                     <input type="submit" class="btn btn-primary" name="submit" value="Supprimer mon compte">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
                 </form>

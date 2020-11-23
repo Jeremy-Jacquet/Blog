@@ -154,34 +154,36 @@ class FrontController extends Controller
 
     public function login(Parameter $post)
     {
-        
         if($this->checkLoggedIn()) {
             $this->alert->addError("Vous êtes déjà connecté.");
             ($this->checkAdmin())? header("Location: ".URL."admin") : header("Location: ".URL."profil");
             exit;
         }
         if($post->get('submit')) {
-            $user = Search::lookForANd($this->userDAO->getUsers(), [
-                'pseudo' => $post->get('pseudo')
-            ]);
-            var_dump($user);
-            if(!$user) {
-                $this->alert->addError("Vos identifiants sont incorrects.");
-            } else {
-                if($user[0]->getRoleId() == ROLE_VISITOR) {
-                    $this->alert->addError("Vous devez d'abord valider votre compte.");
+            if($this->validation->validateInput('user', $post)) {
+                $user = Search::lookForOr($this->userDAO->getUsers(), [
+                    'pseudo' => $post->get('pseudo')
+                ]);
+                if(!$user) {
+                    $this->alert->addError("Vos identifiants sont incorrects.");
                 } else {
-                    if(password_verify($post->get('password'), $user[0]->getPassword())) {
-                        $objDateTime = new DateTime('NOW');
-                        $date = $objDateTime->format('Y-m-d H:i:s');
-                        echo $user[0]->getId();             
-                        $this->userDAO->updateUser($user[0]->getId(), 'last_connexion', $date);
-                        $this->alert->addSuccess("Content de vous revoir.");
-                        $this->session->set('id', $user[0]->getId());
-                        $this->session->set('role_id', $user[0]->getRoleId());
-                        $this->session->set('pseudo', $user[0]->getPseudo());
-                        ($this->checkAdmin())? header("Location: ".URL."admin") : header("Location: ".URL."profil");
-                        exit;
+                    if($user[0]->getRoleId() == ROLE_VISITOR) {
+                        $this->alert->addError("Vous devez d'abord valider votre compte.");
+                    } else {
+                        if(!password_verify($post->get('password'), $user[0]->getPassword())) {
+                            $this->alert->addError("Vos identifiants sont incorrects.");
+                        } else {    
+                            $objDateTime = new DateTime('NOW');
+                            $date = $objDateTime->format('Y-m-d H:i:s');
+                            echo $user[0]->getId();             
+                            $this->userDAO->updateUser($user[0]->getId(), 'last_connexion', $date);
+                            $this->alert->addSuccess("Content de vous revoir.");
+                            $this->session->set('id', $user[0]->getId());
+                            $this->session->set('role_id', $user[0]->getRoleId());
+                            $this->session->set('pseudo', $user[0]->getPseudo());
+                            ($this->checkAdmin())? header("Location: ".URL."admin") : header("Location: ".URL."profil");
+                            exit;
+                        }
                     }
                 }
             }

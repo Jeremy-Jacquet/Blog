@@ -79,3 +79,9 @@
     <input type="hidden" name="update" value="true">
     <input type="submit" name="submit" value="Modifier">
 </form>
+<form method="post" action="">
+    <input type="checkbox" name="deleteConfirm">
+    <input type="hidden" name="delete" value="true">
+    <input type="hidden" name="id" value="<?= $user->getId(); ?>">
+    <input type="submit" name="submit" value="Supprimer le membre">
+</form>

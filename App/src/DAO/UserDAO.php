@@ -31,7 +31,7 @@ class UserDAO extends DAO
     public function addUser(Parameter $post, $date, $token)
     {
         $sql = "INSERT INTO `user` (`pseudo`, `password`, `email`, `filename`, `created_at`, `last_connexion`, `newsletter`, `flag`, `banned`, `role_id`, `token`) 
-            VALUES (:id, :pseudo, :password, :email, :filename, :created_at, :last_connexion, :newsletter, :flag, :banned, :role_id, :token)";
+            VALUES (:pseudo, :password, :email, :filename, :created_at, :last_connexion, :newsletter, :flag, :banned, :role_id, :token)";
         $result = $this->checkConnexion()->prepare($sql);
         $result->bindValue(':pseudo', $post->get('pseudo'), PDO::PARAM_STR);
         $result->bindValue(':password', password_hash($post->get('password'), PASSWORD_BCRYPT), PDO::PARAM_STR);
@@ -76,7 +76,7 @@ class UserDAO extends DAO
         return $users;
     }
 
-    public function updateUser($id, $attribute = null, $value = null)
+    public function updateUser($id, $attribute, $value)
     {
         $sql = 'UPDATE user SET ';
         if ($attribute === 'pseudo') {
