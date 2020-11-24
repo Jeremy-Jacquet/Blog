@@ -1,4 +1,5 @@
 <?php
+
 namespace App\src\blogFram;
 
 class Mailer
@@ -9,27 +10,37 @@ class Mailer
     private $password;
     private $transport;
     private $mailer;
-    private $mail;
-    private $result;
+    private $message;
 
     public function __construct($host = MAILER_HOST, $port = MAILER_PORT, $username = MAILER_USERNAME, $password = MAILER_PASSWORD)
     {
-        $this->setHost($host);
-        $this->setPort($port);
-        $this->setUsername($username);
-        $this->setPassword($password);
+        $this->host = $host;
+        $this->port = $port;
+        $this->username = $username;
+        $this->password = $password;
         $this->setTransport();
-        $this->setMailer();
+        $this->mailer = new \Swift_Mailer($this->transport);
     }
 
-    public function setMail($subject, $fromEmail, $fromUser, $toEmail, $body)
+    public function sendMail($category, Parameter $post, $token = null)
     {
-        $this->mail = new Mail($subject, $fromEmail, $fromUser, $toEmail, $body);
+        $this->setMessage($category, $post, $token);
+        $this->setMail($post->get('email'));
+        $this->mailer->send($this->mail);
     }
 
-    public function sendMail()
+    public function setMessage($category, Parameter $post, $token = null)
     {
-        $this->result = $this->mailer->send($this->mail->getMessage());
+        $this->message = new Message($category);
+        $this->message->setPageSetting($post, $token);
+    }
+
+    public function setMail($toEmail)
+    {
+        $this->mail = (new \Swift_Message($this->message->getSubject()))
+        ->setFrom([FROM_EMAIL => FROM_USERNAME])
+        ->setTo([$toEmail])
+        ->setBody($this->message->getBody(), 'text/html');
     }
 
     public function setTransport()
@@ -42,38 +53,4 @@ class Mailer
         //->setEncryption(EMAIL_ENCRYPTION); //For Gmail
     }
 
-    public function setMailer()
-    {
-        $this->mailer = new \Swift_Mailer($this->transport);
-    }
-
-    public function setHost($host)
-    {
-        $this->host = $host;
-    }
-
-    public function setPort($port)
-    {
-        $this->port = $port;
-    }
-
-    public function setUsername($username)
-    {
-        $this->username = $username;
-    }
-
-    public function setPassword($password)
-    {
-        $this->password = $password;
-    }
-    
-    public function getMail()
-    {
-        return $this->mail;
-    }
-
-    public function getResult()
-    {
-        return $this->result;
-    }
 }
