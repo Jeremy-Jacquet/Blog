@@ -56,12 +56,12 @@
     <!-- ROLE -->
     <label for="role_id">Role:</label>
     <select name="role_id" id="role_id">
-        <option value="<?= $user->getRoleId(); ?>"><?= $role['name'] ?></option>
+        <option value="<?= $user->getRoleId(); ?>"><?= $user->getRole() ?></option>
         <option>--- Choisir une option ---</option>
-        <option value="1">Visiteur</option>
-        <option value="2">Membre</option>
-        <option value="3">Auteur</option>
-        <option value="4">Admin</option>
+        <option value="<?= VISITOR_ROLE; ?>">Visiteur</option>
+        <option value="<?= MEMBER_ROLE; ?>">Membre</option>
+        <option value="<?= AUTHOR_ROLE; ?>">Auteur</option>
+        <option value="<?= ADMIN_ROLE; ?>">Admin</option>
     </select>
     <br>
     
