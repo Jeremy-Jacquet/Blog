@@ -65,6 +65,11 @@ class User
      */
     private $token;
 
+    /**
+     * @var int
+     */
+    private $level;
+
     /*
     |--> GETTERS <--|
     */
@@ -166,6 +171,14 @@ class User
         return $this->token;
     }
 
+    /**
+     * @return int
+     */
+    public function getLevel()
+    {
+        return $this->level;
+    }
+
     /*
     |--> SETTERS <--|
     */
@@ -264,5 +277,13 @@ class User
     public function setToken($token)
     {
         $this->token = $token;
+    }
+
+    /**
+     * @param int $level
+     */
+    public function setLevel($level)
+    {
+        $this->level = $level;
     }
 }
