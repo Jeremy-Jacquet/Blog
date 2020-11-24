@@ -16,6 +16,11 @@ define("ACCEPTED_COMMENT", '1');
 define("REFUSED_COMMENT", '0');
 define("PENDING_COMMENT", NULL);
 
+define("VISITOR_LEVEL", '1');
+define("MEMBER_LEVEL", '10');
+define("AUTHOR_LEVEL", '100');
+define("ADMIN_LEVEL", '1000');
+
 define("ROLE_VISITOR", '1');
 define("ROLE_MEMBER", '2');
 define("ROLE_AUTHOR", '3');
