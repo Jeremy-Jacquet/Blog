@@ -5,7 +5,7 @@ namespace App\src\controller;
 use App\src\blogFram\Request;
 use App\src\blogFram\View;
 use App\src\blogFram\Alert;
-use App\src\blogFram\Image;
+use App\src\blogFram\Mailer;
 use App\src\constraint\Validation;
 use App\src\DAO\ArticleDAO;
 use App\src\DAO\CategoryDAO;
@@ -26,6 +26,7 @@ abstract class Controller
     protected $commentDAO;
     protected $validation;
     protected $alert;
+    protected $mailer;
     
     
 
@@ -42,6 +43,7 @@ abstract class Controller
         $this->commentDAO = new CommentDAO();
         $this->validation = new Validation();
         $this->alert = new Alert();
+        $this->mailer = new Mailer();
         $this->setDate();
     }
 
