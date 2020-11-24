@@ -65,6 +65,16 @@ class User
      */
     private $token;
 
+    /**
+     * @var string
+     */
+    private $role;
+
+    /**
+     * @var int
+     */
+    private $level;
+
     /*
     |--> GETTERS <--|
     */
@@ -166,6 +176,22 @@ class User
         return $this->token;
     }
 
+    /**
+     * @return string
+     */
+    public function getRole()
+    {
+        return $this->role;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLevel()
+    {
+        return $this->level;
+    }
+
     /*
     |--> SETTERS <--|
     */
@@ -264,5 +290,21 @@ class User
     public function setToken($token)
     {
         $this->token = $token;
+    }
+
+    /**
+     * @param string $role
+     */
+    public function setRole($role)
+    {
+        $this->role = $role;
+    }
+
+    /**
+     * @param int $level
+     */
+    public function setLevel($level)
+    {
+        $this->level = $level;
     }
 }

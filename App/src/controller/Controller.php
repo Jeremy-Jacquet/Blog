@@ -66,7 +66,7 @@ abstract class Controller
     protected function checkAdmin()
     {
         $this->checkLoggedIn();
-        if($this->session->get('role_id') === ROLE_ADMIN) {
+        if($this->session->get('level') >= ADMIN_LEVEL) {
             return true;
         }
     }
