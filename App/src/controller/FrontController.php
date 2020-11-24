@@ -11,7 +11,6 @@ class FrontController extends Controller
 {
 
     private $controller = 'front';
-    private $mailer;
 
     public function home()
     {
@@ -106,11 +105,11 @@ class FrontController extends Controller
             'pseudo' => $post->get('pseudo'),
             'email' => $post->get('email')
             ])) {
-            $this->alert->addError("Veuillez changer d'idetifiants.");
+            $this->alert->addError("Veuillez changer d'identifiants.");
         } else {
             $token = password_hash($this->getDate().$post->get('pseudo'), PASSWORD_BCRYPT);
             if($this->userDAO->addUser($post, $this->getDate(), $token)) {
-                $this->sendMail($post, $token);
+                $this->mailer->sendMail('register', $post, $token);
                 $this->alert->addSuccess("Félicitations, un email de confirmation vous a été envoyé.");
                 header("location: ".URL."accueil");
                 exit;
@@ -118,19 +117,6 @@ class FrontController extends Controller
                 $this->alert->addError("Il y a eu un problème avec votre inscription.");
             }
         }
-    }
-
-    public function sendMail(Parameter $post, $token = null)
-    {
-        $title = 'Email de confirmation';
-        $body = $this->view->renderFile('../App/template/mail/mail_confirmation.php', [
-            'title' => $title,
-            'post' => $post,
-            'token' => $token
-            ]);
-        $this->mailer = new Mailer();
-        $this->mailer->setMail($title, FROM_EMAIL, FROM_USERNAME, $post->get('email'), $body);
-        $this->mailer->sendMail();        
     }
 
     public function confirmRegister($email, $token)
