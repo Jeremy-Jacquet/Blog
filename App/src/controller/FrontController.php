@@ -130,7 +130,7 @@ class FrontController extends Controller
             header("Location: ".URL."inscription");
             exit; 
         } else {
-            $this->userDAO->updateUser($user[0]->getId(), 'role_id', ROLE_MEMBER);
+            $this->userDAO->updateUser($user[0]->getId(), 'role_id', MEMBER_ROLE);
             $this->userDAO->updateUser($user[0]->getId(), 'token', NULL);
             $this->alert->addSuccess("Félicitations, vous êtes bien inscrit.");            
             header("Location: ".URL."accueil");
@@ -153,7 +153,7 @@ class FrontController extends Controller
                 if(!$user) {
                     $this->alert->addError("Vos identifiants sont incorrects.");
                 } else {
-                    if($user[0]->getRoleId() == ROLE_VISITOR) {
+                    if($user[0]->getRoleId() <= MEMBER_LEVEL) {
                         $this->alert->addError("Vous devez d'abord valider votre compte.");
                     } else {
                         if(!password_verify($post->get('password'), $user[0]->getPassword())) {
@@ -165,7 +165,7 @@ class FrontController extends Controller
                             $this->userDAO->updateUser($user[0]->getId(), 'last_connexion', $date);
                             $this->alert->addSuccess("Content de vous revoir.");
                             $this->session->set('id', $user[0]->getId());
-                            $this->session->set('role_id', $user[0]->getRoleId());
+                            $this->session->set('level', $user[0]->getLevel());
                             $this->session->set('pseudo', $user[0]->getPseudo());
                             ($this->checkAdmin())? header("Location: ".URL."admin") : header("Location: ".URL."profil");
                             exit;
@@ -177,5 +177,29 @@ class FrontController extends Controller
         return $this->view->render($this->controller, 'login', [
             'post'=> $post
         ]);
+    }
+
+    public function test()
+    {
+        
+        $user = $this->userDAO->getUser(1);
+        $level = $user->getLevel();
+
+        var_dump($user);
+        var_dump($level);
+
+        echo $user->getPseudo();
+        
+
+        $users = $this->userDAO->getUsers();
+        var_dump($users);
+        
+        foreach($users as $user){
+            echo $user->getLevel();
+        }
+        
+        $article = $this->articleDAO->getArticle(3);
+        var_dump($article);
+        
     }
 }
