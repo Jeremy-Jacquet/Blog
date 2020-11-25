@@ -22,7 +22,7 @@ class CategoryDAO extends DAO
     public function getCategory($id)
     {
         $sql = 'SELECT * FROM category WHERE id = :id';
-        $result = $this->checkConnexion()->prepare($sql);
+        $result = $this->checkConnection()->prepare($sql);
         $result->bindValue(':id', $id, PDO::PARAM_INT);
         $result->execute();
         $row = $result->fetch();
@@ -34,7 +34,7 @@ class CategoryDAO extends DAO
     public function getCategories()
     {
         $sql = 'SELECT * FROM category ORDER BY id DESC';
-        $result = $this->checkConnexion()->query($sql);
+        $result = $this->checkConnection()->query($sql);
         $result->execute();
         $categories = [];
         foreach ($result as $row){
@@ -48,7 +48,7 @@ class CategoryDAO extends DAO
     public function existsCategory($id)
     {
         $sql = 'SELECT title FROM category WHERE id = :id';
-        $result = $this->checkConnexion()->prepare($sql);
+        $result = $this->checkConnection()->prepare($sql);
         $result->bindValue(':id', $id, PDO::PARAM_INT);
         $result->execute();
         $exists = $result->fetch();

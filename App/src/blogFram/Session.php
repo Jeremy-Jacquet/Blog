@@ -23,8 +23,6 @@ class Session
         }
     }
 
-    // remove at the end because if it uses to show a error
-    // this error must be removed form $_SESSION after display
     public function show($name)
     {
         if(isset($_SESSION[$name]))

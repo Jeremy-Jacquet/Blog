@@ -35,7 +35,7 @@ class ArticleDAO extends DAO
         INNER JOIN user u ON u.id = a.user_id 
         INNER JOIN category c ON c.id = a.category_id 
         WHERE a.id = :id';
-        $result = $this->checkConnexion()->prepare($sql);
+        $result = $this->checkConnection()->prepare($sql);
         $result->bindValue(':id', $id, PDO::PARAM_INT);
         $result->execute();
         $row = $result->fetch();
@@ -51,7 +51,7 @@ class ArticleDAO extends DAO
         INNER JOIN category c ON c.id = a.category_id 
         WHERE a.user_id = u.id AND a.user_id = u.id
         ORDER BY id DESC';
-        $result = $this->checkConnexion()->query($sql);
+        $result = $this->checkConnection()->query($sql);
         $result->execute();
         $articles = [];
         foreach ($result as $row){
@@ -69,7 +69,7 @@ class ArticleDAO extends DAO
         INNER JOIN category c ON c.id = a.category_id 
         WHERE a.status = :status 
         ORDER BY a.id DESC LIMIT :nbArticles';
-        $result = $this->checkConnexion()->prepare($sql);
+        $result = $this->checkConnection()->prepare($sql);
         $result->bindValue(':nbArticles', $nbArticles, PDO::PARAM_INT);
         $result->bindValue(':status', $status, PDO::PARAM_INT);
         $result->execute();
@@ -81,41 +81,10 @@ class ArticleDAO extends DAO
         return $articles;
     }
 
-    /*
-    public function getArticlesBy($condition = null, $value = null) {
-        $sql = 'SELECT * FROM article';
-        if(is_null($value)) {
-            if(is_null($condition)) {
-                $sql .= ' ORDER BY id DESC';
-            } elseif($condition === 'status') {
-                $sql .= ' WHERE status IS NULL ORDER BY id DESC';
-            }
-            $result = $this->checkConnexion()->query($sql);
-        } else {
-            if($condition === 'category' AND !empty($value)) {
-                $sql .= ' WHERE category_id = :value ORDER BY id DESC';
-            } elseif($condition === 'status' AND !empty($value)) {
-                $sql .= ' WHERE status = :value ORDER BY id DESC';
-            } elseif($condition === 'lasts' AND !empty($value)) {
-                $sql .= ' ORDER BY id DESC LIMIT :value';
-            }
-            $result = $this->checkConnexion()->prepare($sql);
-            $result->bindValue(':value', $value, PDO::PARAM_INT);
-        }
-        $result->execute();
-        $articles = [];
-        foreach ($result as $row){
-            $articles[] = $this->buildObject($row);
-        }
-        $result->closeCursor();
-        return $articles;
-    }
-    */
-
     public function existsArticle($id)
     {
         $sql = 'SELECT title FROM article WHERE id = :id';
-        $result = $this->checkConnexion()->prepare($sql);
+        $result = $this->checkConnection()->prepare($sql);
         $result->bindValue(':id', $id, PDO::PARAM_INT);
         $result->execute();
         $exists = $result->fetch();

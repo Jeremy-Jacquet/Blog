@@ -5,7 +5,7 @@ CREATE TABLE `user` (
 `email` varchar(78) NOT NULL,
 `filename` varchar(20) NOT NULL,
 `created_at` datetime NOT NULL,
-`last_connexion` datetime NOT NULL,
+`last_connection` datetime NOT NULL,
 `newsletter` tinyint(1) NOT NULL,
 `flag` tinyint,
 `banned` tinyint(1) NOT NULL,

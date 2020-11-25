@@ -78,7 +78,7 @@ class Alert
         if($errors) {
             $this->session->remove('error');
             foreach($errors as $key => $message){
-                echo '<p class="text-center  m-auto">'.$message.'</p>';
+                echo "<p class=\"text-center  m-auto\">$message</p>";
             }
         }
     }
@@ -89,7 +89,7 @@ class Alert
         if($successes) {
             $this->session->remove('success');
             foreach($successes as $key => $message){
-                echo '<p class="text-center  m-auto">'.$message.'</p>';
+                echo "<p class=\"text-center  m-auto\">$message</p>";
             }
         }
     }

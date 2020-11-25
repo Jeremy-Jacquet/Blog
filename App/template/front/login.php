@@ -6,6 +6,6 @@
         <input type="text" id="pseudo" name="pseudo" value="<?= isset($post)? $post->get('pseudo') : ''; ?>" required><br>
         <label for="password">Mot de passe</label><br>
         <input type="password" id="password" name="password" required><br>
-        <input type="submit" value="Connexion" id="submit" name="submit">
+        <input type="submit" name="submit" value="login">
     </form>
 </div>

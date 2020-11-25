@@ -38,7 +38,7 @@ class User
     /**
      * @var \DateTime
      */
-    private $lastConnexion;
+    private $lastConnection;
 
     /**
      * @var int
@@ -131,9 +131,9 @@ class User
     /**
      * @return \DateTime
      */
-    public function getLastConnexion()
+    public function getLastConnection()
     {
-        return $this->lastConnexion;
+        return $this->lastConnection;
     }
 
     /**
@@ -245,11 +245,11 @@ class User
     }
 
     /**
-     * @param \Datetime $lastConnexion
+     * @param \Datetime $lastConnection
      */
-    public function setLastConnexion($lastConnexion)
+    public function setLastConnection($lastConnection)
     {
-        $this->lastConnexion = $lastConnexion;
+        $this->lastConnection = $lastConnection;
     }
 
     /**

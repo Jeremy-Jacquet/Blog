@@ -20,7 +20,7 @@ INSERT INTO `category` (`title`, `sentence`, `filename`, `status`) VALUES
 
 /* User */
 
-INSERT INTO `user` (`pseudo`, `password`, `email`, `filename`, `created_at`, `last_connexion`, `newsletter`, `flag`, `banned`, `role_id`, `token`) VALUES
+INSERT INTO `user` (`pseudo`, `password`, `email`, `filename`, `created_at`, `last_connection`, `newsletter`, `flag`, `banned`, `role_id`, `token`) VALUES
 ('admin', '$2y$10$SZQ2Iz/GdPcOWdMOan1FQ.xd8.9tNe8GoM3kq0/nF5YzFqBIBnlWG', 'j.jacquet.contact@gmail.com', '1.jpg', '2020-10-08 08:10:20', '2020-10-08 08:10:20', 0, 0, 0, 3, null),
 ('author', '$2y$10$LIZ5n8WHEfnY8OvOSYpUh.AW4B/4db91Xq49lQcBj..jjHhbq3epm', 'author@gmail.com', '2.jpg', '2020-10-12 11:17:20', '2020-10-20 12:45:20', 0, 0, 0, 2, null),
 ('member', '$2y$10$LxPJDL5LR5s5F4zHpmkVQun9F3brYSKXaLGm/wEck2EtgAyzoz5WC', 'member@gmail.com', '3.jpg', '2020-10-13 15:33:55', '2020-10-25 09:25:36', 1, 0, 0, 1, null)

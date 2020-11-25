@@ -16,13 +16,16 @@ class CommentDAO extends DAO
         $comment->setUserId($row['user_id']);
         $comment->setCreatedAt($row['created_at']);
         $comment->setStatus($row['status']);
+        $comment->setUserPseudo($row['pseudo']);
         return $comment;
     }
 
     public function getComments()
     {
-        $sql = "SELECT * FROM comment";
-        $result = $this->checkConnexion()->query($sql);
+        $sql = "SELECT c.*, u.pseudo 
+        FROM comment c 
+        INNER JOIN user u ON u.id = c.user_id";
+        $result = $this->checkConnection()->query($sql);
         $result->execute();
         $comments = [];
         foreach ($result as $row){

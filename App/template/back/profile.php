@@ -5,12 +5,12 @@
 
 <!-- NEWSLETTER -->
 <?php if($user->getNewsletter() == 0) { ?>
-    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+    <form method="post" action="">
     <input type="hidden" name="newsletter" value="on">
     <input type="submit" class="btn btn-primary" name="submit" value="S'abonner à la newsletter">
 </form>
 <?php } else { ?>
-    <form method="post" action="<?= URL ?>profil">
+    <form method="post" action="">
     <input type="hidden" name="newsletter" value="off">
     <input type="submit" class="btn btn-primary" name="submit" value="Se désabonner à la newsletter">
 </form>
@@ -33,7 +33,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form method="post" action="<?= URL ?>profil">
+                <form method="post" action="">
                     <label for="password">Nouveau mot de passe:</label>
                     <input type="password" name="password" id="password" required>
                     </br>
