@@ -14,7 +14,7 @@ class FrontController extends Controller
 
     public function home()
     {
-        $articles = $this->articleDAO->getArticlesBy('lasts', NB_LAST_ARTICLES);
+        $articles = $this->articleDAO->getLastArticles(NB_LAST_ARTICLES, ACTIVE_ARTICLE);
         $categories = Search::lookForOr($this->categoryDAO->getCategories(), [
             'status' => MAIN_CATEGORY
         ]);
@@ -177,29 +177,5 @@ class FrontController extends Controller
         return $this->view->render($this->controller, 'login', [
             'post'=> $post
         ]);
-    }
-
-    public function test()
-    {
-        
-        $user = $this->userDAO->getUser(1);
-        $level = $user->getLevel();
-
-        var_dump($user);
-        var_dump($level);
-
-        echo $user->getPseudo();
-        
-
-        $users = $this->userDAO->getUsers();
-        var_dump($users);
-        
-        foreach($users as $user){
-            echo $user->getLevel();
-        }
-        
-        $article = $this->articleDAO->getArticle(3);
-        var_dump($article);
-        
     }
 }
