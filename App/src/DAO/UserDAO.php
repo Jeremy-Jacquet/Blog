@@ -25,10 +25,8 @@ class UserDAO extends DAO
         $user->setBanned($row['banned']);
         $user->setRoleId($row['role_id']);
         $user->setToken($row['token']);
-        $user->setLevel($row['level']);
-        //
         $user->setRole($row['role']);
-        //
+        $user->setLevel($row['level']);
         return $user;
     }
 
@@ -59,8 +57,8 @@ class UserDAO extends DAO
     {
         $sql = 'SELECT u.*, r.name AS `role`, r.level
         FROM user u
-        INNER JOIN `role` r
-        WHERE u.id = :id AND u.role_id = r.id';
+        INNER JOIN `role` r ON r.id = u.role_id 
+        WHERE u.id = :id';
         $result = $this->checkConnexion()->prepare($sql);
         $result->bindValue(':id', $id, PDO::PARAM_INT);
         $result->execute();
@@ -74,8 +72,7 @@ class UserDAO extends DAO
     {
         $sql = 'SELECT u.*, r.name AS `role`, r.level 
         FROM user u
-        INNER JOIN `role` r 
-        WHERE u.role_id = r.id 
+        INNER JOIN `role` r ON r.id = u.role_id 
         ORDER BY u.id DESC';
         $result = $this->checkConnexion()->query($sql);
         $result->execute();
