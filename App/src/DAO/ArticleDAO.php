@@ -23,12 +23,18 @@ class ArticleDAO extends DAO
         $article->setUpdatedUserId($row['updated_user_id']);
         $article->setCategoryId($row['category_id']);
         $article->setStatus($row['status']);
+        $article->setCategoryTitle($row['category']);
+        $article->setUserPseudo($row['pseudo']);
         return $article;
     }
 
     public function getArticle($id)
     {
-        $sql = 'SELECT * FROM article WHERE id = :id';
+        $sql = 'SELECT a.*, u.pseudo AS pseudo, c.title AS category
+        FROM article a 
+        INNER JOIN user u ON u.id = a.user_id 
+        INNER JOIN category c ON c.id = a.category_id 
+        WHERE a.id = :id';
         $result = $this->checkConnexion()->prepare($sql);
         $result->bindValue(':id', $id, PDO::PARAM_INT);
         $result->execute();
@@ -39,7 +45,12 @@ class ArticleDAO extends DAO
     }
 
     public function getArticles() {
-        $sql = 'SELECT * FROM article ORDER BY id DESC';
+        $sql = 'SELECT a.*, u.pseudo AS pseudo, c.title AS category
+        FROM article a 
+        INNER JOIN user u ON u.id = a.user_id 
+        INNER JOIN category c ON c.id = a.category_id 
+        WHERE a.user_id = u.id AND a.user_id = u.id
+        ORDER BY id DESC';
         $result = $this->checkConnexion()->query($sql);
         $result->execute();
         $articles = [];
@@ -50,6 +61,27 @@ class ArticleDAO extends DAO
         return $articles;
     }
 
+    public function getLastArticles($nbArticles, $status)
+    {
+        $sql = 'SELECT a.*, u.pseudo AS pseudo, c.title AS category 
+        FROM article a 
+        INNER JOIN user u ON u.id = a.user_id 
+        INNER JOIN category c ON c.id = a.category_id 
+        WHERE a.status = :status 
+        ORDER BY a.id DESC LIMIT :nbArticles';
+        $result = $this->checkConnexion()->prepare($sql);
+        $result->bindValue(':nbArticles', $nbArticles, PDO::PARAM_INT);
+        $result->bindValue(':status', $status, PDO::PARAM_INT);
+        $result->execute();
+        $articles = [];
+        foreach ($result as $row){
+            $articles[] = $this->buildObject($row);
+        }
+        $result->closeCursor();
+        return $articles;
+    }
+
+    /*
     public function getArticlesBy($condition = null, $value = null) {
         $sql = 'SELECT * FROM article';
         if(is_null($value)) {
@@ -78,6 +110,7 @@ class ArticleDAO extends DAO
         $result->closeCursor();
         return $articles;
     }
+    */
 
     public function existsArticle($id)
     {
