@@ -153,7 +153,7 @@ class FrontController extends Controller
                 if(!$user) {
                     $this->alert->addError("Vos identifiants sont incorrects.");
                 } else {
-                    if($user[0]->getRoleId() <= MEMBER_LEVEL) {
+                    if($user[0]->getLevel() <= MEMBER_LEVEL) {
                         $this->alert->addError("Vous devez d'abord valider votre compte.");
                     } else {
                         if(!password_verify($post->get('password'), $user[0]->getPassword())) {
