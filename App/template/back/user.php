@@ -7,7 +7,7 @@
 
     <!-- PASSWORD -->
     <label for="password">Password:</label>
-    <input type="text" name="password" value="<?= $user->getPassword(); ?>">
+    <input type="text" name="password" value="<?= $user->getPassword(); ?>" disabled>
     <br>
 
     <!-- EMAIL -->
@@ -22,12 +22,12 @@
 
     <!-- CREATED AT -->
     <label for="created_at">Inscription:</label>
-    <input type="text" name="created_at" value="<?= $user->getCreatedAt(); ?>">
+    <input type="text" name="created_at" value="<?= $user->getCreatedAt(); ?>" disabled>
     <br>
 
     <!-- LAST CONNEXION -->
-    <label for="last_connexion">Dernière connexion:</label>
-    <input type="text" name="last_connexion" value="<?= $user->getLastConnexion(); ?>">
+    <label for="last_connection">Dernière connexion:</label>
+    <input type="text" name="last_connection" value="<?= $user->getLastConnection(); ?>" disabled>
     <br>
 
     <!-- NEWSLETTER -->
@@ -67,11 +67,7 @@
     
     <!-- TOKEN -->
     <label for="token">Token:</label>
-    <select name="token" id="token">
-        <option value="<?= $user->getToken(); ?>"><?= ($user->getToken() === NULL)? 'Aucun' : $user->getToken(); ?></option>
-        <option>--- Choisir une option ---</option>
-        <?= ($user->getToken() === NULL)? '<option value="new">Créer un token</option>'  : '<option value="null">Supprimer le token</option>' ?>
-    </select>
+    <input type="text" name="token" value="<?= $user->getToken(); ?>" disabled>
     <br>
 
 

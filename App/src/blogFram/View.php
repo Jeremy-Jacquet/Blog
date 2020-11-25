@@ -2,15 +2,19 @@
 
 namespace App\src\blogFram;
 
+use App\src\blogFram\Session;
+
 class View
 {
     private $file;
     private $title;
     private $alert;
+    private $session;
 
     public function __construct()
     {
         $this->alert = new Alert;
+        $this->session = new Session($_SESSION);
     }
 
     public function render($controller, $template, $data = [])
@@ -34,5 +38,6 @@ class View
             return ob_get_clean();
         }
         header('Location: index.php?route=notFound');
+        exit;
     }
 }

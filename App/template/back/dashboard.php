@@ -1,5 +1,5 @@
-<p>Bienvenue <?= $admin->getPseudo(); ?></p>
-<img src="img/avatar/<?= $admin->getFilename(); ?>" alt="">
+<p>Bienvenue <?= $users[$this->session->get('id')]->getPseudo(); ?></p>
+<img src="img/avatar/<?= $users[$this->session->get('id')]->getFilename(); ?>" alt="">
 <p><a href="<?= URL ?>profil">Mon profil</a></p>
 
 <!-- NAV -->
@@ -58,11 +58,10 @@
                     <p><?= $article->getTitle(); ?></p>
                 </a>
                 <p><?= $article->getCreatedAt(); ?></p>
-                <p>
-                    <a href="<?= URL ?>admin&categorie=membres&action=signaler&id=<?= $article->getUserId(); ?>">
-                        <?= $users[$article->getUserId()]->getPseudo(); ?>
-                    </a>
-                </p>
+                <form action="<?= URL ?>admin&categorie=membres" method="post">
+                    <input type="hidden" name="id" value="<?= $article->getUserId(); ?>">
+                    <input type="submit" name="submit" value="Voir <?= $article->getUserPseudo(); ?>">
+                </form>
             </div>
         <?php } ?>
     </section>
@@ -73,25 +72,29 @@
     <section class="border" id="pending_comments">
         <?php foreach ($pendingComments as $comment) { ?>
             <div>
-                <p><a hreh="<?= URL ?>admin&categorie=membres&id=<? $comment->getUserId(); ?>"><?= $user[$comment->getUserId()]->getPseudo(); ?></a></p>
-                <img src="img/avatar/<?= $user[$comment->getUserId()]->getFilename(); ?>" alt="">
-                <a href="<?= URL ?>admin&categorie=membres&action=signaler&id=<?= $comment->getUserId(); ?>">
-                    <p>Signaler le membre</p>
-                </a>
-                <a href="<?= URL ?>admin&categorie=membres&action=signaler&id=<?= $comment->getUserId(); ?>">
-                    <p>Bannir le membre</p>
-                </a>
+                <p><a hreh="<?= URL ?>admin&categorie=membres&id=<? $comment->getUserId(); ?>"><?= $comment->getUserPseudo(); ?></a></p>
+                <img src="img/avatar/<?= $users[$comment->getUserId()]->getFilename(); ?>" alt="">
+                <form action="<?= URL ?>admin&categorie=membres" method="post">
+                    <input type="hidden" name="id" value="<?= $comment->getUserId(); ?>">
+                    <input type="submit" name="submit" value="Signaler">
+                </form>
+                <form action="<?= URL ?>admin&categorie=membres" method="post">
+                    <input type="hidden" name="id" value="<?= $comment->getUserId(); ?>">
+                    <input type="submit" name="submit" value="Bannir">
+                </form>
             </div>
             <div>
                 <p><?= $comment->getContent(); ?></p>
             </div>
             <div>
-                <a href="<?= URL ?>admin&categorie=commentaires&action=ajouter&id=<?= $comment->getId(); ?>">
-                    <p>Valider le commentaire</p>
-                </a>
-                <a href="<?= URL ?>admin&categorie=commentaires&action=supprimer&id=<?= $comment->getId(); ?>">
-                    <p>Supprimer le commentaire</p>
-                </a>
+                <form action="<?= URL ?>admin&categorie=commentaires" method="post">
+                    <input type="hidden" name="id" value="<?= $comment->getId(); ?>">
+                    <input type="submit" name="submit" value="Valider">
+                </form>
+                <form action="<?= URL ?>admin&categorie=commentaires" method="post">
+                    <input type="hidden" name="id" value="<?= $comment->getId(); ?>">
+                    <input type="submit" name="submit" value="Supprimer">
+                </form>
             </div>
         <?php } ?>
     </section>

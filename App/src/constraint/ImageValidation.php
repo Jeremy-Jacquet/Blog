@@ -8,7 +8,6 @@ class ImageValidation extends Validation
 {
     private $constraint;
     private $alert;
-    private $imagePath;
 
     const SIZE_MAX_AVATAR = 200000;                // Taille max en octets du fichier
     const WIDTH_MAX_AVATAR = 800;                  // Largeur max de l'image en pixels
@@ -19,17 +18,6 @@ class ImageValidation extends Validation
         $this->constraint = new ImageConstraint();
         $this->alert = new Alert();
     }
-
-    /*
-    // nom du fichier
-    // type du fichier
-    // taille du fichier
-    // taille autorisée du serveur (php.ini)
-    // nom temporaire
-    // dossier temporaire
-    // existence => renommage si besoin
-    // code erreur
-    */
 
     public function checkAvatar($file, $directory)
     {
@@ -47,27 +35,27 @@ class ImageValidation extends Validation
         $error = 0;
         if($this->checkDirectory($directory)) {
             $this->alert->addError($this->checkDirectory($directory));
-            $error = +1;
+            $error++;
         }
         if($this->checkImageTrue($file)) {
             $this->alert->addError($this->checkImageTrue($file));
-            $error = +1;
+            $error++;
         }
         if($this->checkName($file)) {
             $this->alert->addError($this->checkName($file));
-            $error = +1;
+            $error++;
         }
         if($this->checkExtension($file)) {
             $this->alert->addError($this->checkExtension($file));
-            $error = +1;
+            $error++;
         }
         if($this->checkImageSize($file, $sizeMax, $heightMax, $widthMax)) {
             $this->alert->addError($this->checkImageSize($file, $sizeMax, $heightMax, $widthMax));
-            $error = +1;
+            $error++;
         }
         if($this->checkError($file)) {
             $this->alert->addError($this->checkError($file));
-            $error = +1;
+            $error++;
         }
         return ($error)? false : true;  
     }

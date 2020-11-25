@@ -35,6 +35,11 @@ class Comment
      */
     private $status;
 
+    /**
+     * @var string
+     */
+    private $userPseudo;
+
     /*
     |--> GETTERS <--|
     */
@@ -87,6 +92,14 @@ class Comment
         return $this->status;
     }
 
+    /**
+     * @return string
+     */
+    public function getUserPseudo()
+    {
+        return $this->userPseudo;
+    }
+
     /*
     |--> SETTERS <--|
     */
@@ -137,5 +150,13 @@ class Comment
     public function setStatus($status)
     {
         $this->status = $status;
+    }
+
+    /**
+     * @param string $userPseudo
+     */
+    public function setUserPseudo($userPseudo)
+    {
+        $this->userPseudo = $userPseudo;
     }
 }

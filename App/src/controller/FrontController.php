@@ -3,7 +3,6 @@
 namespace App\src\controller;
 
 use App\src\blogFram\Parameter;
-use App\src\blogFram\Mailer;
 use App\src\blogFram\Search;
 use \DateTime;
 
@@ -107,8 +106,8 @@ class FrontController extends Controller
             ])) {
             $this->alert->addError("Veuillez changer d'identifiants.");
         } else {
-            $token = password_hash($this->getDate().$post->get('pseudo'), PASSWORD_BCRYPT);
-            if($this->userDAO->addUser($post, $this->getDate(), $token)) {
+            $token = password_hash($this->date.$post->get('pseudo'), PASSWORD_BCRYPT);
+            if($this->userDAO->addUser($post, $this->date, $token)) {
                 $this->mailer->sendMail('register', $post, $token);
                 $this->alert->addSuccess("Félicitations, un email de confirmation vous a été envoyé.");
                 header("location: ".URL."accueil");
@@ -126,7 +125,7 @@ class FrontController extends Controller
             'token' => $token
         ]);
         if(!$user) {
-            $this->alert->addError("Votre inscription n'a pas aboutie, veuillez vous réinscrire.");
+            $this->alert->addError("Votre inscription n'a pas aboutie. Veuillez vérifier que vous n'êtes pas déjà inscrit, ou veuillez vous réinscrire.");
             header("Location: ".URL."inscription");
             exit; 
         } else {
@@ -153,16 +152,13 @@ class FrontController extends Controller
                 if(!$user) {
                     $this->alert->addError("Vos identifiants sont incorrects.");
                 } else {
-                    if($user[0]->getLevel() <= MEMBER_LEVEL) {
+                    if($user[0]->getLevel() < MEMBER_LEVEL) {
                         $this->alert->addError("Vous devez d'abord valider votre compte.");
                     } else {
                         if(!password_verify($post->get('password'), $user[0]->getPassword())) {
                             $this->alert->addError("Vos identifiants sont incorrects.");
-                        } else {    
-                            $objDateTime = new DateTime('NOW');
-                            $date = $objDateTime->format('Y-m-d H:i:s');
-                            echo $user[0]->getId();             
-                            $this->userDAO->updateUser($user[0]->getId(), 'last_connexion', $date);
+                        } else {          
+                            $this->userDAO->updateUser($user[0]->getId(), 'last_connection', $this->date);
                             $this->alert->addSuccess("Content de vous revoir.");
                             $this->session->set('id', $user[0]->getId());
                             $this->session->set('level', $user[0]->getLevel());

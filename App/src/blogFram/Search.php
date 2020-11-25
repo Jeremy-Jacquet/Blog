@@ -13,7 +13,7 @@ abstract class Search
                 $method = 'get'.ucfirst($value);
                 if($entity->$method($value) == $key) {
                     if($count === 0) {
-                        $count = +1;
+                        $count++;
                         $result[] = $entity;
                     }
                 }
@@ -29,7 +29,7 @@ abstract class Search
             foreach($values as $value => $key) {
                 $method = 'get'.ucfirst($value);
                 if($entity->$method($value) == $key) {
-                    $count = $count+1;
+                    $count++;
                 }
             }
             if(count($values) === $count) {
@@ -47,7 +47,7 @@ abstract class Search
                 $method = 'get'.ucfirst($value);
                 if($entity->$method($value) != $key) {
                     if($count === 0) {
-                        $count = +1;
+                        $count++;
                         $result[] = $entity;
                     }
                 }
@@ -63,7 +63,7 @@ abstract class Search
             foreach($values as $value => $key) {
                 $method = 'get'.ucfirst($value);
                 if($entity->$method($value) != $key) {
-                    $count = $count+1;
+                    $count++;
                 }
             }
             if(count($values) === $count) {
@@ -72,5 +72,5 @@ abstract class Search
         }
         return $result;
     }
-
+    
 }

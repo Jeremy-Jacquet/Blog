@@ -5,7 +5,6 @@ namespace App\src\controller;
 use App\src\blogFram\Image;
 use App\src\blogFram\Parameter;
 use App\src\blogFram\Search;
-use \DateTime;
 
 class BackController extends Controller
 {
@@ -50,7 +49,6 @@ class BackController extends Controller
                 'status' => PENDING_COMMENT
             ]);
             return $this->view->render($this->controller, 'dashboard', [
-                'admin' => $this->userDAO->getUser($this->session->get('id')),
                 'users' => $this->userDAO->getUsers(),
                 'pendingArticles' => $pendingArticles,
                 'pendingComments' => $pendingComments
@@ -183,8 +181,7 @@ class BackController extends Controller
         }
         $user = $this->userDAO->getUser($post->get('id'));
         return $this->view->render($this->controller, 'user', [
-            'user' => $user,
-            'role' => $this->userDAO->getRole($user->getRoleId())
+            'user' => $user
         ]);
     }
 
@@ -209,17 +206,20 @@ class BackController extends Controller
     {
         $id = $post->get('id');
         $post->delete(['id', 'submit']);
-        $attributesArray = ['pseudo', 'password', 'email', 'filename', 'created_at', 'last_connexion', 'newsletter', 'flag', 'banned', 'role_id', 'token'];
-        if($post->get('token') === 'new') {
-            $post->set('token', password_hash($this->getDate().$post->get('pseudo'), PASSWORD_BCRYPT));
-        } else {
-            $post->set('token', NULL);
-        }
+        $attributesArray = [
+            'pseudo',  
+            'email', 
+            'filename', 
+            'newsletter', 
+            'flag', 
+            'banned', 
+            'role_id'
+        ];
         if($this->validation->validateInput('user', $post)) {                       
             foreach($attributesArray as $index => $attribute) {
                 $value = $post->get($attribute);
                 if(!$this->userDAO->updateUser($id, $attribute, $value)) {
-                    $this->alert->addError("Le champ ".$attribute." n'a pas pu être modifié.");
+                    $this->alert->addError("Le champ $attribute n'a pas pu être modifié.");
                 }
             }
         }

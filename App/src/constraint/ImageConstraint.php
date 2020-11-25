@@ -4,7 +4,7 @@ namespace App\src\constraint;
 
 class ImageConstraint
 {
-    private $tabExt = array('jpg','gif','png','jpeg');
+    const IMAGE_EXTENSIONS = ['jpg','gif','png','jpeg'];
     private $infosImg = array();
 
     public function checkDirectory($directory)
@@ -15,10 +15,10 @@ class ImageConstraint
     }
 
     public function checkImageTrue($file){
-        $finfo = finfo_open(FILEINFO_MIME_TYPE);
-        $mtype = finfo_file($finfo, $file['tmp_name']);
-        finfo_close($finfo);
-        if(!strpos($mtype, 'image/') === 0) {
+        $fileInfo = finfo_open(FILEINFO_MIME_TYPE);
+        $mimeType = finfo_file($fileInfo, $file['tmp_name']);
+        finfo_close($fileInfo);
+        if(strpos($mimeType, 'image/') !== 0) {
             return "Le fichier n'est pas une image.";
         }
     }
@@ -33,7 +33,7 @@ class ImageConstraint
     public function checkExtension($file)
     {
         $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
-        if(!in_array(strtolower($extension), $this->tabExt)) {
+        if(!in_array(strtolower($extension), self::IMAGE_EXTENSIONS)) {
             return "L'extension de l'image n'est pas reconnue.";
         }
     }
