@@ -5,8 +5,17 @@ namespace App\src\DAO;
 use App\src\blogFram\DAO;
 use App\src\entity\Comment;
 
+/**
+ * CommentDAO
+ */
 class CommentDAO extends DAO
-{
+{    
+    /**
+     * Hydrate comment object
+     *
+     * @param  mixed $row
+     * @return Comment $comment
+     */
     private function buildObject($row)
     {
         $comment = new Comment();
@@ -19,7 +28,12 @@ class CommentDAO extends DAO
         $comment->setUserPseudo($row['pseudo']);
         return $comment;
     }
-
+    
+    /**
+     * Get all comments
+     *
+     * @return array [Objects]
+     */
     public function getComments()
     {
         $sql = "SELECT c.*, u.pseudo 

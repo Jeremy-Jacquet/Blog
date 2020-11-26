@@ -7,8 +7,17 @@ use App\src\blogFram\Parameter;
 use App\src\entity\User;
 use \PDO;
 
+/**
+ * UserDAO
+ */
 class UserDAO extends DAO
-{
+{    
+    /**
+     * Hydrate user object
+     *
+     * @param  mixed $row
+     * @return User $user
+     */
     private function buildObject($row)
     {
         $user = new User();
@@ -28,7 +37,15 @@ class UserDAO extends DAO
         $user->setLevel($row['level']);
         return $user;
     }
-
+    
+    /**
+     * Add user in database
+     *
+     * @param  Parameter $post
+     * @param  string $date
+     * @param  string $token
+     * @return false|int (id user if all good)
+     */
     public function addUser(Parameter $post, $date, $token)
     {
         $sql = "INSERT INTO `user` (`pseudo`, `password`, `email`, `filename`, `created_at`, `last_connection`, `newsletter`, `flag`, `banned`, `role_id`, `token`) 
@@ -51,7 +68,13 @@ class UserDAO extends DAO
         
         return ($result)? $id : false;
     }
-
+    
+    /**
+     * Get user by id
+     *
+     * @param  int $id
+     * @return User $user
+     */
     public function getUser($id)
     {
         $sql = 'SELECT u.*, r.name AS `role`, r.level
@@ -66,7 +89,12 @@ class UserDAO extends DAO
         $result->closeCursor();
         return $user;
     }
-
+    
+    /**
+     * Get all users
+     *
+     * @return array [Objects]
+     */
     public function getUsers()
     {
         $sql = 'SELECT u.*, r.name AS `role`, r.level 
@@ -82,7 +110,15 @@ class UserDAO extends DAO
         $result->closeCursor();
         return $users;
     }
-
+    
+    /**
+     * updateUser
+     *
+     * @param  int $id
+     * @param  string $attribute
+     * @param  mixed $value
+     * @return bool (true if all good)
+     */
     public function updateUser($id, $attribute, $value)
     {
         $sql = 'UPDATE user SET ';
@@ -146,7 +182,13 @@ class UserDAO extends DAO
         $result->closeCursor(); 
         return ($result)? true : false;
     }
-
+    
+    /**
+     * Delete user
+     *
+     * @param  int $id
+     * @return void
+     */
     public function deleteUser($id)
     {
         $sql = 'DELETE FROM user WHERE id = :id';
@@ -155,7 +197,13 @@ class UserDAO extends DAO
         $result->execute();
         $result->closeCursor();
     }
-
+    
+    /**
+     * Know if user exists
+     *
+     * @param  string $pseudo
+     * @return bool (true if user exists)
+     */
     public function existsUser($pseudo)
     {
         $sql = 'SELECT id FROM user WHERE pseudo = :pseudo';

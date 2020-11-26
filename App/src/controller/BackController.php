@@ -6,20 +6,35 @@ use App\src\blogFram\Image;
 use App\src\blogFram\Parameter;
 use App\src\blogFram\Search;
 
+/**
+ * BackController
+ */
 class BackController extends Controller
-{
+{    
+    /**
+     * @var string
+     */
     private $controller = 'back';
-
+    
+    /**
+     * Logout user
+     *
+     * @return void
+     */
     public function logout()
     {
-        $_SESSION = [];
-        unset($_SESSION);
         $this->session->stop();
         $this->session->start();
         $this->alert->addSuccess("A bientôt!");
         header("Location: ".URL."accueil");
     }
-
+    
+    /**
+     * Get profile page
+     *
+     * @param  Parameter $post
+     * @return mixed $view
+     */
     public function profile(Parameter $post)
     {
         if(!$this->checkLoggedIn()) {
@@ -34,7 +49,12 @@ class BackController extends Controller
             'user' => $this->userDAO->getUser($this->session->get('id'))
         ]); 
     }
-
+    
+    /**
+     * Get admin dashboard page
+     *
+     * @return mixed $view
+     */
     public function dashboard()
     {
         if(!$this->checkAdmin()) {
@@ -55,7 +75,13 @@ class BackController extends Controller
             ]);
         }  
     }
-
+    
+    /**
+     * Update user account by user
+     *
+     * @param  Parameter $post
+     * @return void
+     */
     public function updateAccount(Parameter $post)
     {
         if($post->get('submit')) {
@@ -72,7 +98,13 @@ class BackController extends Controller
             }         
         }
     }
-
+    
+    /**
+     * Update user password by user
+     *
+     * @param  Parameter $post
+     * @return void
+     */
     public function updateAccountPassword(Parameter $post)
     {
         if($post->get('password') AND $post->get('passwordConfirm')) {
@@ -87,7 +119,13 @@ class BackController extends Controller
             } 
         }
     }
-
+    
+    /**
+     * Update user email by user
+     *
+     * @param  Parameter $post
+     * @return void
+     */
     public function updateAccountEmail(Parameter $post)
     {
         if($post->get('email')) {
@@ -101,7 +139,13 @@ class BackController extends Controller
             }
         }
     }
-
+    
+    /**
+     * update user avatar by user
+     *
+     * @param  Parameter $post
+     * @return void
+     */
     public function updateAccountAvatar(Parameter $post) 
     {
         if($post->get('avatar')) {
@@ -118,6 +162,37 @@ class BackController extends Controller
         }
     }
 
+    /**
+     * Update user newsletter subscription by user
+     *
+     * @param  Parameter $post
+     * @return void
+     */
+    public function updateAccountNewsletter(Parameter $post) 
+    {
+        if($post->get('newsletter')) {
+            if($post->get('newsletter') === 'on') {
+                if($this->userDAO->updateUser($this->session->get('id'), 'newsletter', 1)) {
+                    $this->alert->addSuccess("Merci de vous être abonné à la newsletter.");
+                } else {
+                    $this->alert->addError("Une erreur a empêché votre abonnement à la newsletter.");
+                }
+            } elseif($post->get('newsletter') === 'off') {
+                if($this->userDAO->updateUser($this->session->get('id'), 'newsletter', 0)) {
+                    $this->alert->addSuccess("Vous êtes bien désabonné de la newsletter.");
+                } else {
+                    $this->alert->addError("Une erreur a empêché votre désabonnement à la newsletter.");
+                }
+            }
+        }
+    }
+    
+    /**
+     * Delete user account by user
+     *
+     * @param  Parameter $post
+     * @return void
+     */
     public function updateAccountDelete(Parameter $post)
     {
         if($post->get('delete')) {
@@ -141,26 +216,13 @@ class BackController extends Controller
             }
         }
     }
-
-    public function updateAccountNewsletter(Parameter $post) 
-    {
-        if($post->get('newsletter')) {
-            if($post->get('newsletter') === 'on') {
-                if($this->userDAO->updateUser($this->session->get('id'), 'newsletter', 1)) {
-                    $this->alert->addSuccess("Merci de vous être abonné à la newsletter.");
-                } else {
-                    $this->alert->addError("Une erreur a empêché votre abonnement à la newsletter.");
-                }
-            } elseif($post->get('newsletter') === 'off') {
-                if($this->userDAO->updateUser($this->session->get('id'), 'newsletter', 0)) {
-                    $this->alert->addSuccess("Vous êtes bien désabonné de la newsletter.");
-                } else {
-                    $this->alert->addError("Une erreur a empêché votre désabonnement à la newsletter.");
-                }
-            }
-        }
-    }
-
+    
+    /**
+     * Display users for administration
+     *
+     * @param  Parameter $post
+     * @return void|mixed $view
+     */
     public function displayUsers(Parameter $post)
     {
         if(!$this->checkAdmin()) {
@@ -184,7 +246,13 @@ class BackController extends Controller
             'user' => $user
         ]);
     }
-
+    
+    /**
+     * Delete user by administrator
+     *
+     * @param  Parameter $post
+     * @return void
+     */
     public function deleteUser(Parameter $post)
     {
         if($post->get('delete')) {
@@ -201,7 +269,13 @@ class BackController extends Controller
             }
         }
     }
-
+    
+    /**
+     * Update user by administrator
+     *
+     * @param  Parameter $post
+     * @return void
+     */
     public function updateUser(Parameter $post)
     {
         $id = $post->get('id');

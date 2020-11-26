@@ -5,24 +5,45 @@ namespace App\src\constraint;
 use App\src\blogFram\Parameter;
 use App\src\blogFram\Alert;
 
+/**
+ * UserValidation
+ */
 class UserValidation
 {
-    private $inputConstraint;
-    private $alert;
-
     const PSEUDO_MIN = 2;
     const PSEUDO_MAX = 50;
     const PASSWORD_MIN = 6;
     const PASSWORD_MAX = 72;
     const EMAIL_MIN = 6;
     const EMAIL_MAX = 78;
-
+    
+    /**
+     * @var InputConstraint
+     */
+    private $inputConstraint;
+    
+    /**
+     * @var Alert
+     */
+    private $alert;
+    
+    /**
+     * Construct UserValidation
+     *
+     * @return void
+     */
     public function __construct()
     {
         $this->inputConstraint = new InputConstraint();
         $this->alert = new Alert();
     }
-
+    
+    /**
+     * Check input field about user
+     *
+     * @param  array $post
+     * @return bool (true if all good)
+     */
     public function checkField(Parameter $post)
     {
         $error = 0;
@@ -58,7 +79,14 @@ class UserValidation
         }
         return ($error)? false : true;
     }
-
+    
+    /**
+     * Check pseudo constraints
+     *
+     * @param  string $name
+     * @param  string $value
+     * @return void|string (string = error)
+     */
     private function checkPseudo($name, $value)
     {
         if($this->inputConstraint->notBlank($name, $value)) {
@@ -75,6 +103,13 @@ class UserValidation
         }
     }
 
+    /**
+     * Check password constraints
+     *
+     * @param  string $name
+     * @param  string $value
+     * @return void|string (string = error)
+     */
     private function checkPassword($name, $value)
     {
         if($this->inputConstraint->notBlank($name, $value)) {
@@ -87,14 +122,28 @@ class UserValidation
             return $this->inputConstraint->maxLength('password', $value, self::PASSWORD_MAX);
         }
     }
-
+    
+    /**
+     * Check if the two values are identicals
+     *
+     * @param  string $data
+     * @param  string $dataConfirm
+     * @return void|string (string = error)
+     */
     private function checkIsSame($data, $dataConfirm)
     {
         if($this->inputConstraint->isSame($data, $dataConfirm)) {
             return $this->inputConstraint->isSame($data, $dataConfirm);
         }
     }
-
+     
+    /**
+     * Check email constraints
+     *
+     * @param  string $name
+     * @param  string $value
+     * @return void|string (string = error)
+     */
     private function checkEmail($name, $value)
     {
         if($this->inputConstraint->notBlank($name, $value)) {

@@ -7,13 +7,36 @@ use App\src\controller\FrontController;
 use App\src\controller\BackController;
 use App\src\controller\ErrorController;
 
+/**
+ * Router
+ */
 class Router
-{
+{    
+    /**
+     * @var Request
+     */
     private $request;
+    
+    /**
+     * @var FrontController
+     */
     private $frontController;
-    private $backController;
-    private $errorController;
 
+    /**
+     * @var BackController
+     */
+    private $backController;
+
+    /**
+     * @var ErrorController
+     */
+    private $errorController;
+    
+    /**
+     * Construct Router
+     *
+     * @return void
+     */
     public function __construct()
     {
         $this->request = new Request();
@@ -21,7 +44,12 @@ class Router
         $this->backController = new BackController();
         $this->errorController = new ErrorController();
     }
-
+    
+    /**
+     * Launch router
+     *
+     * @return void
+     */
     public function run()
     {
         $route = $this->request->getGet()->get('route');

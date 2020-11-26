@@ -4,21 +4,43 @@ namespace App\src\constraint;
 
 use App\src\blogFram\Alert;
 
+/**
+ * ImageValidation
+ */
 class ImageValidation extends Validation
 {
-    private $constraint;
+    /**
+     * @var ImageConstraint
+     */
+    private $imageConstraint;
+        
+    /**
+     * @var Alert
+     */
     private $alert;
 
     const SIZE_MAX_AVATAR = 200000;                // Taille max en octets du fichier
     const WIDTH_MAX_AVATAR = 800;                  // Largeur max de l'image en pixels
     const HEIGHT_MAX_AVATAR = 800;                 // Hauteur max de l'image en pixels
-
+    
+    /**
+     * Construct ImageValidation
+     *
+     * @return void
+     */
     public function __construct()
     {
-        $this->constraint = new ImageConstraint();
+        $this->imageConstraint = new ImageConstraint();
         $this->alert = new Alert();
     }
-
+    
+    /**
+     * Check avatar
+     *
+     * @param  array $file[]
+     * @param  string $directory
+     * @return bool (true if all good)
+     */
     public function checkAvatar($file, $directory)
     {
         $validate = $this->checkImageUpload(
@@ -31,7 +53,19 @@ class ImageValidation extends Validation
         return (!$validate)? false : true;
     }
 
-    public function checkImageUpload($file, $directory, $sizeMax, $heightMax, $widthMax) {
+        
+    /**
+     * Check image constraints
+     *
+     * @param  array $file[]
+     * @param  string $directory
+     * @param  int $sizeMax
+     * @param  int $heightMax
+     * @param  int $widthMax
+     * @return bool (true if no error)
+     */
+    public function checkImageUpload($file, $directory, $sizeMax, $heightMax, $widthMax) 
+    {
         $error = 0;
         if($this->checkDirectory($directory)) {
             $this->alert->addError($this->checkDirectory($directory));
@@ -59,42 +93,81 @@ class ImageValidation extends Validation
         }
         return ($error)? false : true;  
     }
-
+    
+    /**
+     * Check directory / Create directory
+     *
+     * @param  mixed $directory
+     * @return void|string (string = error)
+     */
     public function checkDirectory($directory)
     {
-        if($this->constraint->checkDirectory($directory)) {
-            return $this->constraint->checkDirectory($directory);
+        if($this->imageConstraint->checkDirectory($directory)) {
+            return $this->imageConstraint->checkDirectory($directory);
         }
     }
-
+    
+    /**
+     * Check if true image (MIME = image/)
+     *
+     * @param  array $file[]
+     * @return void|string (string = error)
+     */
     public function checkImageTrue($file) {
-        if($this->constraint->checkImageTrue($file)) {
-            return $this->constraint->checkImageTrue($file);
+        if($this->imageConstraint->checkImageTrue($file)) {
+            return $this->imageConstraint->checkImageTrue($file);
         }
         
     }
 
+    /**
+     * Check if file name is not empty
+     *
+     * @param  array $file[]
+     * @return void|string (string = error)
+     */
     public function checkName($file) {
-        if($this->constraint->checkName($file)) {
-            return $this->constraint->checkName($file);
+        if($this->imageConstraint->checkName($file)) {
+            return $this->imageConstraint->checkName($file);
         }
     }
 
+    /**
+     * Check if extension file is allowed (self::IMAGE_EXTENSIONS)
+     *
+     * @param  array $file[]
+     * @return void|string (string = error)
+     */
     public function checkExtension($file) {
-        if($this->constraint->checkExtension($file)) {
-            return $this->constraint->checkExtension($file);
+        if($this->imageConstraint->checkExtension($file)) {
+            return $this->imageConstraint->checkExtension($file);
         }
     }
 
+    /**
+     * Check if image size is allowed
+     *
+     * @param  array $file[]
+     * @param  int $sizeMax
+     * @param  int $heightMax
+     * @param  int $widthMax
+     * @return void|string (string = error)
+     */
     public function checkImageSize($file, $sizeMax, $heightMax, $widthMax) {
-        if($this->constraint->checkImageSize($file, $sizeMax, $heightMax, $widthMax)) {
-            return $this->constraint->checkImageSize($file, $sizeMax, $heightMax, $widthMax);
+        if($this->imageConstraint->checkImageSize($file, $sizeMax, $heightMax, $widthMax)) {
+            return $this->imageConstraint->checkImageSize($file, $sizeMax, $heightMax, $widthMax);
         }
     }
 
+    /**
+     * Check if $file['error'] === 0
+     *
+     * @param  array $file
+     * @return void|string (string = error)
+     */
     public function checkError($file) {
-        if($this->constraint->checkError($file)) {
-            return $this->constraint->checkError($file);
+        if($this->imageConstraint->checkError($file)) {
+            return $this->imageConstraint->checkError($file);
         }
     }
 
