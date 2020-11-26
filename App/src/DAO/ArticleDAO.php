@@ -6,8 +6,17 @@ use App\src\blogFram\DAO;
 use App\src\entity\Article;
 use \PDO;
 
+/**
+ * ArticleDAO
+ */
 class ArticleDAO extends DAO
-{
+{    
+    /**
+     * Hydrate article object
+     *
+     * @param  mixed $row
+     * @return Article $article
+     */
     private function buildObject($row)
     {
         $article = new Article();
@@ -27,7 +36,13 @@ class ArticleDAO extends DAO
         $article->setUserPseudo($row['pseudo']);
         return $article;
     }
-
+    
+    /**
+     * Get article by id
+     *
+     * @param  int $id
+     * @return Article $article
+     */
     public function getArticle($id)
     {
         $sql = 'SELECT a.*, u.pseudo AS pseudo, c.title AS category
@@ -43,7 +58,12 @@ class ArticleDAO extends DAO
         $result->closeCursor();
         return $article;
     }
-
+    
+    /**
+     * Get all articles
+     *
+     * @return array [objects]
+     */
     public function getArticles() {
         $sql = 'SELECT a.*, u.pseudo AS pseudo, c.title AS category
         FROM article a 
@@ -60,7 +80,14 @@ class ArticleDAO extends DAO
         $result->closeCursor();
         return $articles;
     }
-
+    
+    /**
+     * Get last articles
+     *
+     * @param  int $nbArticles
+     * @param  int $status
+     * @return array [objects]
+     */
     public function getLastArticles($nbArticles, $status)
     {
         $sql = 'SELECT a.*, u.pseudo AS pseudo, c.title AS category 
@@ -80,7 +107,13 @@ class ArticleDAO extends DAO
         $result->closeCursor();
         return $articles;
     }
-
+    
+    /**
+     * Know if article exists
+     *
+     * @param  int $id
+     * @return bool (true if article exists)
+     */
     public function existsArticle($id)
     {
         $sql = 'SELECT title FROM article WHERE id = :id';

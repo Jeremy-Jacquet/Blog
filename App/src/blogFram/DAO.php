@@ -5,11 +5,22 @@ namespace App\src\blogFram;
 use PDO;
 use Exception;
 
+/**
+ * DAO
+ */
 abstract class DAO
 {
-
+    
+    /**
+     * @var \PDO
+     */
     private $connection;
-
+    
+    /**
+     * Check if connection already exists
+     *
+     * @return \PDO $connection
+     */
     protected function checkConnection()
     {
         if($this->connection === null) {
@@ -17,7 +28,12 @@ abstract class DAO
         }
         return $this->connection;
     }
-
+    
+    /**
+     * Get connection
+     *
+     * @return \PDO $connection
+     */
     private function getConnection()
     {
         try{
@@ -31,7 +47,14 @@ abstract class DAO
         }
 
     }
-
+    
+    /**
+     * Create query / Create prepare
+     *
+     * @param  mixed $sql
+     * @param  mixed $parameters
+     * @return mixed $result
+     */
     protected function createQuery($sql, $parameters = null)
     {
         if($parameters) {

@@ -13,23 +13,82 @@ use App\src\DAO\UserDAO;
 use App\src\DAO\CommentDAO;
 use \DateTime;
 
+/**
+ * Controller
+ */
 abstract class Controller
-{
+{    
+    /**
+     * @var Request
+     */
     protected $request;
-    protected $get;
-    protected $post;
-    protected $session;
-    protected $view;
-    protected $articleDAO;
-    protected $categoryDAO;
-    protected $userDAO;
-    protected $commentDAO;
-    protected $validation;
-    protected $alert;
-    protected $mailer;
-    
-    
 
+    /**
+     * @var Parameter
+     */
+    protected $get;
+
+    /**
+     * @var Parameter
+     */
+    protected $post;
+
+    /**
+     * @var Session
+     */
+    protected $session;
+
+    /**
+     * @var View
+     */
+    protected $view;
+
+    /**
+     * @var ArticleDAO
+     */
+    protected $articleDAO;
+
+    /**
+     * @var CategoryDAO
+     */
+    protected $categoryDAO;
+
+    /**
+     * @var UserDAO
+     */
+    protected $userDAO;
+
+    /**
+     * @var Comment
+     */
+    protected $commentDAO;
+
+    /**
+     * @var Validation
+     */
+    protected $validation;
+
+    /**
+     * @var Alert
+     */
+    protected $alert;
+
+    /**
+     * @var Mailer
+     */
+    protected $mailer;
+
+    /**
+     * @var \DateTime
+     */
+    protected $date;
+    
+    
+    /**
+     * Construct Controller
+     *
+     * @return void
+     */
     public function __construct()
     {
         $this->request = new Request();
@@ -46,23 +105,43 @@ abstract class Controller
         $this->mailer = new Mailer();
         $this->setDate();
     }
-
+    
+    /**
+     * Set protected date (format: Y-m-d H:i:s)
+     *
+     * @return void
+     */
     private function setDate(){
         $objDateTime = new DateTime('NOW');
         $this->date = $objDateTime->format('Y-m-d H:i:s');
     }
-
+    
+    /**
+     * Get protected date (format: Y-m-d H:i:s)
+     *
+     * @return \DateTime protected $date
+     */
     protected function getDate() {
         return $this->date;
     }
-
+    
+    /**
+     * Check if user is logged
+     *
+     * @return void|true (true if session->get('pseudo'))
+     */
     protected function checkLoggedIn()
     {
         if($this->session->get('pseudo')) {
             return true;
         }
     }
-
+    
+    /**
+     * Check if user is an Admin
+     *
+     * @return void|true (true if session->get('level') >= ADMIN_LEVEL))
+     */
     protected function checkAdmin()
     {
         $this->checkLoggedIn();

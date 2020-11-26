@@ -2,8 +2,17 @@
 
 namespace App\src\blogFram;
 
+/**
+ * Security
+ */
 class Security
-{
+{    
+    /**
+     * Secure data (trim + stripslashes + htmlspecialchars)
+     *
+     * @param  string $data
+     * @return string $secureData
+     */
     public function secureData($data) 
     {
         $secureData = trim($data);
@@ -11,8 +20,14 @@ class Security
         $secureData = htmlspecialchars($secureData);
         return $secureData;
     }
-
-    public function secureArray($array = null) 
+    
+    /**
+     * Secure array[string] (trim + stripslashes + htmlspecialchars)
+     *
+     * @param  array $array[string]
+     * @return array $array[string]
+     */
+    public function secureArray($array) 
     {
         foreach($array as $key => $value) {
             $array[$key] = $this->secureData($value);

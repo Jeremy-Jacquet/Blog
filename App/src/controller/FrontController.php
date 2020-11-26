@@ -4,13 +4,23 @@ namespace App\src\controller;
 
 use App\src\blogFram\Parameter;
 use App\src\blogFram\Search;
-use \DateTime;
 
+/**
+ * FrontController
+ */
 class FrontController extends Controller
 {
-
+    
+    /**
+     * @var string
+     */
     private $controller = 'front';
-
+    
+    /**
+     * Get homepage
+     *
+     * @return mixed $view
+     */
     public function home()
     {
         $articles = $this->articleDAO->getLastArticles(NB_LAST_ARTICLES, ACTIVE_ARTICLE);
@@ -22,7 +32,12 @@ class FrontController extends Controller
            'categories' => $categories
         ]);
     }
-
+    
+    /**
+     * Get categories page
+     *
+     * @return mixed $view
+     */
     public function categories()
     {
         $categoriesMain = Search::lookForOr($this->categoryDAO->getCategories(), [
@@ -36,7 +51,12 @@ class FrontController extends Controller
            'categoriesActive' => $categoriesActive
         ]);
     }
-
+    
+    /**
+     * Get articles page
+     *
+     * @return mixed $view
+     */
     public function articles()
     {
         $articles = Search::lookForOr($this->articleDAO->getArticles(),[
@@ -46,7 +66,13 @@ class FrontController extends Controller
            'articles' => $articles
         ]);
     }
-
+    
+    /**
+     * Get articles page by category
+     *
+     * @param  int $id
+     * @return mixed $view
+     */
     public function articlesByCategory($id)
     {
         if(!$this->categoryDAO->existsCategory($id)) {
@@ -64,7 +90,13 @@ class FrontController extends Controller
             ]);
         }    
     }
-
+    
+    /**
+     * Get single article page
+     *
+     * @param  int $id
+     * @return mixed $view
+     */
     public function single($id)
     {
         $article = Search::lookForOr($this->articleDAO->getArticles(), [
@@ -80,7 +112,13 @@ class FrontController extends Controller
             ]);
         }
     }
-
+    
+    /**
+     * Get register page
+     *
+     * @param  Parameter $post
+     * @return mixed $view
+     */
     public function displayRegister(Parameter $post = null)
     {
         if($this->checkLoggedIn()) {
@@ -97,7 +135,13 @@ class FrontController extends Controller
             'post' => $post
         ]); 
     }
-
+    
+    /**
+     * Register user
+     *
+     * @param  Parameter $post
+     * @return void|mixed $view
+     */
     public function register(Parameter $post)
     {
         if(Search::lookForOr($this->userDAO->getUsers(), [
@@ -117,7 +161,14 @@ class FrontController extends Controller
             }
         }
     }
-
+    
+    /**
+     * Confirm user registration
+     *
+     * @param  string $email
+     * @param  string $token
+     * @return void
+     */
     public function confirmRegister($email, $token)
     {
         $user = Search::lookForAnd($this->userDAO->getUsers(), [
@@ -136,7 +187,13 @@ class FrontController extends Controller
             exit;
         }       
     }
-
+    
+    /**
+     * Get login page / Login user
+     *
+     * @param  object $post
+     * @return void|mixed $view
+     */
     public function login(Parameter $post)
     {
         if($this->checkLoggedIn()) {

@@ -2,17 +2,42 @@
 
 namespace App\src\blogFram;
 
+/**
+ * Alert
+ */
 class Alert
-{
-    private $session;
-    private $error;
-    private $success;
+{    
+    /**
+     * @var Session
+     */
+    private $session;    
 
+    /**
+     * @var array [string]
+     */
+    private $error;    
+    
+    /**
+     * @var array [string]
+     */
+    private $success;
+    
+    /**
+     * Construct Alert
+     *
+     * @return void
+     */
     public function __construct()
     {
         $this->session = new Session($_SESSION);
     }
-
+    
+    /**
+     * Add error on $_SESSION['error']
+     *
+     * @param  string $message
+     * @return void
+     */
     public function addError($message)
     {
         if($message) {
@@ -21,6 +46,12 @@ class Alert
         }
     }
 
+    /**
+     * Add error on $_SESSION['success']
+     *
+     * @param  string $message
+     * @return void
+     */
     public function addSuccess($message)
     {
         if($message) {
@@ -28,7 +59,12 @@ class Alert
             $this->session->set('success', $this->success);
         }
     }
-
+    
+    /**
+     * Check if exist some alerts
+     *
+     * @return void|true (true if some alerts exist)
+     */
     public function checkAlert()
     {
         if($this->getSuccess() OR $this->getError()) {
@@ -36,6 +72,11 @@ class Alert
         }
     }
 
+    /**
+     * Check if exist some errors
+     *
+     * @return void|true (true if some errors exist)
+     */
     public function checkError()
     {
         if($this->getError()) {
@@ -43,13 +84,23 @@ class Alert
         }
     }
 
+    /**
+     * Check if exist some successes
+     *
+     * @return void|true (true if some successes exist)
+     */
     public function checkSuccess()
     {
         if($this->getSuccess()) {
             return true;
         }
     }
-
+    
+    /**
+     * Get errors
+     *
+     * @return array [string]
+     */
     public function getError()
     {
         $errors = [];
@@ -61,6 +112,11 @@ class Alert
         return $errors;
     }
 
+    /**
+     * Get successes
+     *
+     * @return array [string]
+     */
     public function getSuccess()
     {
         $successes = [];
@@ -71,7 +127,12 @@ class Alert
         }
         return $successes;
     }
-
+    
+    /**
+     * Show errors (foreach)
+     *
+     * @return void|string (string = error)
+     */
     public function showError()
     {
         $errors = $this->getError();
@@ -83,6 +144,11 @@ class Alert
         }
     }
 
+    /**
+     * Show successes (foreach)
+     *
+     * @return void|string (string = success)
+     */
     public function showSuccess()
     {
         $successes = $this->getSuccess();
