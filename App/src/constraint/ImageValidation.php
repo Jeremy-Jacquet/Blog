@@ -7,7 +7,7 @@ use App\src\blogFram\Alert;
 /**
  * ImageValidation
  */
-class ImageValidation extends Validation
+class ImageValidation
 {
     /**
      * @var ImageConstraint
