@@ -299,5 +299,32 @@ class BackController extends Controller
         }
         $post->set('id', $id);
     }
+    
+    
+    /**
+     * Add comment by user
+     *
+     * @param  Parameter $post
+     * @return void
+     */
+    public function addComment(Parameter $post)
+    {
+        if(!$this->checkLoggedIn()) {
+            $this->alert->addError("Vous devez être connecté pour laisser un commentaire");
+            header("Location: ".URL."connexion");
+            exit;
+        }
+        if(!$this->validation->validateInput('comment', $post)) {
+            $this->session->set('comment', $post->get('comment'));
+            header("Location:".URL."articles&id=".$post->get('articleId')."#comment");
+            exit;
+        } else {
+            if($this->commentDAO->addComment($post, $this->date)) {
+                $this->alert->addSuccess("Merci, votre commentaire est soumis à validation.");
+                header("Location:".URL."articles");
+                exit;
+            }
+        }
+    }
 
 }

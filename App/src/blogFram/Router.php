@@ -72,6 +72,9 @@ class Router
                     if($category) {
                         $this->frontController->articlesByCategory($category);
                     } elseif($id) {
+                        if($action === 'commenter') {
+                            $this->backController->addComment($post);
+                        }
                         $this->frontController->single($id);
                     } else {
                         $this->frontController->articles();
