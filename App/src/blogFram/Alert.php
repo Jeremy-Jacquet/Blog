@@ -16,6 +16,11 @@ class Alert
      * @var array [string]
      */
     private $error;    
+
+    /**
+     * @var array [string]
+     */
+    private $errorComment; 
     
     /**
      * @var array [string]
@@ -43,6 +48,20 @@ class Alert
         if($message) {
             $this->error[] = $message;
             $this->session->set('error', $this->error);
+        }
+    }
+
+    /**
+     * Add error on $_SESSION['errorComment']
+     *
+     * @param  string $message
+     * @return void
+     */
+    public function addErrorComment($message)
+    {
+        if($message) {
+            $this->errorComment[] = $message;
+            $this->session->set('errorComment', $this->errorComment);
         }
     }
 
@@ -85,6 +104,18 @@ class Alert
     }
 
     /**
+     * Check if exist some comment errors
+     *
+     * @return void|true (true if some comment errors exist)
+     */
+    public function checkErrorComment()
+    {
+        if($this->getErrorComment()) {
+            return true;
+        }
+    }
+
+    /**
      * Check if exist some successes
      *
      * @return void|true (true if some successes exist)
@@ -106,6 +137,22 @@ class Alert
         $errors = [];
         if($this->session->get('error')) {   
             foreach($this->session->get('error') as $key => $message){
+                $errors[] = $message;
+            }         
+        }
+        return $errors;
+    }
+
+    /**
+     * Get comment errors
+     *
+     * @return array [string]
+     */
+    public function getErrorComment()
+    {
+        $errors = [];
+        if($this->session->get('errorComment')) {   
+            foreach($this->session->get('errorComment') as $key => $message){
                 $errors[] = $message;
             }         
         }
@@ -138,6 +185,22 @@ class Alert
         $errors = $this->getError();
         if($errors) {
             $this->session->remove('error');
+            foreach($errors as $key => $message){
+                echo "<p class=\"text-center  m-auto\">$message</p>";
+            }
+        }
+    }
+
+    /**
+     * Show comment errors (foreach)
+     *
+     * @return void|string (string = error)
+     */
+    public function showErrorComment()
+    {
+        $errors = $this->getErrorComment();
+        if($errors) {
+            $this->session->remove('errorComment');
             foreach($errors as $key => $message){
                 echo "<p class=\"text-center  m-auto\">$message</p>";
             }
