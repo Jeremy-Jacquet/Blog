@@ -12,7 +12,7 @@ class Validation
     /**
      * Check if input is valid
      *
-     * @param  string $category (ex: user)
+     * @param  string $category (ex: user, comment)
      * @param  Parameter $post
      * @return bool (true if all good)
      */
@@ -21,6 +21,10 @@ class Validation
         if($category === 'user') {
             $userValidation = new UserValidation();
             $validate = $userValidation->checkField($post);
+            return $validate;
+        } elseif($category === 'comment') {
+            $commentValidation = new CommentValidation();
+            $validate = $commentValidation->checkComment($post->get('comment'));
             return $validate;
         }
     }
