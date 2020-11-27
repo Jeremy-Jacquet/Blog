@@ -108,7 +108,8 @@ class FrontController extends Controller
             exit;
         } else {
             return $this->view->render($this->controller, 'single', [
-                'article' => $article[0]
+                'article' => $article[0],
+                'comment' => ($this->session->get('comment'))? $this->session->show('comment') : ''
             ]);
         }
     }
