@@ -63,10 +63,10 @@ class BackController extends Controller
             exit;
         } else {
             $pendingArticles = Search::lookForOr($this->articleDAO->getArticles(),[
-                'status' => PENDING_ARTICLE
+                'status' => parent::PENDING_ARTICLE
             ]);
             $pendingComments = Search::lookForOr($this->commentDAO->getComments(),[
-                'status' => PENDING_COMMENT
+                'status' => parent::PENDING_COMMENT
             ]);
             return $this->view->render($this->controller, 'dashboard', [
                 'users' => $this->userDAO->getUsers(),

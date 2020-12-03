@@ -75,6 +75,11 @@ class User
      */
     private $level;
 
+    const VISITOR_ROLE = 1;
+    const MEMBER_ROLE = 2;
+    const AUTHOR_ROLE = 3;
+    const ADMIN_ROLE = 4;
+
     /*
     |--> GETTERS <--|
     */
