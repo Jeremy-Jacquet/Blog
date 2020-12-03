@@ -5,11 +5,6 @@
     <input type="text" name="pseudo" value="<?= $user->getPseudo(); ?>">
     <br>
 
-    <!-- PASSWORD -->
-    <label for="password">Password:</label>
-    <input type="text" name="password" value="<?= $user->getPassword(); ?>" disabled>
-    <br>
-
     <!-- EMAIL -->
     <label for="email">Email:</label>
     <input type="email" name="email" value="<?= $user->getEmail(); ?>">
@@ -18,17 +13,12 @@
     <!-- FILENAME -->
     <label for="avatar">Avatar:</label>
     <input type="text" name="filename" value="<?= $user->getFilename(); ?>">
-    <br>
 
     <!-- CREATED AT -->
-    <label for="created_at">Inscription:</label>
-    <input type="text" name="created_at" value="<?= $user->getCreatedAt(); ?>" disabled>
-    <br>
+    <p>Inscription: <?= $user->getCreatedAt(); ?></p>
 
     <!-- LAST CONNEXION -->
-    <label for="last_connection">Dernière connexion:</label>
-    <input type="text" name="last_connection" value="<?= $user->getLastConnection(); ?>" disabled>
-    <br>
+    <p>Dernière connexion: <?= $user->getLastConnection(); ?></p>
 
     <!-- NEWSLETTER -->
     <label for="newsletter">Abonnement à la newsletter:</label>
@@ -58,23 +48,18 @@
     <select name="role_id" id="role_id">
         <option value="<?= $user->getRoleId(); ?>"><?= $user->getRole() ?></option>
         <option>--- Choisir une option ---</option>
-        <option value="<?= VISITOR_ROLE; ?>">Visiteur</option>
-        <option value="<?= MEMBER_ROLE; ?>">Membre</option>
-        <option value="<?= AUTHOR_ROLE; ?>">Auteur</option>
-        <option value="<?= ADMIN_ROLE; ?>">Admin</option>
+        <option value="<?= $user::VISITOR_ROLE; ?>">Visiteur</option>
+        <option value="<?= $user::MEMBER_ROLE; ?>">Membre</option>
+        <option value="<?= $user::AUTHOR_ROLE; ?>">Auteur</option>
+        <option value="<?= $user::ADMIN_ROLE; ?>">Admin</option>
     </select>
     <br>
-    
-    <!-- TOKEN -->
-    <label for="token">Token:</label>
-    <input type="text" name="token" value="<?= $user->getToken(); ?>" disabled>
-    <br>
-
 
     <input type="hidden" name="id" value="<?= $user->getId(); ?>">
     <input type="hidden" name="update" value="true">
     <input type="submit" name="submit" value="Modifier">
 </form>
+
 <form method="post" action="">
     <input type="checkbox" name="deleteConfirm">
     <input type="hidden" name="delete" value="true">
