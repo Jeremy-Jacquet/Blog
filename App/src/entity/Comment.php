@@ -4,6 +4,9 @@ namespace App\src\entity;
 
 class Comment
 {
+    const ACTIVE_COMMENT = 1;
+    const INACTIVE_COMMENT = 0;
+    const PENDING_COMMENT = NULL;
 
     /**
      * @var int

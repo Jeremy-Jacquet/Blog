@@ -4,6 +4,9 @@ namespace App\src\entity;
 
 class Category
 {
+    const MAIN_CATEGORY = 1;
+    const ACTIVE_CATEGORY = NULL;
+    const INACTIVE_CATEGORY = 0;
 
     /**
      * @var int

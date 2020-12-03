@@ -4,6 +4,9 @@ namespace App\src\entity;
 
 class Article
 {
+    const ACTIVE_ARTICLE = 1;
+    const INACTIVE_ARTICLE = 0;
+    const PENDING_ARTICLE = NULL;
 
     /**
      * @var int

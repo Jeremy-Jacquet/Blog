@@ -23,9 +23,9 @@ class FrontController extends Controller
      */
     public function home()
     {
-        $articles = $this->articleDAO->getLastArticles(NB_LAST_ARTICLES, ACTIVE_ARTICLE);
+        $articles = $this->articleDAO->getLastArticles(parent::NB_LAST_ARTICLES, parent::ACTIVE_ARTICLE);
         $categories = Search::lookForOr($this->categoryDAO->getCategories(), [
-            'status' => MAIN_CATEGORY
+            'status' => parent::MAIN_CATEGORY
         ]);
         return $this->view->render($this->controller, 'home', [
            'articles' => $articles,
@@ -41,10 +41,10 @@ class FrontController extends Controller
     public function categories()
     {
         $categoriesMain = Search::lookForOr($this->categoryDAO->getCategories(), [
-            'status' => MAIN_CATEGORY
+            'status' => parent::MAIN_CATEGORY
             ]);
         $categoriesActive = Search::lookForOr($this->categoryDAO->getCategories(), [
-            'status' => ACTIVE_CATEGORY
+            'status' => parent::ACTIVE_CATEGORY
             ]);
         return $this->view->render($this->controller, 'categories', [
            'categoriesMain' => $categoriesMain,
@@ -60,7 +60,7 @@ class FrontController extends Controller
     public function articles()
     {
         $articles = Search::lookForOr($this->articleDAO->getArticles(),[
-            'status' => ACTIVE_ARTICLE
+            'status' => parent::ACTIVE_ARTICLE
         ]);
         return $this->view->render($this->controller, 'articles', [
            'articles' => $articles
@@ -79,16 +79,15 @@ class FrontController extends Controller
             $this->alert->addError("La catégorie recherchée n'existe pas.");
             header("Location: ".URL."articles");
             exit;
-        } else {
-            $articles = Search::lookForOr($this->articleDAO->getArticles(), [
-                'categoryId' => $id
-            ]);
-            $category = $this->categoryDAO->getCategory($id);
-            return $this->view->render($this->controller, 'articlesByCategory', [
-            'articles' => $articles,
-            'category' => $category
-            ]);
-        }    
+        }
+        $articles = Search::lookForOr($this->articleDAO->getArticles(), [
+            'categoryId' => $id
+        ]);
+        $category = $this->categoryDAO->getCategory($id);
+        return $this->view->render($this->controller, 'articlesByCategory', [
+        'articles' => $articles,
+        'category' => $category
+        ]);
     }
     
     /**
@@ -106,12 +105,11 @@ class FrontController extends Controller
             $this->alert->addError("L'article recherché n'existe pas.");
             header("Location: ".URL."articles");
             exit;
-        } else {
-            return $this->view->render($this->controller, 'single', [
-                'article' => $article[0],
-                'comment' => ($this->session->get('comment'))? $this->session->show('comment') : ''
-            ]);
         }
+        return $this->view->render($this->controller, 'single', [
+            'article' => $article[0],
+            'comment' => ($this->session->get('comment'))? $this->session->show('comment') : ''
+        ]);
     }
     
     /**
@@ -157,9 +155,8 @@ class FrontController extends Controller
                 $this->alert->addSuccess("Félicitations, un email de confirmation vous a été envoyé.");
                 header("location: ".URL."accueil");
                 exit;
-            } else {
-                $this->alert->addError("Il y a eu un problème avec votre inscription.");
             }
+            $this->alert->addError("Il y a eu un problème avec votre inscription.");
         }
     }
     
@@ -180,13 +177,12 @@ class FrontController extends Controller
             $this->alert->addError("Votre inscription n'a pas aboutie. Veuillez vérifier que vous n'êtes pas déjà inscrit, ou veuillez vous réinscrire.");
             header("Location: ".URL."inscription");
             exit; 
-        } else {
-            $this->userDAO->updateUser($user[0]->getId(), 'role_id', MEMBER_ROLE);
-            $this->userDAO->updateUser($user[0]->getId(), 'token', NULL);
-            $this->alert->addSuccess("Félicitations, vous êtes bien inscrit.");            
-            header("Location: ".URL."accueil");
-            exit;
-        }       
+        }
+        $this->userDAO->updateUser($user[0]->getId(), 'role_id', parent::MEMBER_ROLE);
+        $this->userDAO->updateUser($user[0]->getId(), 'token', NULL);
+        $this->alert->addSuccess("Félicitations, vous êtes bien inscrit.");            
+        header("Location: ".URL."accueil");
+        exit;   
     }
     
     /**
@@ -210,7 +206,7 @@ class FrontController extends Controller
                 if(!$user) {
                     $this->alert->addError("Vos identifiants sont incorrects.");
                 } else {
-                    if($user[0]->getLevel() < MEMBER_LEVEL) {
+                    if($user[0]->getLevel() < parent::MEMBER_LEVEL) {
                         $this->alert->addError("Vous devez d'abord valider votre compte.");
                     } else {
                         if(!password_verify($post->get('password'), $user[0]->getPassword())) {

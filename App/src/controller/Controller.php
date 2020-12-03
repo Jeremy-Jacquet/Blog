@@ -18,6 +18,30 @@ use \DateTime;
  */
 abstract class Controller
 {    
+    const NB_LAST_ARTICLES = 4;
+
+    const ACTIVE_ARTICLE = 1;
+    const INACTIVE_ARTICLE = 0;
+    const PENDING_ARTICLE = NULL;
+
+    const MAIN_CATEGORY = 1;
+    const ACTIVE_CATEGORY = NULL;
+    const INACTIVE_CATEGORY = 0;
+
+    const ACTIVE_COMMENT = 1;
+    const INACTIVE_COMMENT = 0;
+    const PENDING_COMMENT = NULL;
+
+    const VISITOR_LEVEL = 1;
+    const MEMBER_LEVEL = 10;
+    const AUTHOR_LEVEL = 100;
+    const ADMIN_LEVEL = 1000;
+
+    const VISITOR_ROLE = 1;
+    const MEMBER_ROLE = 2;
+    const AUTHOR_ROLE = 3;
+    const ADMIN_ROLE = 4;
+
     /**
      * @var Request
      */
@@ -83,7 +107,6 @@ abstract class Controller
      */
     protected $date;
     
-    
     /**
      * Construct Controller
      *
@@ -145,7 +168,7 @@ abstract class Controller
     protected function checkAdmin()
     {
         $this->checkLoggedIn();
-        if($this->session->get('level') >= ADMIN_LEVEL) {
+        if($this->session->get('level') >= self::ADMIN_LEVEL) {
             return true;
         }
     }
