@@ -6,6 +6,7 @@ use Exception;
 use App\src\controller\FrontController;
 use App\src\controller\BackController;
 use App\src\controller\ErrorController;
+use App\src\controller\LogController;
 
 /**
  * Router
@@ -31,6 +32,11 @@ class Router
      * @var ErrorController
      */
     private $errorController;
+
+    /**
+     * @var LogController
+     */
+    private $logController;
     
     /**
      * Construct Router
@@ -43,6 +49,7 @@ class Router
         $this->frontController = new FrontController();
         $this->backController = new BackController();
         $this->errorController = new ErrorController();
+        $this->logController = new LogController();
     }
     
     /**
@@ -72,10 +79,7 @@ class Router
                     if($category) {
                         $this->frontController->articlesByCategory($category);
                     } elseif($id) {
-                        if($action === 'commenter') {
-                            $this->backController->addComment($post);
-                        }
-                        $this->frontController->single($id);
+                        $this->frontController->single($id, $post);
                     } else {
                         $this->frontController->articles();
                     }
@@ -91,7 +95,7 @@ class Router
                     $this->frontController->login($post);
                 }
                 elseif($route === 'deconnexion') {
-                    $this->backController->logout();
+                    $this->logController->logout();
                 }
                 elseif($route === 'profil') {
                     $this->backController->profile($post);
