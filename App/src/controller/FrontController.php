@@ -133,7 +133,10 @@ class FrontController extends Controller
     public function single($id, $post = null)
     {
         if($post->get('submit')) {
-            $this->commentController->addComment($post);
+            if($this->commentController->addComment($post)) {
+                header("Location: ".URL."articles&id=$id");
+                exit;
+            }
         }
         $article = Search::lookForOr($this->articleDAO->getArticles(), [
             'id' => $id
@@ -146,7 +149,7 @@ class FrontController extends Controller
         $comments = Search::lookForAnd($this->commentDAO->getComments(), [
             'articleId' => $id,
             'status' => parent::ACTIVE_COMMENT
-        ]);
+        ]); 
         $users = [];
         foreach($comments as $comment) {
             $users[$comment->getUserId()] = $this->userDAO->getUser($comment->getUserId());
