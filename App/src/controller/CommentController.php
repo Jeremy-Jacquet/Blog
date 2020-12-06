@@ -18,6 +18,7 @@ class CommentController extends Controller
             if($this->validation->validateInput('comment', $post)) {
                 if($this->commentDAO->addComment($post, $this->date)) {
                     $this->alert->addSuccess("Merci, votre commentaire est soumis à validation.");
+                    return true;
                 }
             }
         }

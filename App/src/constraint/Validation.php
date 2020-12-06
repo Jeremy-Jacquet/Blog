@@ -24,7 +24,7 @@ class Validation
             return $validate;
         } elseif($category === 'comment') {
             $commentValidation = new CommentValidation();
-            $validate = $commentValidation->checkComment($post->get('comment'));
+            $validate = $commentValidation->checkComment($post->get('content'));
             return $validate;
         }
     }

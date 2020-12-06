@@ -63,7 +63,7 @@ class CommentDAO extends DAO
         $sql = "INSERT INTO `comment` (`content`, `article_id`, `user_id`, `created_at`, `status`) 
                 VALUES (:content, :article_id, :user_id, :created_at, :status)";
         $result = $this->checkConnection()->prepare($sql);
-        $result->bindValue(':content', $post->get('comment'), PDO::PARAM_STR);
+        $result->bindValue(':content', $post->get('content'), PDO::PARAM_STR);
         $result->bindValue(':article_id', $post->get('articleId'), PDO::PARAM_INT);
         $result->bindValue(':user_id', $post->get('userId'), PDO::PARAM_INT);
         $result->bindValue(':created_at', $date, PDO::PARAM_STR);
