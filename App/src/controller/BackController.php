@@ -133,5 +133,20 @@ class BackController extends Controller
             'user' => $user
         ]);
     }
+    
+    /**
+     * Display categories for administration
+     *
+     * @return void
+     */
+    public function displayCategories()
+    {
+        if(!$this->checkAdmin()) {
+            $categories = $this->categoryDAO->getCategories();
+            $this->view->render($this->controller, 'categories', [
+                'categories' => $categories
+            ]);
+        }
+    }
 
 }
