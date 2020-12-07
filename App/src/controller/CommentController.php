@@ -14,14 +14,12 @@ class CommentController extends Controller
      */
     public function addComment(Parameter $post)
     {
-        if($post->get('submit')) {
-            if(!$this->validation->validateInput('comment', $post)) {
-                return false;
-            }
-            $this->commentDAO->addComment($post, $this->date);
-            $this->alert->addSuccess("Merci, votre commentaire est soumis à validation.");
-            return true;
+        if(!$this->validation->validateInput('comment', $post)) {
+            return false;
         }
+        $this->commentDAO->addComment($post, $this->date);
+        $this->alert->addSuccess("Merci, votre commentaire est soumis à validation.");
+        return true;
     }
     
     /**
