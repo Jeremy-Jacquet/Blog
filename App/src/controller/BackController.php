@@ -77,25 +77,31 @@ class BackController extends Controller
      *
      * @return mixed $view
      */
-    public function dashboard()
+    public function dashboard(Parameter $post)
     {
         if(!$this->checkAdmin()) {
             $this->alert->addError("Vous n'avez pas le droit d'accéder à cette page.");
             header("Location: ".URL."accueil");
             exit;
-        } else {
-            $pendingArticles = Search::lookForOr($this->articleDAO->getArticles(),[
-                'status' => parent::PENDING_ARTICLE
-            ]);
-            $pendingComments = Search::lookForOr($this->commentDAO->getComments(),[
-                'status' => parent::PENDING_COMMENT
-            ]);
-            return $this->view->render($this->controller, 'dashboard', [
-                'users' => $this->userDAO->getUsers(),
-                'pendingArticles' => $pendingArticles,
-                'pendingComments' => $pendingComments
-            ]);
-        }  
+        }
+        if($post->get('submit')) {
+            if($post->get('entity') === 'comment') {
+                $this->commentController->moderateComment($post);
+            } else {
+                $this->alert->addError("L'entité ".$post->get('entity')." n'est pas reconnue.");
+            }
+        }
+        $pendingArticles = Search::lookForOr($this->articleDAO->getArticles(),[
+            'status' => parent::PENDING_ARTICLE
+        ]);
+        $pendingComments = Search::lookForOr($this->commentDAO->getComments(),[
+            'status' => parent::PENDING_COMMENT
+        ]);
+        return $this->view->render($this->controller, 'dashboard', [
+            'users' => $this->userDAO->getUsers(),
+            'pendingArticles' => $pendingArticles,
+            'pendingComments' => $pendingComments
+        ]);
     }
     
     /**
