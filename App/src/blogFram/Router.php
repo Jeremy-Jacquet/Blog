@@ -103,6 +103,8 @@ class Router
                 elseif($route === 'admin') {
                     if($category === 'membres') {
                         $this->backController->displayUsers($post);
+                    } elseif($category === 'categories') {
+                        $this->backController->displayCategories();
                     } else {
                         $this->backController->dashboard($post);
                     }
