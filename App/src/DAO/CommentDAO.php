@@ -56,7 +56,7 @@ class CommentDAO extends DAO
      *
      * @param  Parameter $post
      * @param  string $date
-     * @return void
+     * @return bool
      */
     public function addComment(Parameter $post, $date)
     {
@@ -71,6 +71,39 @@ class CommentDAO extends DAO
         $result->execute();
         $result->closeCursor();
         return ($result)? true : false;
+    }
+    
+    /**
+     * Update comment
+     *
+     * @param  Parameter $post
+     * @param  int $status
+     * @return bool
+     */
+    public function updateComment(Parameter $post, $status)
+    {
+        $sql = "UPDATE comment SET `status` = :status WHERE id = :id";
+        $result = $this->checkConnection()->prepare($sql);
+        $result->bindValue(':status', $status, PDO::PARAM_INT);
+        $result->bindValue(':id', $post->get('id'), PDO::PARAM_INT);
+        $result->execute();
+        $result->closeCursor();
+        return ($result)? true : false;
+    }
+    
+    /**
+     * Delete comment
+     *
+     * @param  Parameter $post
+     * @return void
+     */
+    public function deleteComment(Parameter $post)
+    {
+        $sql = "DELETE comment WHERE id = :id";
+        $result = $this->checkConnection->prepare($sql);
+        $result->bindValue(':id', $post->get('id'), PDO::PARAM_INT);
+        $result->execute();
+        $result->closeCursor();
     }
 
 }
