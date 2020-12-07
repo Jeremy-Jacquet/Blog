@@ -3,7 +3,6 @@
 $this->alert->showErrorComment() . '<p class="text-center  m-auto"><a href="#comment">Modifier votre commentaire</a></p>' 
 : ''; 
 ?>
-
 <section id="single">
     <div class="row">
         <div class="border border-dark col-6 mx-auto my-3 p-3">
@@ -16,13 +15,19 @@ $this->alert->showErrorComment() . '<p class="text-center  m-auto"><a href="#com
             <p><?= $article->getUserPseudo(); ?></p>
             <p><?= $article->getPublishedAt(); ?></p>
             <img src="img/article/<?= $article->getFilename(); ?>" alt="">
-            <?php if($this->session->get('id')) { ?>
-                <a href="#comment">Ecrire un commentaire</a>
-            <?php } else { ?>
-                <p>Pour laisser un commentaire veuillez vous inscrire et vous connecter.</p>
-            <?php } ?>
         </div>
     </div>
+    <?php if($this->session->get('id')) { ?>
+        <?php if(count($comments) > 2) { ?>
+            <div class="border border-dark col-6 mx-auto my-3 p-3">
+            <a href="#comment">Ecrire un commentaire</a>
+            </div>
+        <?php } ?>
+    <?php } else { ?>
+            <div class="border border-dark col-6 mx-auto my-3 p-3">
+            <p>Pour laisser un commentaire veuillez vous inscrire et vous connecter.</p>
+            </div>
+    <?php } ?>
 </section>
 
 <?php if($comments){ ?>
@@ -36,11 +41,27 @@ $this->alert->showErrorComment() . '<p class="text-center  m-auto"><a href="#com
                 <p>
                     <?= $comment->getContent(); ?>
                 </p>
-            </div>
+                <?php if($this->session->get('level') >= 1000) { ?>
+                    <div>
+                        <form action="" method="post">
+                            <label for="action">Status du commentaire:</label>
+                            <select name="action" id="action">
+                                <option value="validate">Valide</option>
+                                <option>--- Choisir une option ---</option>
+                                <option value="pending">En attente</option>
+                                <option value="refuse">Refuser</option>
+                                <option value="delete">Supprimer</option>
+                            </select>
+                            <input type="hidden" name="entity" value="comment">
+                            <input type="hidden" name="id" value="<?= $comment->getId(); ?>">
+                            <input type="submit" name="submit" value="Modérer">
+                        </form>
+                    </div>
+                <?php } ?>
+            </div> 
         <?php } ?>
     </section>
 <?php } ?>
-
 <?php if($this->session->get('id')) { ?>
     <section id="comment">
         <div class="border border-dark col-6 mx-auto my-3 p-3">
@@ -52,6 +73,8 @@ $this->alert->showErrorComment() . '<p class="text-center  m-auto"><a href="#com
                         <?= ($content)? $content : ''; ?>
                     </textarea>
                     <br>
+                    <input type="hidden" name="entity" value="comment">
+                    <input type="hidden" name="action" value="add">
                     <input type="hidden" name="articleId" value="<?= $article->getId(); ?>">
                     <input type="hidden" name="userId" value="<?= $this->session->get('id'); ?>">
                     <input type="submit" name="submit" value="Envoyer le commentaire">
