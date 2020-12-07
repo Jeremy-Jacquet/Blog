@@ -132,18 +132,16 @@ class FrontController extends Controller
      */
     public function single($id, $post = null)
     {
-        if($post->get('submit')) {
-            if($this->commentController->addComment($post)) {
-                header("Location: ".URL."articles&id=$id");
-                exit;
-            }
-        }
         $article = Search::lookForOr($this->articleDAO->getArticles(), [
             'id' => $id
         ]);
         if(empty($article)) {
             $this->alert->addError("L'article recherché n'existe pas.");
             header("Location: ".URL."articles");
+            exit;
+        }
+        if($this->commentController->moderateComment($post)) {
+            header("Location: ".URL."articles&id=$id");
             exit;
         }
         $comments = Search::lookForAnd($this->commentDAO->getComments(), [

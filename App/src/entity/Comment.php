@@ -82,7 +82,7 @@ class Comment
     /**
      * @return string
      */
-    public function getCreated()
+    public function getCreatedAt()
     {
         return $this->createdAt;
     }

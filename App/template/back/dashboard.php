@@ -3,7 +3,7 @@
 <p><a href="<?= URL ?>profil">Mon profil</a></p>
 
 <!-- NAV -->
-<section class="border"id="managers">
+<section class="border" id="managers">
     <div>
         <a href="<?= URL ?>admin&categorie=membres">Membres</a>
         <a href="<?= URL ?>admin&categorie=articles">Articles</a>
@@ -13,7 +13,7 @@
 </section>
 
 <!-- ADD ENTITIES -->
-<section class="border"id="add_entities">
+<section class="border" id="add_entities">
     <div>
         <a href="<?= URL ?>admin&categorie=articles&action=ajouter">Ajouter un article</a>
         <a href="<?= URL ?>admin&categorie=categories&action=ajouter">Ajouter une catégorie</a>
@@ -71,30 +71,42 @@
     <!-- PENDING COMMENTS -->
     <section class="border" id="pending_comments">
         <?php foreach ($pendingComments as $comment) { ?>
-            <div>
-                <p><a hreh="<?= URL ?>admin&categorie=membres&id=<? $comment->getUserId(); ?>"><?= $comment->getUserPseudo(); ?></a></p>
-                <img src="img/avatar/<?= $users[$comment->getUserId()]->getFilename(); ?>" alt="">
-                <form action="<?= URL ?>admin&categorie=membres" method="post">
-                    <input type="hidden" name="id" value="<?= $comment->getUserId(); ?>">
-                    <input type="submit" name="submit" value="Signaler">
-                </form>
-                <form action="<?= URL ?>admin&categorie=membres" method="post">
-                    <input type="hidden" name="id" value="<?= $comment->getUserId(); ?>">
-                    <input type="submit" name="submit" value="Bannir">
-                </form>
-            </div>
-            <div>
-                <p><?= $comment->getContent(); ?></p>
-            </div>
-            <div>
-                <form action="<?= URL ?>admin&categorie=commentaires" method="post">
-                    <input type="hidden" name="id" value="<?= $comment->getId(); ?>">
-                    <input type="submit" name="submit" value="Valider">
-                </form>
-                <form action="<?= URL ?>admin&categorie=commentaires" method="post">
-                    <input type="hidden" name="id" value="<?= $comment->getId(); ?>">
-                    <input type="submit" name="submit" value="Supprimer">
-                </form>
+            <div class="border">
+                <div>
+                    <p><a href=""><?= $comment->getUserPseudo(); ?></a></p>
+                    <img src="img/avatar/<?= $users[$comment->getUserId()]->getFilename(); ?>" alt="">
+                </div>
+                <div>
+                    <p><?= $comment->getContent(); ?></p>
+                    <p><?= $comment->getCreatedAt() ?> / <a href="<?= URL ?>articles&id=<?= $comment->getId(); ?>" target="_blank">Article n° <?= $comment->getId(); ?></a></p>
+                </div>
+                <div>
+                    <form action="" method="post">
+                        <label for="action">Modérer le commentaire:</label>
+                        <select name="action" id="action">
+                            <option>--- Choisir une option ---</option>
+                            <option value="validate">Valider</option>
+                            <option value="refuse">Refuser</option>
+                            <option value="delete">Supprimer</option>
+                        </select>
+                        <input type="hidden" name="entity" value="comment">
+                        <input type="hidden" name="id" value="<?= $comment->getId(); ?>">
+                        <input type="submit" name="submit" value="Modérer">
+                    </form>
+                </div>
+                <div>
+                    <form action="" method="post">
+                        <label for="action">Modérer l'utilisateur:</label>
+                        <select name="action" id="action">
+                            <option>--- Choisir une option ---</option>
+                            <option value="flag">Signaler</option>
+                            <option value="ban">Bannir</option>
+                        </select>
+                        <input type="hidden" name="entity" value="user">
+                        <input type="hidden" name="id" value="<?= $comment->getUserId(); ?>">
+                        <input type="submit" name="submit" value="Modérer">
+                    </form>
+                </div>
             </div>
         <?php } ?>
     </section>

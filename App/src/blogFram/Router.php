@@ -104,7 +104,7 @@ class Router
                     if($category === 'membres') {
                         $this->backController->displayUsers($post);
                     } else {
-                        $this->backController->dashboard();
+                        $this->backController->dashboard($post);
                     }
                 }
                 else {
