@@ -4,6 +4,7 @@ namespace App\src\DAO;
 
 use App\src\blogFram\DAO;
 use App\src\entity\Category;
+use App\src\blogFram\Parameter;
 use \PDO;
 
 /**
@@ -63,6 +64,45 @@ class CategoryDAO extends DAO
         }
         $result->closeCursor();
         return $categories;
+    }
+
+    public function addCategory(Parameter $post)
+    {
+        var_dump($post);
+        $sql = "INSERT INTO `category` (title, sentence, `filename`, `status`) 
+                VALUES (:title, :sentence, :filename, :status)";
+        $result = $this->checkConnection()->prepare($sql);
+        $result->bindValue(':title', $post->get('title'), PDO::PARAM_STR);
+        $result->bindValue(':sentence', $post->get('sentence'), PDO::PARAM_STR);
+        $result->bindValue(':filename', $post->get('filename'), PDO::PARAM_STR);
+        $result->bindValue(':status', $post->get('status'), PDO::PARAM_INT);
+        $result->execute();
+        $id = $this->checkConnection()->lastInsertId();
+        $result->closeCursor();
+        return $id;
+    }
+
+    public function updateCategory(Parameter $post)
+    {
+        $sql = "SELECT COUNT(*) FROM category WHERE id = :id";
+        $result = $this->checkConnection()->prepare($sql);
+        $result->bindValue(':id', $post->get('id'), PDO::PARAM_INT);
+        $result->execute();
+        $count = $result->fetch(PDO::FETCH_ASSOC);
+        if($count > 0) {
+            $sql = "UPDATE category SET title = :title, sentence = :sentence, `filename` = :filename, `status` = :status  WHERE id = :id";
+            $result = $this->checkConnection()->prepare($sql);
+            $result->bindValue(':title', $post->get('title'), PDO::PARAM_STR);
+            $result->bindValue(':sentence', $post->get('sentence'), PDO::PARAM_STR);
+            $result->bindValue(':filename', $post->get('filename'), PDO::PARAM_STR);
+            $result->bindValue(':status', $post->get('status'), PDO::PARAM_INT);
+            $result->bindValue(':id', $post->get('id'), PDO::PARAM_INT);
+            $result->execute();
+            $result->closeCursor(); 
+            return true;
+        }
+        $result->closeCursor(); 
+        return false;
     }
     
     /**
