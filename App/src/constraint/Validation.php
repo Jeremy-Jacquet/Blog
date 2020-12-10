@@ -21,12 +21,14 @@ class Validation
         if($category === 'user') {
             $userValidation = new UserValidation();
             $validate = $userValidation->checkField($post);
-            return $validate;
         } elseif($category === 'comment') {
             $commentValidation = new CommentValidation();
             $validate = $commentValidation->checkComment($post->get('content'));
-            return $validate;
+        } elseif($category === 'category') {
+            $categoryValidation = new CategoryValidation();
+            $validate = $categoryValidation->checkField($post);
         }
+        return $validate;
     }
     
     /**
