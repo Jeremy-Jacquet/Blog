@@ -60,7 +60,14 @@ class CategoryValidation
         }
         return ($error)? false : true;
     }
-
+    
+    /**
+     * Check category title
+     *
+     * @param  string $name
+     * @param  string $value
+     * @return void|string (string = error)
+     */
     private function checkTitle($name, $value)
     {
         if($this->inputConstraint->notBlank($name, $value)) {
@@ -74,6 +81,13 @@ class CategoryValidation
         }
     }
 
+    /**
+     * Check category sentence
+     *
+     * @param  string $name
+     * @param  string $value
+     * @return void|string (string = error)
+     */
     private function checkSentence($name, $value)
     {
         if($this->inputConstraint->notBlank($name, $value)) {

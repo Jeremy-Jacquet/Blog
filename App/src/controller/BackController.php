@@ -151,7 +151,14 @@ class BackController extends Controller
             'categories' => $categories
         ]);
     }
-
+    
+    /**
+     * Category administration
+     *
+     * @param  Parameter $get
+     * @param  Parameter $post
+     * @return void
+     */
     public function adminCategory(Parameter $get, Parameter $post)
     {
         if($get->get('action') === 'ajouter') {

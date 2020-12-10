@@ -65,7 +65,13 @@ class CategoryDAO extends DAO
         $result->closeCursor();
         return $categories;
     }
-
+    
+    /**
+     * Add category
+     *
+     * @param  Parameter $post
+     * @return int (ctaegory_id)
+     */
     public function addCategory(Parameter $post)
     {
         var_dump($post);
@@ -81,7 +87,13 @@ class CategoryDAO extends DAO
         $result->closeCursor();
         return $id;
     }
-
+    
+    /**
+     * Update category
+     *
+     * @param  Parameter $post
+     * @return bool (true if updated, false if category_id is wrong)
+     */
     public function updateCategory(Parameter $post)
     {
         $sql = "SELECT COUNT(*) FROM category WHERE id = :id";

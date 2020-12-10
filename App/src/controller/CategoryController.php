@@ -6,7 +6,13 @@ use App\src\blogFram\Parameter;
 use App\src\blogFram\Image;
 
 class CategoryController extends Controller
-{
+{    
+    /**
+     * Add category
+     *
+     * @param  Parameter $post
+     * @return false|int (int = category_id)
+     */
     public function addCategory(Parameter $post)
     {
         if($this->validation->validateInput('category', $post)) {
@@ -26,7 +32,13 @@ class CategoryController extends Controller
         }
         
     }
-
+    
+    /**
+     * Update category
+     *
+     * @param  Parameter $post
+     * @return bool (true if success)
+     */
     public function updateCategory(Parameter $post)
     {
         if($this->categoryDAO->updateCategory($post)) {
