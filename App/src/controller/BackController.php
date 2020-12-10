@@ -142,11 +142,36 @@ class BackController extends Controller
     public function displayCategories()
     {
         if(!$this->checkAdmin()) {
-            $categories = $this->categoryDAO->getCategories();
-            $this->view->render($this->controller, 'categories', [
-                'categories' => $categories
-            ]);
+            $this->alert->addError("Vous n'avez pas le droit d'accéder à cette page.");
+            header("Location: ".URL."accueil");
+            exit;
         }
+        $categories = $this->categoryDAO->getCategories();
+        $this->view->render($this->controller, 'categories/display-categories', [
+            'categories' => $categories
+        ]);
+    }
+    
+    /**
+     * Category administration
+     *
+     * @param  Parameter $get
+     * @param  Parameter $post
+     * @return void
+     */
+    public function adminCategory(Parameter $get, Parameter $post)
+    {
+        if($get->get('action') === 'ajouter') {
+            if($post->get('submit')) {
+                $id = $this->categoryController->addCategory($post);
+                if($id) {
+                    header("Location: ".URL."categories&id=".$id);
+                    exit;
+                }
+            }
+            $this->view->render($this->controller, 'categories/add-category');
+        }
+        
     }
 
 }

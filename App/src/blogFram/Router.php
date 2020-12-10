@@ -63,9 +63,12 @@ class Router
         $action = $this->request->getGet()->get('action');
         $category = $this->request->getGet()->get('categorie');
         $id = $this->request->getGet()->get('id');
+        $get = $this->request->getGet();
         $post = $this->request->getPost();
         $token = $this->request->getGet()->get('token');
         $email = $this->request->getGet()->get('email');
+
+        var_dump($post);
         
         try {
             if(isset($route)) {
@@ -104,7 +107,11 @@ class Router
                     if($category === 'membres') {
                         $this->backController->displayUsers($post);
                     } elseif($category === 'categories') {
-                        $this->backController->displayCategories();
+                        if($action) {
+                            $this->backController->adminCategory($get, $post); 
+                        } else {
+                            $this->backController->displayCategories();
+                        }
                     } else {
                         $this->backController->dashboard($post);
                     }

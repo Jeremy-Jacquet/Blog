@@ -10,6 +10,7 @@ use App\src\constraint\Validation;
 class Image
 {
     const TARGET_AVATAR = "../public/img/avatar/"; 
+    const TARGET_CATEGORY = "../public/img/category/"; 
     
     /**
      * @var Validation
@@ -52,6 +53,8 @@ class Image
     {
         if($category = 'avatar') {
             $validate = $this->validation->validateImage($category, $file, self::TARGET_AVATAR);
+        } elseif( $category = "category") {
+            $validate = $this->validation->validateImage($category, $file, self::TARGET_CATEGORY);
         }
         return ($validate)? true : false;
     }
@@ -83,6 +86,7 @@ class Image
             $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
             $this->filename = $name.'.'.$extension;
         }
+
     }
     
     /**
@@ -95,6 +99,8 @@ class Image
     {
         if($category === 'avatar') {
             $this->imagePath = self::TARGET_AVATAR.$this->filename;
+        } elseif($category === "category") {
+            $this->imagePath = self::TARGET_CATEGORY.$this->filename;
         }
     }
     
