@@ -161,6 +161,11 @@ class BackController extends Controller
      */
     public function adminCategory(Parameter $get, Parameter $post)
     {
+        if(!$this->checkAdmin()) {
+            $this->alert->addError("Vous n'avez pas le droit d'accéder à cette page.");
+            header("Location: ".URL."accueil");
+            exit;
+        }
         if($get->get('action') === 'ajouter') {
             if($post->get('submit')) {
                 $id = $this->categoryController->addCategory($post);
@@ -170,6 +175,17 @@ class BackController extends Controller
                 }
             }
             $this->view->render($this->controller, 'categories/add-category');
+        } elseif($get->get('action') === 'modifier') {
+            if($post->get('submit')) {
+                if($this->categoryController->updateCategory($post)) {
+                    header("Location: ".URL."articles&categorie=".$post->get('id'));
+                    exit;
+                }
+            }
+            $category = $this->categoryDAO->getCategory($get->get('id'));
+            $this->view->render($this->controller, 'categories/update-category', [
+                'category' => $category
+            ]);
         }
         
     }
