@@ -41,6 +41,12 @@ class CategoryController extends Controller
      */
     public function updateCategory(Parameter $post)
     {
+        if(!empty($_FILES['picture']['name'])) {
+            $image = new Image('category', $_FILES['picture'], $post->get('id'));
+            if($image->checkImage('category', $_FILES['picture'], $image::TARGET_CATEGORY)) {
+                $image->upload($_FILES['picture']);
+            }
+        }
         if($this->categoryDAO->updateCategory($post)) {
             $this->alert->addSuccess("La catégorie a bien été modifiée.");
             return true;   
