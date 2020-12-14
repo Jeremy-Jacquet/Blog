@@ -34,6 +34,13 @@ class ArticleDAO extends DAO
         $article->setStatus($row['status']);
         $article->setCategoryTitle($row['category']);
         $article->setUserPseudo($row['pseudo']);
+        if($row['status'] === null) {
+            $article->setStatusName('En attente');
+        } elseif($row['status'] == 0) {
+            $article->setStatusName('Inactif');
+        } elseif($row['status'] == 1) {
+            $article->setStatusName('Actif');
+        }
         return $article;
     }
     
