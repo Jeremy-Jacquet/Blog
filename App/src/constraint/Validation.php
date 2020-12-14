@@ -48,6 +48,8 @@ class Validation
         $imageValidation = new ImageValidation();
         if($category === 'avatar') {
             $validate = $imageValidation->checkAvatar($file, $directory);
+        } elseif($category === 'category') {
+            $validate = $imageValidation->checkCategoryImage($file, $directory);
         } elseif($category === 'article') {
             $validate = $imageValidation->checkArticleImage($file, $directory);
         }
