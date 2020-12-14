@@ -43,7 +43,7 @@ class CategoryController extends Controller
     {
         if(!empty($_FILES['picture']['name'])) {
             $image = new Image('category', $_FILES['picture'], $post->get('id'));
-            if($image->checkImage('category', $_FILES['picture'], $image::TARGET_CATEGORY)) {
+            if($image->checkImage('category', $_FILES['picture'])) {
                 $image->upload($_FILES['picture']);
             }
         }

@@ -6,7 +6,7 @@ use App\src\blogFram\Parameter;
 use App\src\blogFram\Alert;
 
 /**
- * CategoryValidation
+ * Category validation
  */
 class CategoryValidation
 {
@@ -16,7 +16,7 @@ class CategoryValidation
     const SENTENCE_MAX = 500;
 
     /**
-     * @var CategoryConstraint
+     * @var InputConstraint
      */
     private $inputConstraint;
 
