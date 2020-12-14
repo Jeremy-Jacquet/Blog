@@ -74,7 +74,6 @@ class CategoryDAO extends DAO
      */
     public function addCategory(Parameter $post)
     {
-        var_dump($post);
         $sql = "INSERT INTO `category` (title, sentence, `filename`, `status`) 
                 VALUES (:title, :sentence, :filename, :status)";
         $result = $this->checkConnection()->prepare($sql);
@@ -96,25 +95,38 @@ class CategoryDAO extends DAO
      */
     public function updateCategory(Parameter $post)
     {
-        $sql = "SELECT COUNT(*) FROM category WHERE id = :id";
+        if(!$this->checkCategory($post->get('id'))) {
+            return false;
+        }
+        $sql = "UPDATE category SET title = :title, sentence = :sentence, `filename` = :filename, `status` = :status  WHERE id = :id";
+        $result = $this->checkConnection()->prepare($sql);
+        $result->bindValue(':title', $post->get('title'), PDO::PARAM_STR);
+        $result->bindValue(':sentence', $post->get('sentence'), PDO::PARAM_STR);
+        $result->bindValue(':filename', $post->get('filename'), PDO::PARAM_STR);
+        $result->bindValue(':status', $post->get('status'), PDO::PARAM_INT);
+        $result->bindValue(':id', $post->get('id'), PDO::PARAM_INT);
+        $result->execute();
+        $result->closeCursor();
+        return true;
+    }
+
+    /**
+     * Delete category
+     *
+     * @param  Parameter $post
+     * @return int (ctaegory_id)
+     */
+    public function deleteCategory(Parameter $post)
+    {
+        if(!$this->checkCategory($post->get('id'))) {
+            return false;
+        }
+        $sql = "DELETE FROM category WHERE id = :id";
         $result = $this->checkConnection()->prepare($sql);
         $result->bindValue(':id', $post->get('id'), PDO::PARAM_INT);
         $result->execute();
-        $count = $result->fetch(PDO::FETCH_ASSOC);
-        if($count > 0) {
-            $sql = "UPDATE category SET title = :title, sentence = :sentence, `filename` = :filename, `status` = :status  WHERE id = :id";
-            $result = $this->checkConnection()->prepare($sql);
-            $result->bindValue(':title', $post->get('title'), PDO::PARAM_STR);
-            $result->bindValue(':sentence', $post->get('sentence'), PDO::PARAM_STR);
-            $result->bindValue(':filename', $post->get('filename'), PDO::PARAM_STR);
-            $result->bindValue(':status', $post->get('status'), PDO::PARAM_INT);
-            $result->bindValue(':id', $post->get('id'), PDO::PARAM_INT);
-            $result->execute();
-            $result->closeCursor(); 
-            return true;
-        }
-        $result->closeCursor(); 
-        return false;
+        $result->closeCursor();
+        return true;
     }
     
     /**
@@ -134,4 +146,20 @@ class CategoryDAO extends DAO
         return ($exists) ? true : false;
     }
 
+    /**
+     * Check category id
+     *
+     * @param  int $id
+     * @return bool (true if category id exists)
+     */
+    public function checkCategory($id)
+    {
+        $sql = "SELECT COUNT(*) FROM category WHERE id = :id";
+        $result = $this->checkConnection()->prepare($sql);
+        $result->bindValue(':id', $id, PDO::PARAM_INT);
+        $result->execute();
+        $count = $result->fetch(PDO::FETCH_ASSOC);
+        $result->closeCursor();
+        return ($count > 0)? true : false;
+    }
 }

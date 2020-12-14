@@ -55,4 +55,21 @@ class CategoryController extends Controller
             return false;
         }
     }
+    
+    /**
+     * Delete category
+     *
+     * @param  Parameter $post
+     * @return bool
+     */
+    public function deleteCategory(Parameter $post)
+    {  
+        if($this->categoryDAO->deleteCategory($post)) {
+            $this->alert->addSuccess("La catégorie a bien été supprimée.");
+            return true;   
+        } else {
+            $this->alert->addError("La catégorie n'a pas pu être supprimée.");            
+            return false;
+        }
+    }
 }
