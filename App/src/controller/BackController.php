@@ -186,8 +186,18 @@ class BackController extends Controller
             $this->view->render($this->controller, 'categories/update-category', [
                 'category' => $category
             ]);
+        } elseif($get->get('action') === 'supprimer') {
+            if($post->get('delete')) {
+                if($this->categoryController->deleteCategory($post)) {
+                    header("Location: ".URL."admin");
+                    exit;
+                }
+            }
+        } else {
+            $this->alert->addError("L'action demandée n'est pas reconnue");
+            header("Location: ".URL."admin");
+            exit;
         }
-        
     }
 
 }
