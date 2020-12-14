@@ -11,6 +11,7 @@ class Image
 {
     const TARGET_AVATAR = "../public/img/avatar/"; 
     const TARGET_CATEGORY = "../public/img/category/"; 
+    const TARGET_ARTICLE = "../public/img/article/"; 
     
     /**
      * @var Validation
@@ -51,10 +52,12 @@ class Image
      */
     public function checkImage($category, $file)
     {
-        if($category = 'avatar') {
+        if($category === 'avatar') {
             $validate = $this->validation->validateImage($category, $file, self::TARGET_AVATAR);
-        } elseif( $category = "category") {
+        } elseif($category === 'category') {
             $validate = $this->validation->validateImage($category, $file, self::TARGET_CATEGORY);
+        } elseif($category === 'article') {
+            $validate = $this->validation->validateImage($category, $file, self::TARGET_ARTICLE);
         }
         return ($validate)? true : false;
     }
@@ -99,8 +102,10 @@ class Image
     {
         if($category === 'avatar') {
             $this->imagePath = self::TARGET_AVATAR.$this->filename;
-        } elseif($category === "category") {
+        } elseif($category === 'category') {
             $this->imagePath = self::TARGET_CATEGORY.$this->filename;
+        } elseif($category === 'article') {
+            $this->imagePath = self::TARGET_ARTICLE.$this->filename;
         }
     }
     
