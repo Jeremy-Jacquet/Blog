@@ -200,4 +200,22 @@ class BackController extends Controller
         }
     }
 
+    /**
+     * Display articles for administration
+     *
+     * @return void
+     */
+    public function displayArticles()
+    {
+        if(!$this->checkAdmin()) {
+            $this->alert->addError("Vous n'avez pas le droit d'accéder à cette page.");
+            header("Location: ".URL."accueil");
+            exit;
+        }
+        $articles = $this->articleDAO->getArticles();
+        $this->view->render($this->controller, 'articles/display-articles', [
+            'articles' => $articles
+        ]);
+    }
+
 }
