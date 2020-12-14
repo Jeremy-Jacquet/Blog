@@ -140,9 +140,11 @@ class FrontController extends Controller
             header("Location: ".URL."articles");
             exit;
         }
-        if($this->commentController->moderateComment($post)) {
-            header("Location: ".URL."articles&id=$id");
-            exit;
+        if($post->get('submit')) {
+            if($this->commentController->moderateComment($post)) {
+                header("Location: ".URL."articles&id=$id");
+                exit;
+            }
         }
         $comments = Search::lookForAnd($this->commentDAO->getComments(), [
             'articleId' => $id,
