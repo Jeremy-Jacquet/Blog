@@ -82,28 +82,52 @@ class CommentDAO extends DAO
      */
     public function updateComment(Parameter $post, $status)
     {
+        if(!$this->checkComment($post->get('id'))) {
+            return false;
+        }
         $sql = "UPDATE comment SET `status` = :status WHERE id = :id";
         $result = $this->checkConnection()->prepare($sql);
         $result->bindValue(':status', $status, PDO::PARAM_INT);
         $result->bindValue(':id', $post->get('id'), PDO::PARAM_INT);
         $result->execute();
         $result->closeCursor();
-        return ($result)? true : false;
+        return true;
     }
     
     /**
      * Delete comment
      *
      * @param  Parameter $post
-     * @return void
+     * @return bool (false if commment id doesn't exist)
      */
     public function deleteComment(Parameter $post)
     {
+        if(!$this->checkComment($post->get('id'))) {
+            return false;
+        }
         $sql = "DELETE comment WHERE id = :id";
         $result = $this->checkConnection->prepare($sql);
         $result->bindValue(':id', $post->get('id'), PDO::PARAM_INT);
         $result->execute();
         $result->closeCursor();
+        return true;
+    }
+
+    /**
+     * Check comment id
+     *
+     * @param  int $id
+     * @return bool (true if comment id exists)
+     */
+    public function checkComment($id)
+    {
+        $sql = "SELECT COUNT(*) FROM comment WHERE id = :id";
+        $result = $this->checkConnection()->prepare($sql);
+        $result->bindValue(':id', $id, PDO::PARAM_INT);
+        $result->execute();
+        $count = $result->fetch(PDO::FETCH_ASSOC);
+        $result->closeCursor();
+        return ($count > 0)? true : false;
     }
 
 }
