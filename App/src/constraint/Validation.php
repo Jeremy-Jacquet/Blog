@@ -27,6 +27,9 @@ class Validation
         } elseif($category === 'category') {
             $categoryValidation = new CategoryValidation();
             $validate = $categoryValidation->checkField($post);
+        } elseif($category === 'article') {
+            $articleValidation = new ArticleValidation();
+            $validate = $articleValidation->checkField($post);
         }
         return $validate;
     }
@@ -41,11 +44,14 @@ class Validation
      */
     public function validateImage($category, $file, $directory)
     {
+        
+        $imageValidation = new ImageValidation();
         if($category === 'avatar') {
-            $imageValidation = new ImageValidation();
             $validate = $imageValidation->checkAvatar($file, $directory);
-            return $validate;
+        } elseif($category === 'article') {
+            $validate = $imageValidation->checkArticleImage($file, $directory);
         }
+        return $validate;
     }
 
 }
