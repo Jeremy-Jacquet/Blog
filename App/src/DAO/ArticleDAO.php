@@ -4,6 +4,7 @@ namespace App\src\DAO;
 
 use App\src\blogFram\DAO;
 use App\src\entity\Article;
+use App\src\blogFram\Parameter;
 use \PDO;
 
 /**
@@ -114,6 +115,72 @@ class ArticleDAO extends DAO
         $result->closeCursor();
         return $articles;
     }
+
+    /**
+     * Add article
+     *
+     * @param  Parameter $post
+     * @return int (ctaegory_id)
+     */
+    public function addArticle(Parameter $post, $date)
+    {
+        $sql = "INSERT INTO `article` (title, sentence, content, `filename`, `user_id`, created_at, published_at, updated_at, updated_user_id, category_id, `status`) 
+                VALUES (:title, :sentence, :content, :filename, :user_id, :created_at, :published_at, :updated_at, :updated_user_id, :category_id, :status)";
+        $result = $this->checkConnection()->prepare($sql);
+        $result->bindValue(':title', $post->get('title'), PDO::PARAM_STR);
+        $result->bindValue(':sentence', $post->get('sentence'), PDO::PARAM_STR);
+        $result->bindValue(':content', $post->get('content'), PDO::PARAM_STR);
+        $result->bindValue(':filename', 'tmp', PDO::PARAM_STR);
+        $result->bindValue(':user_id', $post->get('userId'), PDO::PARAM_INT);
+        $result->bindValue(':created_at', $date, PDO::PARAM_STR);
+        $result->bindValue(':published_at', NULL, PDO::PARAM_STR);
+        $result->bindValue(':updated_at', NULL, PDO::PARAM_STR);
+        $result->bindValue(':updated_user_id', NULL, PDO::PARAM_INT);
+        $result->bindValue(':category_id', $post->get('categoryId'), PDO::PARAM_INT);
+        $result->bindValue(':status', $post->get('status'), PDO::PARAM_INT);
+        $result->execute();
+        $id = $this->checkConnection()->lastInsertId();
+        $result->closeCursor();
+        return $id;
+    }
+
+    /**
+     * Update article
+     *
+     * @param  Parameter $post
+     * @return bool (true if updated, false if category_id is wrong)
+     */
+    public function updateArticle(Parameter $post)
+    {
+        if(!$this->checkArticle($post->get('id'))) {
+            return false;
+        }
+        $sql = "UPDATE article 
+                SET title = :title, 
+                sentence = :sentence, 
+                content = :content,
+                `filename` = :filename, 
+                published_at = :published_at,
+                updated_at = :updated_at,
+                updated_user_id = :updated_user_id,
+                category_id = :category_id,
+                `status` = :status  
+                WHERE id = :id";
+        $result = $this->checkConnection()->prepare($sql);
+        $result->bindValue(':id', $post->get('id'), PDO::PARAM_INT);
+        $result->bindValue(':title', $post->get('title'), PDO::PARAM_STR);
+        $result->bindValue(':sentence', $post->get('sentence'), PDO::PARAM_STR);
+        $result->bindValue(':content', $post->get('content'), PDO::PARAM_STR);
+        $result->bindValue(':filename', $post->get('filename'), PDO::PARAM_STR);
+        $result->bindValue(':published_at', $post->get('publishedAt'), PDO::PARAM_STR);
+        $result->bindValue(':updated_at', $post->get('updatedAt'), PDO::PARAM_STR);
+        $result->bindValue(':updated_user_id', $post->get('updatedUserId'), PDO::PARAM_INT);
+        $result->bindValue(':category_id', $post->get('categoryId'), PDO::PARAM_INT);
+        $result->bindValue(':status', $post->get('status'), PDO::PARAM_INT);
+        $result->execute();
+        $result->closeCursor();
+        return true;
+    }
     
     /**
      * Know if article exists
@@ -130,6 +197,23 @@ class ArticleDAO extends DAO
         $exists = $result->fetch();
         $result->closeCursor();
         return ($exists) ? true : false;
+    }
+
+    /**
+     * Check article id
+     *
+     * @param  int $id
+     * @return bool (true if article id exists)
+     */
+    public function checkArticle($id)
+    {
+        $sql = "SELECT COUNT(*) FROM article WHERE id = :id";
+        $result = $this->checkConnection()->prepare($sql);
+        $result->bindValue(':id', $id, PDO::PARAM_INT);
+        $result->execute();
+        $count = $result->fetch(PDO::FETCH_ASSOC);
+        $result->closeCursor();
+        return ($count > 0)? true : false;
     }
     
 }
