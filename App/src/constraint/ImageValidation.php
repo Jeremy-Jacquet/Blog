@@ -19,9 +19,12 @@ class ImageValidation
      */
     private $alert;
 
-    const SIZE_MAX_AVATAR = 200000;                // Taille max en octets du fichier
-    const WIDTH_MAX_AVATAR = 800;                  // Largeur max de l'image en pixels
-    const HEIGHT_MAX_AVATAR = 800;                 // Hauteur max de l'image en pixels
+    const SIZE_MAX_AVATAR = 200000;                 // Taille max en octets du fichier
+    const WIDTH_MAX_AVATAR = 800;                   // Largeur max de l'image en pixels
+    const HEIGHT_MAX_AVATAR = 800;                  // Hauteur max de l'image en pixels
+    const SIZE_MAX_ARTICLE_IMAGE = 200000;
+    const WIDTH_MAX_ARTICLE_IMAGE = 800;
+    const HEIGHT_MAX_ARTICLE_IMAGE = 800;
     
     /**
      * Construct ImageValidation
@@ -50,9 +53,27 @@ class ImageValidation
             self::HEIGHT_MAX_AVATAR, 
             self::WIDTH_MAX_AVATAR
         );
-        return (!$validate)? false : true;
+        return ($validate)? true : false;
     }
 
+    /**
+     * Check article image
+     *
+     * @param  array $file[]
+     * @param  string $directory
+     * @return bool (true if all good)
+     */
+    public function checkArticleImage($file, $directory)
+    {
+        $validate = $this->checkImageUpload(
+            $file, 
+            $directory,
+            self::SIZE_MAX_ARTICLE_IMAGE, 
+            self::HEIGHT_MAX_ARTICLE_IMAGE, 
+            self::WIDTH_MAX_ARTICLE_IMAGE
+        );
+        return ($validate)? true : false;
+    }
         
     /**
      * Check image constraints
@@ -91,7 +112,7 @@ class ImageValidation
             $this->alert->addError($this->checkError($file));
             $error++;
         }
-        return ($error)? false : true;  
+        return ($error === 0)? true : false;  
     }
     
     /**
