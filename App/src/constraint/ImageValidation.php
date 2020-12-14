@@ -22,6 +22,9 @@ class ImageValidation
     const SIZE_MAX_AVATAR = 200000;                 // Taille max en octets du fichier
     const WIDTH_MAX_AVATAR = 800;                   // Largeur max de l'image en pixels
     const HEIGHT_MAX_AVATAR = 800;                  // Hauteur max de l'image en pixels
+    const SIZE_MAX_CATEGORY_IMAGE = 200000;
+    const WIDTH_MAX_CATEGORY_IMAGE = 800;
+    const HEIGHT_MAX_CATEGORY_IMAGE = 800;
     const SIZE_MAX_ARTICLE_IMAGE = 200000;
     const WIDTH_MAX_ARTICLE_IMAGE = 800;
     const HEIGHT_MAX_ARTICLE_IMAGE = 800;
@@ -71,6 +74,25 @@ class ImageValidation
             self::SIZE_MAX_ARTICLE_IMAGE, 
             self::HEIGHT_MAX_ARTICLE_IMAGE, 
             self::WIDTH_MAX_ARTICLE_IMAGE
+        );
+        return ($validate)? true : false;
+    }
+
+    /**
+     * Check category image
+     *
+     * @param  array $file[]
+     * @param  string $directory
+     * @return bool (true if all good)
+     */
+    public function checkCategoryImage($file, $directory)
+    {
+        $validate = $this->checkImageUpload(
+            $file, 
+            $directory,
+            self::SIZE_MAX_CATEGORY_IMAGE, 
+            self::HEIGHT_MAX_CATEGORY_IMAGE, 
+            self::WIDTH_MAX_CATEGORY_IMAGE
         );
         return ($validate)? true : false;
     }
