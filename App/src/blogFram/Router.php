@@ -112,6 +112,8 @@ class Router
                         } else {
                             $this->backController->displayCategories();
                         }
+                    } elseif($category === 'articles') {
+                            $this->backController->displayArticles();
                     } else {
                         $this->backController->dashboard($post);
                     }

@@ -78,6 +78,11 @@ class Article
      */
     private $categoryTitle;
 
+    /**
+     * @var string
+     */
+    private $statusName;
+
     /*
     |--> GETTERS <--|
     */
@@ -195,6 +200,14 @@ class Article
         return $this->categoryTitle;
     }
 
+    /**
+     * @return string
+     */
+    public function getStatusName()
+    {
+        return $this->statusName;
+    }
+
     /*
     |--> SETTERS <--|
     */
@@ -309,5 +322,13 @@ class Article
     public function setCategoryTitle($categoryTitle)
     {
         $this->categoryTitle = $categoryTitle;
+    }
+
+    /**
+     * @param string $statusName
+     */
+    public function setStatusName($statusName)
+    {
+        $this->statusName = $statusName;
     }
 }
