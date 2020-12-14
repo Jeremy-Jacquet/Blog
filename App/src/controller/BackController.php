@@ -218,4 +218,33 @@ class BackController extends Controller
         ]);
     }
 
+    /**
+     * Article administration
+     *
+     * @param  Parameter $get
+     * @param  Parameter $post
+     * @return void
+     */
+    public function adminArticle(Parameter $get, Parameter $post)
+    {
+        if(!$this->checkAdmin()) {
+            $this->alert->addError("Vous n'avez pas le droit d'accéder à cette page.");
+            header("Location: ".URL."accueil");
+            exit;
+        }
+        if($get->get('action') === 'ajouter') {
+            if($post->get('submit')) {
+                $id = $this->articleController->addArticle($post);
+                if($id) {
+                    header("Location: ".URL."articles&id=".$id);
+                    exit;
+                }
+            }
+            $categories = $this->categoryDAO->getCategories();
+            $this->view->render($this->controller, 'articles/add-article', [
+                'categories' => $categories
+            ]);
+        }
+    }
+
 }

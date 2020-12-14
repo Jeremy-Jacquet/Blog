@@ -67,8 +67,6 @@ class Router
         $post = $this->request->getPost();
         $token = $this->request->getGet()->get('token');
         $email = $this->request->getGet()->get('email');
-
-        var_dump($post);
         
         try {
             if(isset($route)) {
@@ -113,7 +111,11 @@ class Router
                             $this->backController->displayCategories();
                         }
                     } elseif($category === 'articles') {
+                        if($action) {
+                            $this->backController->adminArticle($get, $post); 
+                        } else {
                             $this->backController->displayArticles();
+                        }
                     } else {
                         $this->backController->dashboard($post);
                     }
