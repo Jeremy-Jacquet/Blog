@@ -7,7 +7,13 @@ use App\src\blogFram\Image;
 
 class ArticleController extends Controller
 {
-/**
+
+    /**
+     * @var string
+     */
+    private $controller = 'article';
+
+    /**
      * Add article
      *
      * @param  Parameter $post
@@ -40,20 +46,30 @@ class ArticleController extends Controller
      * @param  Parameter $post
      * @return bool (true if success)
      */
-    public function updateArticle(Parameter $post, $justAdded = null)
+    public function updateArticle(Parameter $get, Parameter $post)
     {
-        if(!empty($_FILES['picture']['name']) and $justAdded === null) {
-            $image = new Image('article', $_FILES['picture'], $post->get('id'));
-            if($image->checkImage('article', $_FILES['picture'])) {
-                $image->upload($_FILES['picture']);
+        if(!$this->checkAdmin()) {
+            $this->alert->addError("Vous n'avez pas le droit d'accéder à cette page.");
+            header("Location: ".URL."accueil");
+            exit;
+        }
+        if($post->get('submit')) {
+            if($post->get('picture')) {
+                $image = new Image('article', $_FILES['picture'], $post->get('id'));
+                if($image->checkImage('article', $_FILES['picture'])) {
+                    $image->upload($_FILES['picture']);
+                }
+            }
+            if($this->validation->validateInput('article', $post)) {
+                $this->articleDAO->updateArticle($post);
+                $this->alert->addSuccess("L'article a bien été modifié.");
             }
         }
-        if($this->articleDAO->updateArticle($post)) {
-            $this->alert->addSuccess("L'article a bien été modifié.");
-            return true;   
-        } else {
-            $this->alert->addError("L'article n'a pas pu être modifié.");
-            return false;
-        }
+        $article = $this->articleDAO->getArticle($get->get('id'));
+        $categories = $this->categoryDAO->getCategories();
+        $this->view->render($this->controller, 'update-article', [
+            'article' => $article,
+            'categories' => $categories
+        ]);
     }
 }
