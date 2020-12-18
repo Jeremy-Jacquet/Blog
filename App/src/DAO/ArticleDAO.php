@@ -120,7 +120,7 @@ class ArticleDAO extends DAO
      * Add article
      *
      * @param  Parameter $post
-     * @return int (ctaegory_id)
+     * @return int (category_id)
      */
     public function addArticle(Parameter $post, $date)
     {
@@ -144,42 +144,130 @@ class ArticleDAO extends DAO
         return $id;
     }
 
-    /**
-     * Update article
-     *
-     * @param  Parameter $post
-     * @return bool (true if updated, false if category_id is wrong)
-     */
     public function updateArticle(Parameter $post)
     {
         if(!$this->checkArticle($post->get('id'))) {
             return false;
         }
-        $sql = "UPDATE article 
-                SET title = :title, 
-                sentence = :sentence, 
-                content = :content,
-                `filename` = :filename, 
-                published_at = :published_at,
-                updated_at = :updated_at,
-                updated_user_id = :updated_user_id,
-                category_id = :category_id,
-                `status` = :status  
-                WHERE id = :id";
+        $data = $this->checkAttribute($post);
+        $sql = $data['sql'] . ", updated_user_id = :updated_user_id WHERE id = :id";
         $result = $this->checkConnection()->prepare($sql);
-        $result->bindValue(':id', $post->get('id'), PDO::PARAM_INT);
-        $result->bindValue(':title', $post->get('title'), PDO::PARAM_STR);
-        $result->bindValue(':sentence', $post->get('sentence'), PDO::PARAM_STR);
-        $result->bindValue(':content', $post->get('content'), PDO::PARAM_STR);
-        $result->bindValue(':filename', $post->get('filename'), PDO::PARAM_STR);
-        $result->bindValue(':published_at', $post->get('publishedAt'), PDO::PARAM_STR);
-        $result->bindValue(':updated_at', $post->get('updatedAt'), PDO::PARAM_STR);
+        $result->bindValue($data['attribute'], $data['value'], $data['parameter']);
         $result->bindValue(':updated_user_id', $post->get('updatedUserId'), PDO::PARAM_INT);
-        $result->bindValue(':category_id', $post->get('categoryId'), PDO::PARAM_INT);
-        $result->bindValue(':status', $post->get('status'), PDO::PARAM_INT);
+        $result->bindValue(':id', $post->get('id'), PDO::PARAM_INT);
         $result->execute();
         $result->closeCursor();
-        return true;
+        return true;        
+    }
+
+    public function checkAttribute(Parameter $post)
+    {
+        if($post->get('title')) {
+            $data = $this->setSqlTitle($post);
+        } elseif($post->get('sentence')) {
+            $data = $this->setSqlSentence($post);
+        } elseif($post->get('content')) {
+            $data = $this->setSqlContent($post);
+        } elseif($post->get('filename')) {
+            $data = $this->setSqlFilename($post);
+        } elseif($post->get('publishedAt')) {
+            $data = $this->setSqlPublishedAt($post);
+        } elseif($post->get('updatedAt')) {
+            $data = $this->setSqlUpdatedAt($post);
+        } elseif($post->get('categoryId')) {
+            $data = $this->setSqlCategoryId($post);
+        } elseif($post->get('status')) {
+            $data = $this->setSqlStatus($post);
+        }
+        return $data;
+    }
+
+    public function setSqlTitle(Parameter $post) {
+        $sql = "UPDATE article SET title = :title";
+        $data = [
+                'sql' => $sql, 
+                'attribute' => ':title', 
+                'value' => $post->get('title'), 
+                'parameter' => PDO::PARAM_STR
+                ];
+        return $data;
+    }
+
+    public function setSqlSentence(Parameter $post) {
+        $sql = "UPDATE article SET sentence = :sentence";
+        $data = [
+                'sql' => $sql, 
+                'attribute' => ':sentence', 
+                'value' => $post->get('sentence'), 
+                'parameter' => PDO::PARAM_STR
+                ];
+        return $data;
+    }
+
+    public function setSqlContent(Parameter $post) {
+        $sql = "UPDATE article SET content = :content";
+        $data = [
+                'sql' => $sql, 
+                'attribute' => ':content', 
+                'value' => $post->get('content'), 
+                'parameter' => PDO::PARAM_STR
+                ];
+        return $data;
+    }
+
+    public function setSqlFilename(Parameter $post) {
+        $sql = "UPDATE article SET `filename` = :filename";
+        $data = [
+                'sql' => $sql, 
+                'attribute' => ':filename', 
+                'value' => $post->get('filename'), 
+                'parameter' => PDO::PARAM_STR
+                ];
+        return $data;
+    }
+
+    public function setSqlPublishedAt(Parameter $post) {
+        $sql = "UPDATE article SET published_at = :published_at";
+        $data = [
+                'sql' => $sql, 
+                'attribute' => ':published_at', 
+                'value' => $post->get('publishedAt'), 
+                'parameter' => PDO::PARAM_STR
+                ];
+        return $data;
+    }
+
+    public function setSqlUpdatedAt(Parameter $post) {
+        $sql = "UPDATE article SET updated_at = :updated_at";
+        $data = [
+                'sql' => $sql, 
+                'attribute' => ':updated_at', 
+                'value' => $post->get('updatedAt'), 
+                'parameter' => PDO::PARAM_STR
+                ];
+        return $data;
+    }
+
+    public function setSqlCategoryId(Parameter $post) {
+        $sql = "UPDATE article SET category_id = :category_id";
+        $data = [
+                'sql' => $sql, 
+                'attribute' => ':category_id', 
+                'value' => $post->get('categoryId'), 
+                'parameter' => PDO::PARAM_INT
+                ];
+        return $data;
+    }
+
+    public function setSqlStatus(Parameter $post) {
+        $sql = "UPDATE article SET `status` = :status";
+        $data = [
+                'sql' => $sql, 
+                'attribute' => ':status', 
+                'value' => $post->get('status'), 
+                'parameter' => PDO::PARAM_INT
+                ];
+        return $data;
     }
     
     /**
