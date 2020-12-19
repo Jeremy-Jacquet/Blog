@@ -3,6 +3,7 @@
 namespace App\src\blogFram;
 
 use Exception;
+use App\src\controller\ArticleController;
 use App\src\controller\FrontController;
 use App\src\controller\BackController;
 use App\src\controller\ErrorController;
@@ -46,6 +47,7 @@ class Router
     public function __construct()
     {
         $this->request = new Request();
+        $this->articleController = new ArticleController();
         $this->frontController = new FrontController();
         $this->backController = new BackController();
         $this->errorController = new ErrorController();
@@ -72,7 +74,7 @@ class Router
             if(isset($route)) {
                 if($route === 'accueil') {
                     $this->frontController->home();
-                } 
+                }  
                 elseif($route === 'categories') {
                     $this->frontController->categories();
                 }
@@ -111,8 +113,8 @@ class Router
                             $this->backController->displayCategories();
                         }
                     } elseif($category === 'articles') {
-                        if($action) {
-                            $this->backController->adminArticle($get, $post); 
+                        if($action === 'modifier') {
+                            $this->articleController->updateArticle($get, $post); 
                         } else {
                             $this->backController->displayArticles();
                         }
