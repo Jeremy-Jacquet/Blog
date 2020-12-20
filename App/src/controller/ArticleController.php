@@ -72,4 +72,20 @@ class ArticleController extends Controller
             'categories' => $categories
         ]);
     }
+
+    public function deleteArticle(Parameter $post) {
+        if(!$this->checkAdmin()) {
+            $this->alert->addError("Vous n'avez pas le droit d'accéder à cette page.");
+            header("Location: ".URL."accueil");
+            exit;
+        }
+        if($post->get('submit')) {
+            if(!$this->articleDAO->deleteArticle($post)) {
+                $this->alert->addSuccess("L'article n'a pas été supprimé.");
+            }
+            $this->alert->addSuccess("L'article a bien été supprimé.");
+        }
+        header("Location: ".URL."admin&categorie=articles");
+        exit;
+    }
 }
