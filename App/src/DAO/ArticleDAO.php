@@ -160,6 +160,25 @@ class ArticleDAO extends DAO
         return true;        
     }
 
+    /**
+     * Delete article
+     *
+     * @param  Parameter $post
+     * @return bool
+     */
+    public function deleteArticle(Parameter $post)
+    {
+        if(!$this->checkArticle($post->get('id'))) {
+            return false;
+        }
+        $sql = "DELETE FROM article WHERE id = :id";
+        $result = $this->checkConnection()->prepare($sql);
+        $result->bindValue(':id', $post->get('id'), PDO::PARAM_INT);
+        $result->execute();
+        $result->closeCursor();
+        return true;
+    }
+
     public function checkAttribute(Parameter $post)
     {
         if($post->get('title')) {
