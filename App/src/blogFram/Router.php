@@ -115,7 +115,9 @@ class Router
                     } elseif($category === 'articles') {
                         if($action === 'modifier') {
                             $this->articleController->updateArticle($get, $post); 
-                        } else {
+                        } elseif($action === 'supprimer') {
+                            $this->articleController->deleteArticle($post); 
+                        }else {
                             $this->backController->displayArticles();
                         }
                     } else {
