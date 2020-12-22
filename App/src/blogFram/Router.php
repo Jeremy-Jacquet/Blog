@@ -73,7 +73,7 @@ class Router
         try {
             if(isset($route)) {
                 if($route === 'accueil') {
-                    $this->frontController->home();
+                    $this->frontController->home($post);
                 }  
                 elseif($route === 'categories') {
                     $this->frontController->categories();
