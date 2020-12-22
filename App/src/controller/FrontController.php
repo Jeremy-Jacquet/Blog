@@ -55,12 +55,15 @@ class FrontController extends Controller
      *
      * @return mixed $view
      */
-    public function home()
+    public function home(Parameter $post = null)
     {
         $articles = $this->articleDAO->getLastArticles(parent::NB_LAST_ARTICLES, parent::ACTIVE_ARTICLE);
         $categories = Search::lookForOr($this->categoryDAO->getCategories(), [
             'status' => parent::MAIN_CATEGORY
         ]);
+        if($post->get('contact')) {
+            $this->mailer->sendMail('contact', $post);
+        }
         return $this->view->render($this->controller, 'home', [
            'articles' => $articles,
            'categories' => $categories
