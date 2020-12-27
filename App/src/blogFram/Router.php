@@ -129,7 +129,7 @@ class Router
                 }
             } 
             else {
-                $this->frontController->home();
+                $this->frontController->home($post);
             }
         }
         catch (Exception $e) {
