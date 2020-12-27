@@ -64,6 +64,18 @@ class Message
                 'email' => $post->get('email'),
                 'token' => $token
                 ]);
+        } elseif ($this->category === 'contactUser') {
+            $this->body = $this->view->renderFile('../App/template/mail/contact_user.php', [
+                'name' => $post->get('name'),
+                'email' => $post->get('email'),
+                'content' => $post->get('content')
+                ]);
+        } elseif ($this->category === 'contactAdmin') {
+            $this->body = $this->view->renderFile('../App/template/mail/contact_admin.php', [
+                'name' => $post->get('name'),
+                'email' => $post->get('email'),
+                'content' => $post->get('content')
+                ]);
         }
     }
     

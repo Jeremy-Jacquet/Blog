@@ -15,6 +15,7 @@ class Mailer
     /**
      * @var mixed
      */
+    private $mail;
         
     /**
      * @var int
@@ -75,6 +76,16 @@ class Mailer
      */
     public function sendMail($category, Parameter $post, $token = null)
     {
+        if($category === 'contact') { 
+            $this->setMessage('contactAdmin', $post);
+            $this->setMail(ADMIN_EMAIL);
+            $this->mailer->send($this->mail);
+
+            $this->setMessage('contactUser', $post, $token);
+            $this->setMail($post->get('email'));
+            $this->mailer->send($this->mail);
+            return true;
+        }
         $this->setMessage($category, $post, $token);
         $this->setMail($post->get('email'));
         $this->mailer->send($this->mail);
