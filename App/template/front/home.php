@@ -46,3 +46,16 @@
         <?php } ?>
     </div>
 </section>
+
+<section id="contact">
+        <form method="post">
+            <label for="name">Votre nom :</label>
+            <input type="text" id="name" name="name">
+            <label for="name">Votre email :</label>
+            <input type="email" id="email" name="email">
+            <label for="name">Votre message :</label>
+            <textarea id="content" name="content"></textarea>
+            <input type="hidden" name="contact" value=true>
+            <input type="submit" name="submit">
+        </form>
+</section>
